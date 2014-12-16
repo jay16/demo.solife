@@ -1,32 +1,31 @@
 default: &default
-  domain: "http://mailhok.solife.us"
-  admins: "jay_li@intfocus.com;albert_li@intfocus.com"
-  regexp:
-    order: "^ppc\\d+u\\d+o[a-zA-Z]{3}$"
-    order_item: "^ppc\\d+u\\d+o\\d+i[a-zA-Z]{3}$"
+  domain: "http://weixin.solife.us"
+  admins: "admin"
   weixin:
-    name: "名片转家"
+    name: "生活点滴"
     desc: "TODO"
   website:
-    title: "名片转家"
+    title: "生活点滴"
     subtitle: "Carder"
-    slogan: "名片转家"
+    slogan: "爱生活、爱记录"
     favicon: "/images/favicon.ico"
-  api:
-    v1:
-      url: "http://mailhok.solife.us/track"
   alipay:
-    pid: 'pid' 
-    secret: 'secret-key'
-    seller_email: "jay_li@solife.us" 
-    return_url: "http://mailhok.solife.us/transactions/done"
-    notify_url: "http://mailhok.solife.us/transactions/notify"
+    pid: '' 
+    secret: ''
+    seller_email: "" 
+    return_url: ""
+    notify_url: ""
   cdn:
     qiniu:
-      bucket: "bucket"
-      access_key: 'access_key'
-      secret_key: 'secret_key'
+      bucket: "bucket-name"
+      access_key: 'key'
+      secret_key: 'key'
       out_link: "http://bucket.qiniudn.com"
+  server:
+    app_root_path: "/app-root-path"
+    host: "host"
+    user: "user"
+    password: "pwd"
 
 production:
   <<: *default
