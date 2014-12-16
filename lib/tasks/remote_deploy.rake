@@ -33,9 +33,9 @@ namespace :remote do
         puts "\n"
       end
 
-      datebase_name = "%s_%s" % [ENV["APP_NAME"], ENV["RACK_ENV"]]
-      remote_db_path = "%s/db/%s.db" % [datebase_name, remote_root_path]
-      local_db_path  = "%s/db/%s.db" % [database_name, ENV["APP_ROOT_PATH"]]
+      database_name = "%s_%s" % [ENV["APP_NAME"], ENV["RACK_ENV"]]
+      remote_db_path = "%s/db/%s.db" % [remote_root_path, database_name]
+      local_db_path  = "%s/db/%s.db" % [ENV["APP_ROOT_PATH"], database_name]
       File.delete(local_db_path) if File.exist?(local_db_path)
       ssh.scp.download!(remote_db_path, local_db_path)
     end

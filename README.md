@@ -5,6 +5,8 @@
 ````
 bundle install
 ./lib/script/unicorn {start|stop|restart}
+
+bundle exec rake remote:deploy
 ````
 
 
