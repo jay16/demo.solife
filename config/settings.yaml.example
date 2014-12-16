@@ -1,0 +1,39 @@
+default: &default
+  domain: "http://mailhok.solife.us"
+  admins: "jay_li@intfocus.com;albert_li@intfocus.com"
+  regexp:
+    order: "^ppc\\d+u\\d+o[a-zA-Z]{3}$"
+    order_item: "^ppc\\d+u\\d+o\\d+i[a-zA-Z]{3}$"
+  weixin:
+    name: "名片转家"
+    desc: "TODO"
+  website:
+    title: "名片转家"
+    subtitle: "Carder"
+    slogan: "名片转家"
+    favicon: "/images/favicon.ico"
+  api:
+    v1:
+      url: "http://mailhok.solife.us/track"
+  alipay:
+    pid: 'pid' 
+    secret: 'secret-key'
+    seller_email: "jay_li@solife.us" 
+    return_url: "http://mailhok.solife.us/transactions/done"
+    notify_url: "http://mailhok.solife.us/transactions/notify"
+  cdn:
+    qiniu:
+      bucket: "bucket"
+      access_key: 'access_key'
+      secret_key: 'secret_key'
+      out_link: "http://bucket.qiniudn.com"
+
+production:
+  <<: *default
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+  default_password: ''

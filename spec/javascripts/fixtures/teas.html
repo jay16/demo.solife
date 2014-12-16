@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>我喝茶 | 在路上</title>
+    <meta charset='UTF-8' content='text/html' http-equiv='content-type'>
+    <link href='/images/favicon.ico' rel='shortcut icon'>
+    <script src="/javascripts/jquery-2.1.1.min.js"></script>
+    <script src="/javascripts/bootstrap.320.min.js"></script>
+    <script src="/javascripts/application.js"></script>
+    <link href="/stylesheets/bootstrap.320.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/application.scss" media="screen, projection" rel="stylesheet" type="text/css">
+  </head>
+  <body style='background:#f0f0f0;'>
+    <nav class='navbar navbar-default' role='navigation' style='margin-bottom:0px;'>
+      <div class='container'>
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class='navbar-header'>
+          <button class='navbar-toggle' data-target='#bs-example-navbar-collapse-1' data-toggle='collapse' type='button'>
+            <span class='sr-only'>Toggle navigation</span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+          </button>
+          <a class="navbar-brand" href="/cpanel">控制台</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1' role='navigation'>
+          <ul class='nav navbar-nav'>
+            <li class='active'><a href="/cpanel">概况</a></li>
+            <li><a href="/cpanel/teas">茶品</a></li>
+            <li><a href="/cpanel/orders">订单</a></li>
+            <li><a href="/cpanel/blogs">博文</a></li>
+          </ul>
+          <ul class='nav navbar-nav navbar-right'>
+            <li class='dropdown'>
+              <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+                设置
+                <b class='caret'></b>
+              </a>
+              <ul class='dropdown-menu'>
+                <li>
+                  <a>
+                    <i class='glyphicon glyphicon-user'></i>
+                    账户设置
+                  </a>
+                </li>
+                <li>
+                  <a href='/'>
+                    <i class='glyphicon glyphicon-wrench'></i>
+                    返回前台
+                  </a>
+                </li>
+                <li class='divider'></li>
+                <li>
+                  <a href="{:method=&gt;:delete}">logout</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class='container'>
+      <div class='row'>
+        <div class='col-sm-12' style='text-align:center;'>
+          <div class='loading hidden'>加载中...</div>
+          
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-sm-10 col-sm-offset-1'>
+          <script src="/javascripts/teas.js"></script>
+          <div class='row'>
+            <div class='col-sm-8'>
+              <h1>商品列表</h1>
+            </div>
+            <div class='col-sm-4' style='margin-top:25px;'>
+              <a class="btn btn-default btn-primary right" href="/admin/teas/new">添加商品</a>
+              <a class="btn btn-default btn-success right" href="javascript:void(0);" onclick="Teas.generateStaticFiles();">生成表态模板</a>
+            </div>
+          </div>
+          <div class='row' style='margin-top: 5px;'>
+            <div class='col-sm-8'>
+              <div class='input-group' style='max-width:400px;'>
+                <input class='form-control' id='search' placeholder='输入关键字' type='text'>
+                <span class='input-group-btn'>
+                  <button class='btn btn-default' onclick="Teas.search('#search');" type='button'>
+                    <span class='glyphicon glyphicon-search'></span>
+                  </button>
+                </span>
+              </div>
+              <span class='search-result'></span>
+            </div>
+            <div class='col-sm-4' style='margin-top:10px;'>
+              <label class='right'>
+                <input class='right' id='showall' name='showall' onchange='Teas.showAllTeas(this);' type='checkbox' value='1'>显示所有商品</input>
+              </label>
+            </div>
+          </div>
+          <table class='table table-striped table-condensed'>
+            <thead>
+              <tr>
+                <th>列号</th>
+                <th style='width:100px;'>图片</th>
+                <th>名称</th>
+                <th>产地</th>
+                <th>价格</th>
+                <th style='width:50px;'>净重</th>
+                <th class='hidden' style='width:200px;'>描述</th>
+                <th style='width:50px;'>编辑</th>
+                <th style='width:50px;'>上架</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class='onsale tea' data-keywords='1 longjing-400.png 茅家埠西湖龙井（售罄） 2014春新茶 http://wiki.wohecha.cn 西湖龙井核心产区之茅家埠 80.0 元 盒 30.0 g 茶农的这批茶，似乎已经把整个春天锁进小小的叶片之中，香气淡雅，静心品味可以体会出，清晨荷花露珠消散的清雾里淡淡的香甜。 true' id='tea_1'>
+                <td style='vertical-align: middle'>1</td>
+                <td>
+                  <img class='img-news' src='../images/teas/1/longjing-400.png' style='width:100px;'>
+                </td>
+                <td>茅家埠西湖龙井（售罄）</td>
+                <td>西湖龙井核心产区之茅家埠</td>
+                <td>80.0 元/盒</td>
+                <td>30 g</td>
+                <td class='hidden'>茶农的这批茶，似乎已经把整个春天锁进小小的叶片之中，香气淡雅，静心品味可以体会出，清晨荷花露珠消散的清雾里淡淡的香甜。</td>
+                <td>
+                  <a class='btn' data-original-title='编辑茶品' data-toggle='tooltip' href='/admin/teas/1/edit'>
+                    <span class='glyphicon glyphicon-edit'></span>
+                  </a>
+                  <form accept-charset='UTF-8' action='/teas/1/image' class='form-horizontal' enctype='multipart/form-data' method='post'>
+                    <a data-original-title='更换图片' data-toggle='tooltip'>
+                      <span class='glyphicon glyphicon-picture fileinput-button' style='padding: 3px 12px;'>
+                        <input class='text_field' name='image' onchange="$('#image_submit1').trigger('click');" type='file'>
+                      </span>
+                    </a>
+                    <input class='btn' id='image_submit1' name='commit' style='display:none;' type='submit' value='submit'>
+                  </form>
+                </td>
+                <td>
+                  <form accept-charset='UTF-8' action='/teas/1/onsale' class='form-inline' method='post' role='form'>
+                    <input checked='true' name='status' onchange="$('#tea_1_submit').trigger('click');" type='checkbox' value='0'>
+                    <input class='hidden' id='tea_1_submit' name='commit' type='submit' value='submit'>
+                  </form>
+                </td>
+              </tr>
+              <tr class='onsale tea' data-keywords='3 baicha-400.png 安吉桂家场白茶（售罄） 2014春新茶 http://wiki.wohecha.cn 天荒坪镇桂家场茶园 90.0 元 盒 30.0 g 安吉白茶，氨基酸含量很高，有利于柔嫩肌肤，同时也可以较好的抵抗电脑辐射，非常适宜白领女性饮用。 true' id='tea_3'>
+                <td style='vertical-align: middle'>2</td>
+                <td>
+                  <img class='img-news' src='../images/teas/3/baicha-400.png' style='width:100px;'>
+                </td>
+                <td>安吉桂家场白茶（售罄）</td>
+                <td>天荒坪镇桂家场茶园</td>
+                <td>90.0 元/盒</td>
+                <td>30 g</td>
+                <td class='hidden'>安吉白茶，氨基酸含量很高，有利于柔嫩肌肤，同时也可以较好的抵抗电脑辐射，非常适宜白领女性饮用。</td>
+                <td>
+                  <a class='btn' data-original-title='编辑茶品' data-toggle='tooltip' href='/admin/teas/3/edit'>
+                    <span class='glyphicon glyphicon-edit'></span>
+                  </a>
+                  <form accept-charset='UTF-8' action='/teas/3/image' class='form-horizontal' enctype='multipart/form-data' method='post'>
+                    <a data-original-title='更换图片' data-toggle='tooltip'>
+                      <span class='glyphicon glyphicon-picture fileinput-button' style='padding: 3px 12px;'>
+                        <input class='text_field' name='image' onchange="$('#image_submit3').trigger('click');" type='file'>
+                      </span>
+                    </a>
+                    <input class='btn' id='image_submit3' name='commit' style='display:none;' type='submit' value='submit'>
+                  </form>
+                </td>
+                <td>
+                  <form accept-charset='UTF-8' action='/teas/3/onsale' class='form-inline' method='post' role='form'>
+                    <input checked='true' name='status' onchange="$('#tea_3_submit').trigger('click');" type='checkbox' value='0'>
+                    <input class='hidden' id='tea_3_submit' name='commit' type='submit' value='submit'>
+                  </form>
+                </td>
+              </tr>
+              <tr class='onsale tea' data-keywords='4 01DSC_0028.jpg 普洱茶系列之－易武老黄片 2013 年茶 http://wiki.wohecha.cn/blog/2014/06/30/yi-wu-cha-shan-lao-huang-pian-xun-cha-ji/ 西双版纳勐海易武茶山 98.0 元 砖 249.0 g 易武古镇是茶马古道的源头，清朝时被列为贡茶。我们选的这批茶是茶农自饮的老黄片，醇厚温润。作为自饮茶，具有超高的性价比。 true' id='tea_4'>
+                <td style='vertical-align: middle'>3</td>
+                <td>
+                  <img class='img-news' src='../images/teas/4/01DSC_0028.jpg' style='width:100px;'>
+                </td>
+                <td>普洱茶系列之－易武老黄片</td>
+                <td>西双版纳勐海易武茶山</td>
+                <td>98.0 元/砖</td>
+                <td>249 g</td>
+                <td class='hidden'>易武古镇是茶马古道的源头，清朝时被列为贡茶。我们选的这批茶是茶农自饮的老黄片，醇厚温润。作为自饮茶，具有超高的性价比。</td>
+                <td>
+                  <a class='btn' data-original-title='编辑茶品' data-toggle='tooltip' href='/admin/teas/4/edit'>
+                    <span class='glyphicon glyphicon-edit'></span>
+                  </a>
+                  <form accept-charset='UTF-8' action='/teas/4/image' class='form-horizontal' enctype='multipart/form-data' method='post'>
+                    <a data-original-title='更换图片' data-toggle='tooltip'>
+                      <span class='glyphicon glyphicon-picture fileinput-button' style='padding: 3px 12px;'>
+                        <input class='text_field' name='image' onchange="$('#image_submit4').trigger('click');" type='file'>
+                      </span>
+                    </a>
+                    <input class='btn' id='image_submit4' name='commit' style='display:none;' type='submit' value='submit'>
+                  </form>
+                </td>
+                <td>
+                  <form accept-charset='UTF-8' action='/teas/4/onsale' class='form-inline' method='post' role='form'>
+                    <input checked='true' name='status' onchange="$('#tea_4_submit').trigger('click');" type='checkbox' value='0'>
+                    <input class='hidden' id='tea_4_submit' name='commit' type='submit' value='submit'>
+                  </form>
+                </td>
+              </tr>
+              <tr class='onsale tea' data-keywords='6 DSC_0139-5.jpg 野生红茶 2014新品 http://wiki.wohecha.cn/blog/2014/07/24/ye-sheng-hong-cha/ 福建崇安－武夷山 89.0 元 盒 40.0 g 产自崇安县星村的曹墩和桐木关一带，地处武夷山脉之北段。在茶叶审评的课堂上，遇到了朋友分享的这款野生红茶，滋味醇厚，甘滑爽口，丝丝果甜香，回甘持久，口感迷人。 true' id='tea_6'>
+                <td style='vertical-align: middle'>4</td>
+                <td>
+                  <img class='img-news' src='../images/teas/6/DSC_0139-5.jpg' style='width:100px;'>
+                </td>
+                <td>野生红茶</td>
+                <td>福建崇安－武夷山</td>
+                <td>89.0 元/盒</td>
+                <td>40 g</td>
+                <td class='hidden'>产自崇安县星村的曹墩和桐木关一带，地处武夷山脉之北段。在茶叶审评的课堂上，遇到了朋友分享的这款野生红茶，滋味醇厚，甘滑爽口，丝丝果甜香，回甘持久，口感迷人。</td>
+                <td>
+                  <a class='btn' data-original-title='编辑茶品' data-toggle='tooltip' href='/admin/teas/6/edit'>
+                    <span class='glyphicon glyphicon-edit'></span>
+                  </a>
+                  <form accept-charset='UTF-8' action='/teas/6/image' class='form-horizontal' enctype='multipart/form-data' method='post'>
+                    <a data-original-title='更换图片' data-toggle='tooltip'>
+                      <span class='glyphicon glyphicon-picture fileinput-button' style='padding: 3px 12px;'>
+                        <input class='text_field' name='image' onchange="$('#image_submit6').trigger('click');" type='file'>
+                      </span>
+                    </a>
+                    <input class='btn' id='image_submit6' name='commit' style='display:none;' type='submit' value='submit'>
+                  </form>
+                </td>
+                <td>
+                  <form accept-charset='UTF-8' action='/teas/6/onsale' class='form-inline' method='post' role='form'>
+                    <input checked='true' name='status' onchange="$('#tea_6_submit').trigger('click');" type='checkbox' value='0'>
+                    <input class='hidden' id='tea_6_submit' name='commit' type='submit' value='submit'>
+                  </form>
+                </td>
+              </tr>
+              <tr class='onsale tea' data-keywords='7 baicha.jpg 福建白茶白牡丹 2011 年产 http://wiki.wohecha.cn/blog/2014/08/18/bai-mu-dan/ 福建福鼎 69.0 元 盒 50.0 g 宋徽宗在《大观茶论》里专门列出：“白茶自为一种，于常茶不同，其条敷阐，其叶莹薄。⋯⋯须制造精微，运度得宜，则表里昭澄，如玉之在璞，他无与伦比也。”给的是最高的评价，而且影响了宋代“茶贵白”的风尚。 true' id='tea_7'>
+                <td style='vertical-align: middle'>5</td>
+                <td>
+                  <img class='img-news' src='../images/teas/7/baicha.jpg' style='width:100px;'>
+                </td>
+                <td>福建白茶白牡丹</td>
+                <td>福建福鼎</td>
+                <td>69.0 元/盒</td>
+                <td>50 g</td>
+                <td class='hidden'>宋徽宗在《大观茶论》里专门列出：“白茶自为一种，于常茶不同，其条敷阐，其叶莹薄。⋯⋯须制造精微，运度得宜，则表里昭澄，如玉之在璞，他无与伦比也。”给的是最高的评价，而且影响了宋代“茶贵白”的风尚。</td>
+                <td>
+                  <a class='btn' data-original-title='编辑茶品' data-toggle='tooltip' href='/admin/teas/7/edit'>
+                    <span class='glyphicon glyphicon-edit'></span>
+                  </a>
+                  <form accept-charset='UTF-8' action='/teas/7/image' class='form-horizontal' enctype='multipart/form-data' method='post'>
+                    <a data-original-title='更换图片' data-toggle='tooltip'>
+                      <span class='glyphicon glyphicon-picture fileinput-button' style='padding: 3px 12px;'>
+                        <input class='text_field' name='image' onchange="$('#image_submit7').trigger('click');" type='file'>
+                      </span>
+                    </a>
+                    <input class='btn' id='image_submit7' name='commit' style='display:none;' type='submit' value='submit'>
+                  </form>
+                </td>
+                <td>
+                  <form accept-charset='UTF-8' action='/teas/7/onsale' class='form-inline' method='post' role='form'>
+                    <input checked='true' name='status' onchange="$('#tea_7_submit').trigger('click');" type='checkbox' value='0'>
+                    <input class='hidden' id='tea_7_submit' name='commit' type='submit' value='submit'>
+                  </form>
+                </td>
+              </tr>
+              <tr class='hidden outsale tea' data-keywords='5  测试 2014新品  from 11.0 元 盒 11.0 g  false' id='tea_5'>
+                <td style='vertical-align: middle'>6</td>
+                <td>
+                  <img class='img-news' src='../images/teas/5/' style='width:100px;'>
+                </td>
+                <td>测试</td>
+                <td>from</td>
+                <td>11.0 元/盒</td>
+                <td>11 g</td>
+                <td class='hidden'></td>
+                <td>
+                  <a class='btn' data-original-title='编辑茶品' data-toggle='tooltip' href='/admin/teas/5/edit'>
+                    <span class='glyphicon glyphicon-edit'></span>
+                  </a>
+                  <form accept-charset='UTF-8' action='/teas/5/image' class='form-horizontal' enctype='multipart/form-data' method='post'>
+                    <a data-original-title='更换图片' data-toggle='tooltip'>
+                      <span class='glyphicon glyphicon-picture fileinput-button' style='padding: 3px 12px;'>
+                        <input class='text_field' name='image' onchange="$('#image_submit5').trigger('click');" type='file'>
+                      </span>
+                    </a>
+                    <input class='btn' id='image_submit5' name='commit' style='display:none;' type='submit' value='submit'>
+                  </form>
+                </td>
+                <td>
+                  <form accept-charset='UTF-8' action='/teas/5/onsale' class='form-inline' method='post' role='form'>
+                    <input name='status' onchange="$('#tea_5_submit').trigger('click');" type='checkbox' value='1'>
+                    <input class='hidden' id='tea_5_submit' name='commit' type='submit' value='submit'>
+                  </form>
+                </td>
+              </tr>
+              <tr class='hidden outsale tea' data-keywords='8  ss 2014新品  s 11.0 元 盒 11.0 g  false' id='tea_8'>
+                <td style='vertical-align: middle'>7</td>
+                <td>
+                  <img class='img-news' src='../images/teas/8/' style='width:100px;'>
+                </td>
+                <td>ss</td>
+                <td>s</td>
+                <td>11.0 元/盒</td>
+                <td>11 g</td>
+                <td class='hidden'></td>
+                <td>
+                  <a class='btn' data-original-title='编辑茶品' data-toggle='tooltip' href='/admin/teas/8/edit'>
+                    <span class='glyphicon glyphicon-edit'></span>
+                  </a>
+                  <form accept-charset='UTF-8' action='/teas/8/image' class='form-horizontal' enctype='multipart/form-data' method='post'>
+                    <a data-original-title='更换图片' data-toggle='tooltip'>
+                      <span class='glyphicon glyphicon-picture fileinput-button' style='padding: 3px 12px;'>
+                        <input class='text_field' name='image' onchange="$('#image_submit8').trigger('click');" type='file'>
+                      </span>
+                    </a>
+                    <input class='btn' id='image_submit8' name='commit' style='display:none;' type='submit' value='submit'>
+                  </form>
+                </td>
+                <td>
+                  <form accept-charset='UTF-8' action='/teas/8/onsale' class='form-inline' method='post' role='form'>
+                    <input name='status' onchange="$('#tea_8_submit').trigger('click');" type='checkbox' value='1'>
+                    <input class='hidden' id='tea_8_submit' name='commit' type='submit' value='submit'>
+                  </form>
+                </td>
+              </tr>
+              <tr class='hidden outsale tea' data-keywords='9  阿萨啊 2014新品     淡淡的 11.0 元 盒 11.0 g  false' id='tea_9'>
+                <td style='vertical-align: middle'>8</td>
+                <td>
+                  <img class='img-news' src='../images/teas/9/' style='width:100px;'>
+                </td>
+                <td>阿萨啊</td>
+                <td>   淡淡的</td>
+                <td>11.0 元/盒</td>
+                <td>11 g</td>
+                <td class='hidden'></td>
+                <td>
+                  <a class='btn' data-original-title='编辑茶品' data-toggle='tooltip' href='/admin/teas/9/edit'>
+                    <span class='glyphicon glyphicon-edit'></span>
+                  </a>
+                  <form accept-charset='UTF-8' action='/teas/9/image' class='form-horizontal' enctype='multipart/form-data' method='post'>
+                    <a data-original-title='更换图片' data-toggle='tooltip'>
+                      <span class='glyphicon glyphicon-picture fileinput-button' style='padding: 3px 12px;'>
+                        <input class='text_field' name='image' onchange="$('#image_submit9').trigger('click');" type='file'>
+                      </span>
+                    </a>
+                    <input class='btn' id='image_submit9' name='commit' style='display:none;' type='submit' value='submit'>
+                  </form>
+                </td>
+                <td>
+                  <form accept-charset='UTF-8' action='/teas/9/onsale' class='form-inline' method='post' role='form'>
+                    <input name='status' onchange="$('#tea_9_submit').trigger('click');" type='checkbox' value='1'>
+                    <input class='hidden' id='tea_9_submit' name='commit' type='submit' value='submit'>
+                  </form>
+                </td>
+              </tr>
+              <tr class='hidden outsale tea' data-keywords='10  啊 2014新品  是 11.0 元 盒 11.0 g 11 false' id='tea_10'>
+                <td style='vertical-align: middle'>9</td>
+                <td>
+                  <img class='img-news' src='../images/teas/10/' style='width:100px;'>
+                </td>
+                <td>啊</td>
+                <td>是</td>
+                <td>11.0 元/盒</td>
+                <td>11 g</td>
+                <td class='hidden'>11</td>
+                <td>
+                  <a class='btn' data-original-title='编辑茶品' data-toggle='tooltip' href='/admin/teas/10/edit'>
+                    <span class='glyphicon glyphicon-edit'></span>
+                  </a>
+                  <form accept-charset='UTF-8' action='/teas/10/image' class='form-horizontal' enctype='multipart/form-data' method='post'>
+                    <a data-original-title='更换图片' data-toggle='tooltip'>
+                      <span class='glyphicon glyphicon-picture fileinput-button' style='padding: 3px 12px;'>
+                        <input class='text_field' name='image' onchange="$('#image_submit10').trigger('click');" type='file'>
+                      </span>
+                    </a>
+                    <input class='btn' id='image_submit10' name='commit' style='display:none;' type='submit' value='submit'>
+                  </form>
+                </td>
+                <td>
+                  <form accept-charset='UTF-8' action='/teas/10/onsale' class='form-inline' method='post' role='form'>
+                    <input name='status' onchange="$('#tea_10_submit').trigger('click');" type='checkbox' value='1'>
+                    <input class='hidden' id='tea_10_submit' name='commit' type='submit' value='submit'>
+                  </form>
+                </td>
+              </tr>
+              <tr class='hidden outsale tea' data-keywords='2 biluochun-400.png 太湖西山碧螺春 2014春新茶 http://wiki.wohecha.cn 西山镇消夏湾茶园 70.0 元 盒 30.0 g 茶园中有很多栗子树、枇杷树，去茶主看到不少梅花鹿。这批茶，卷曲如罗，色泽银碧，冲泡后碗中春色喜人。 ' id='tea_2'>
+                <td style='vertical-align: middle'>10</td>
+                <td>
+                  <img class='img-news' src='../images/teas/2/biluochun-400.png' style='width:100px;'>
+                </td>
+                <td>太湖西山碧螺春</td>
+                <td>西山镇消夏湾茶园</td>
+                <td>70.0 元/盒</td>
+                <td>30 g</td>
+                <td class='hidden'>茶园中有很多栗子树、枇杷树，去茶主看到不少梅花鹿。这批茶，卷曲如罗，色泽银碧，冲泡后碗中春色喜人。</td>
+                <td>
+                  <a class='btn' data-original-title='编辑茶品' data-toggle='tooltip' href='/admin/teas/2/edit'>
+                    <span class='glyphicon glyphicon-edit'></span>
+                  </a>
+                  <form accept-charset='UTF-8' action='/teas/2/image' class='form-horizontal' enctype='multipart/form-data' method='post'>
+                    <a data-original-title='更换图片' data-toggle='tooltip'>
+                      <span class='glyphicon glyphicon-picture fileinput-button' style='padding: 3px 12px;'>
+                        <input class='text_field' name='image' onchange="$('#image_submit2').trigger('click');" type='file'>
+                      </span>
+                    </a>
+                    <input class='btn' id='image_submit2' name='commit' style='display:none;' type='submit' value='submit'>
+                  </form>
+                </td>
+                <td>
+                  <form accept-charset='UTF-8' action='/teas/2/onsale' class='form-inline' method='post' role='form'>
+                    <input name='status' onchange="$('#tea_2_submit').trigger('click');" type='checkbox' value='1'>
+                    <input class='hidden' id='tea_2_submit' name='commit' type='submit' value='submit'>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class='row'>
+            <div class='col-sm-6 col-offset3'>
+              <!-- / Modal -->
+              <div aria-hidden='true' aria-labelledby='myModalLabel' class='modal fade' id='myModal' role='dialog' tabindex='-1'>
+                <div class='modal-dialog'>
+                  <div class='modal-content' id='myModalContent'>
+                    <div class='modal-header'>
+                      <button aria-hidden='true' class='close' data-dismiss='modal' type='button'>&times;</button>
+                      <h4 class='modal-title' id='myModalLabel'>loading</h4>
+                    </div>
+                    <div class='modal-body'>
+                      loading
+                    </div>
+                    <div class='modal-footer'>
+                      <button class='btn btn-default' data-dismiss='modal' type='button'>Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='container'>
+      <div class='row center'>
+        <div class='footer'>微信号: sha-aichun</div>
+        <div class='footer'>&copy; 2014 wohecha.cn</div>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+  $(function() {
+    $('body').tooltip({
+      selector: "[data-toggle=tooltip]",
+      container: "body"
+    })
+    $('body').popover({
+      selector: "[data-toggle=popover]",
+      container: "body"
+    })
+  
+    // navbar-nav active menu
+    var pathname = window.location.pathname;
+    $(".navbar-nav:first li").each(function(){
+      var href = $(this).children("a:first").attr("href");
+      if(pathname == href)
+        $(this).addClass("active")
+      else
+        $(this).removeClass("active")
+    });
+  })
+</script>

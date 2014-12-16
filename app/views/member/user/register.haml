@@ -1,0 +1,33 @@
+= stylesheet_link_tag "/stylesheets/bootstrapValidator.min.css"
+= javascript_include_tag "/javascripts/bootstrapValidator.js"
+
+.page-header
+  %h2 注册
+
+%form#registerForm.form-horizontal{action: "/carder/user/register", method: "post"}
+  .form-group
+    %label.col-lg-2.control-label 用户名称&nbsp;&nbsp;&nbsp;
+    .col-lg-8
+      %input.form-control{name: "user[name]", type: "text", value: @user.name}/
+  .form-group
+    %label.col-lg-2.control-label 登陆邮箱*
+    .col-lg-8
+      %input.form-control{name: "user[email]", type: "text", value: @user.email}/
+  .form-group
+    %label.col-lg-2.control-label 登陆密码*
+    .col-lg-8
+      %input.form-control{name: "user[password]", type: "password", value: @user.password}/
+  .form-group
+    %label.col-lg-2.control-label 确认密码*
+    .col-lg-8
+      %input.form-control{name: "confirm_password", type: "password"}/
+  .form-group
+    %label#captchaOperation.col-lg-2.control-label
+    .col-lg-3
+      %input.form-control{name: "captcha", type: "text"}/
+  .form-group
+    .col-lg-3.col-lg-offset-2
+      %button.btn.btn-primary{type: "submit"} 提交
+      %button#resetBtn.btn.btn-default{type: "button"} 重置 
+
+= javascript_include_tag "/javascripts/user_register.js"

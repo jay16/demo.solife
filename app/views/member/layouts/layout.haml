@@ -1,0 +1,40 @@
+-# coding: UTF-8
+!!!
+%html
+  %head
+    %title= [Settings.website.title, Settings.website.slogan].join(" | ")
+    %meta{"http-equiv" => "content-type", content: "text/html", charset: "UTF-8"}
+    = favicon_link_tag Settings.website.favicon
+    = javascript_include_tag "/javascripts/jquery-2.1.1.min.js"
+    = javascript_include_tag "/javascripts/bootstrap.320.min.js"
+    = javascript_include_tag "/javascripts/nprogress.js"
+    = javascript_include_tag "/javascripts/js_utils.js"
+    = javascript_include_tag "/javascripts/application.js"
+    = javascript_include_tag "/javascripts/jquery_sinatra.js"
+    = stylesheet_link_tag "/stylesheets/bootstrap.320.min.css"
+    = stylesheet_link_tag "/stylesheets/nprogress.css"
+    = stylesheet_link_tag "/stylesheets/application.css"
+    -if mobile? or (params = params || {} and params[:template] == "mobile_cart")
+      %meta{:content => "no", :name => "apple-mobile-web-app-capable"}
+      %meta{:content => "True", :name => "HandheldFriendly"}/
+      %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no", :name => "viewport"}/
+      :css
+        body {
+          max-width: 1000px;
+          min-width:300px;
+        }
+  %body{style: "background:#f0f0f0;"}
+    = haml :"../layouts/_header"
+    .container#main
+      .row
+        .col-sm-12{style: "text-align:center;"}
+          .loading.hidden 加载中...
+          = flash_message
+      .row{style: "margin:0px;"}
+        .col-sm-12
+          = yield
+
+    .container#footer
+      .row.center
+        .footer &copy; 2014 carder.solife.us
+
