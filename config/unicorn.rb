@@ -21,10 +21,16 @@ stdout_path log_file
 preload_app true
 
 # make sure that Bundler finds the Gemfile
-#before_exec do |server|
-#  ENV['BUNDLE_GEMFILE'] = File.expand_path('../Gemfile', File.dirname(__FILE__))
-#end
-#
+before_exec do |server|
+  ENV['BUNDLE_GEMFILE'] = File.expand_path('../Gemfile', File.dirname(__FILE__))
+end
+
+before_fork do |server, worker|
+  DataObjects::Pooling.pools.each do |pool|
+    pool.dispose
+  end
+end
+
 #before_fork do |server, worker|
 #  defined?(ActiveRecord::Base) and
 #    ActiveRecord::Base.connection.disconnect!

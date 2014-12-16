@@ -1,5 +1,6 @@
 #encoding: utf-8
 source "http://ruby.taobao.org"
+#source "http://gemcutter.org"
 
 if defined? Encoding
   Encoding.default_external = Encoding::UTF_8
