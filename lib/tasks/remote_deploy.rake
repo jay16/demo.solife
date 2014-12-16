@@ -15,7 +15,7 @@ namespace :remote do
 
   desc "scp local config files to remote server."
   task :deploy => :environment do
-    remote_root_path = "/home/work/carder"
+    remote_root_path = "/home/work/solife-weixin"
     local_config_path  = "%s/config" % ENV["APP_ROOT_PATH"]
     remote_config_path = "%s/config" % remote_root_path
     yamls = Dir.entries(local_config_path).find_all { |file| File.extname(file) == ".yaml" }
@@ -33,8 +33,8 @@ namespace :remote do
         puts "\n"
       end
 
-      remote_db_path = "%s/db/carder_development.db" % remote_root_path
-      local_db_path  = "%s/db/carder_development.db" % ENV["APP_ROOT_PATH"] 
+      remote_db_path = "%s/db/solife_weixin_development.db" % remote_root_path
+      local_db_path  = "%s/db/solife_weixin_development.db" % ENV["APP_ROOT_PATH"] 
       File.delete(local_db_path) if File.exist?(local_db_path)
       ssh.scp.download!(remote_db_path, local_db_path)
     end

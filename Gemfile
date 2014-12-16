@@ -36,7 +36,7 @@ gem "unicorn", "~>4.8.3"
 gem "capistrano", "~>2.15.5"
 gem "rake", "~>10.3.2"
 gem "settingslogic", "~>2.0.9"
-gem "rest-client", "~>1.7.2"
+#gem "rest-client", "~>1.7.2"
 
 #代码覆盖率
 #rake stats
@@ -52,6 +52,4 @@ end
 group :test do
   gem "rack-test", "~>0.6.2"
   gem "rspec", "~>2.14.1"
-  gem "factory_girl", "~>4.4.0"
-  gem "jasmine", "~>2.0.2"
 end
