@@ -140,6 +140,8 @@ class ApplicationController < Sinatra::Base
       body.read
     # gem#unicorn
     #     it also change the strtucture of REQUEST
+    when (defined?(Unicorn) and Unicorn::TeeInput)
+      body.read
     when Rack::Lint::InputWrapper
       body.read
     else

@@ -6,7 +6,7 @@ class WeixinController < ApplicationController
   set :views, ENV["VIEW_PATH"] + "/weixin"
 
   configure do
-    set :weixin_token, "carder_go_home"
+    set :weixin_token, Settings.weixin.token 
     set :weixin_uri,   "%s/weixin" % Settings.domain
     set :weixin_name,  Settings.weixin.name
     set :weixin_desc,  Settings.weixin.desc

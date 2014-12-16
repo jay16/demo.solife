@@ -4,6 +4,7 @@ default: &default
   weixin:
     name: "生活点滴"
     desc: "TODO"
+    token: "weixin-token"
   website:
     title: "生活点滴"
     subtitle: "Carder"
