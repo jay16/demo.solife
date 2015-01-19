@@ -1,0 +1,30 @@
+.row
+  %h1 首页
+
+.row
+  %table.table.table-striped.table-condensed
+    %thead
+      %tr
+        %th 微信头像
+        %th 微信昵称
+        %th 消息数量
+        %th 关注状态
+        %th 回调函数
+    %tbody
+      - @weixiners.each do |weixiner|
+        %tr
+          %td{"data-openid" => weixiner.uid}
+            = image_tag weixiner.head_img_url, class: "avatar"
+          %td.va-m= weixiner.nick_name
+          %td.va-m= weixiner.messages.count
+          %td.va-m= weixiner.status
+          %td
+            = weixiner.callbacks.count
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            = link_to "+", "/account/new/%s" % weixiner.uid
+    
+
+

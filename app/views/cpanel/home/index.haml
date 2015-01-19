@@ -1,0 +1,23 @@
+.row
+  %h1 概况
+
+.row
+  %table.table.table-condensed
+    %thead
+      %tr
+        %th 参数
+        %th 数量
+        %th 备注
+    %tbody
+      %tr
+        %td 注册用户
+        %td= @users.count
+        %td
+      %tr 
+        %td 微信用户
+        %td= @weixiners.count
+        %td
+      %tr
+        %td 微信消息
+        %td= @messages.count
+        %td

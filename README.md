@@ -1,6 +1,6 @@
-# [生活点滴]
+# [SOLife]
 
-## 启动服务
+## start up
 
 ````
 bundle install
@@ -9,4 +9,7 @@ bundle install
 bundle exec rake remote:deploy
 ````
 
+## TODO
+
+  1. deal with weixin#voice(media_id, format, recogination)
 

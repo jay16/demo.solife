@@ -1,0 +1,34 @@
+.row
+  .col-lg-4
+    .stat
+      %h2 Users
+      %span.stat-heading= @weixiners.count
+  .col-lg-4
+    .stat
+      %h2 Messages
+      %span.stat-heading= @messages.count
+  .col-lg-4
+    .stat
+      %h2 Phantoms 
+      %span.stat-heading= @phantoms.count
+
+.row
+  .col-lg-4.col-lg-offset-1
+    %img.img-responsive.img-rounded{src: "/images/xiao6say.jpg"}
+  .col-lg-6
+    :css
+      .dl-horizontal dt { width: 80px; }
+      .dl-horizontal dd { margin-left: 100px; }
+    %dl.dl-horizontal
+      %dt 微信号名称
+      %dd 胜因
+      %dt 微信号类型
+      %dd 服务号
+      %dt 微信功能
+      %dd 语音录入词义解析测试,错误例句收集.
+      %dt 功能示例
+      %dd 语音录入: 吃饭花费15元<br> 返回:<br> {Remain: 吃饭, Type: 饮食,Money: 15,Time: 0}
+      %dt 需要您配合
+      %dd 输入 0（错误 )/1（正确）对最近一次解析结果判断.
+      %dt 建议反馈
+      %dd 欢迎发表相关想法或建议, 邮箱地址: jay_li(at)intfocus.com

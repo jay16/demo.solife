@@ -1,0 +1,37 @@
+.row.page-header
+  %h1{style: "display:inline-block;"} 更新明细
+  = link_to "编辑", "/cpanel/change_log/%d/edit" % @change_log.id, class: "btn btn-sm btn-default", style: "margin-bottom: 15px;"
+
+.row
+  %table.table.table-condensed.table-bordered
+    %tr
+      %td 标题
+      %td= @change_log.title
+    %tr
+      %td 内容
+      %td= @change_log.content.split(/\n/).join("<br>")
+    %tr
+      %td 耗时
+      %td= @change_log.duration + " 分钟" if @change_log.duration
+    %tr
+      %td 标签
+      %td= @change_log.tag.split(/\s+/).join(",")
+    %tr
+      %td 源自
+      %td= @change_log.source.split(/\s+/).join(",")
+    %tr
+      %td 创建者
+      %td= @change_log.author.split(/#/).first
+    %tr
+      %td 创建时间
+      %td= @change_log.created_at.strftime("%Y-%m-%d %H:%M:%S")
+    - if @change_log.editor
+      %tr
+        %td 编辑者
+        %td= @change_log.editor.split(/#/).first
+      %tr
+        %td 编辑时间
+        %td= @change_log.updated_at.strftime("%Y-%m-%d %H:%M:%S")
+    %tr
+      %td 公开
+      %td= @change_log.publish

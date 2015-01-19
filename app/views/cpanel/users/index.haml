@@ -1,0 +1,21 @@
+.row
+  %h1 注册用户
+
+.row
+  %table.table.table-condensed
+    %thead
+      %tr
+        %th -
+        %th 名称
+        %th 邮箱
+        %th 微信用户
+        %th 注册时间
+
+    %tbody
+      - @users.each_with_index do |user,index|
+        %tr
+          %td= index
+          %td= user.name
+          %td= user.email
+          %td= user.weixiners.count
+          %td= user.created_at.strftime("%y-%m-%d %H:%M")

@@ -10,7 +10,7 @@
     # bootstrap#v3 [alert] javascript plugin
     flash.keys.map(&:to_s).grep(/warning|danger|success/).map do |key|
       close = link_to("&times;", "#", class: "close", "data-dismiss" => "alert")
-      tag(:div, "#{close}#{hash[key]}", { class: "alert alert-#{key}", role: "alert" }) 
+      tag(:div, {content: "#{close}#{hash[key]}", class: "alert alert-#{key}", role: "alert" }) 
     end.join
   end
 

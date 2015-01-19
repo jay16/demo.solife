@@ -1,9 +1,15 @@
-.row.page-header
-  %h1 点滴生活
-
 .row
-  .col-lg-12
-    .panel.panel-default
-      .panel-heading 首页
-      .panel-body 
-        %h1 TODO
+  .col-lg-4
+    .stat
+      %h2 用户
+      %span.stat-heading= @users.count
+  .col-lg-4
+    .stat
+      %h2 微信
+      %span.stat-heading= @weixiners.count
+  .col-lg-4
+    .stat
+      %h2 消息
+      %span.stat-heading= @messages.count
+
+

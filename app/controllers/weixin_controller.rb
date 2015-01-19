@@ -1,8 +1,10 @@
 ﻿#encoding: utf-8 
 require "lib/utils/weixin_robot.rb"
+require "lib/utils/reply_robot.rb"
 require "timeout"
 class WeixinController < ApplicationController
   register Sinatra::WeiXinRobot
+  register Sinatra::ReplyRobot
   set :views, ENV["VIEW_PATH"] + "/weixin"
 
   configure do
@@ -37,7 +39,7 @@ class WeixinController < ApplicationController
 
     reply = "消息创建成功."
     Timeout::timeout(4) do # weixin limit 5s callback
-      reply += "\n" + message.reply
+      reply = reply_robot(message)
     end
 
     weixin.sender(msg_type: "text") do |msg|

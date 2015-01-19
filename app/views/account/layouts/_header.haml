@@ -13,12 +13,12 @@
     .collapse.navbar-collapse{role: "navigation", id:"bs-example-navbar-collapse-1"}
       %ul.nav.navbar-nav
         %li.active= link_to "首页", "/carder"
-        %li= link_to "工作室", "/carder/workspace"
+        %li= link_to "回调函数", "/carder/workspace"
 
       %input#navbar_right_lis{type: "hidden", value: 1}/
       %ul.nav.navbar-nav.navbar-right
-        %li.glyphicon-width
-          %a{href: "/carder/trash"}
+        %li.glyphicon-width.hidden
+          %a{href: "/account/trash"}
             %i.glyphicon.glyphicon-trash
         %li.dropdown
           %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
@@ -41,7 +41,6 @@
                   后台管理
             %li.divider
             %li
-              %a{:href => "/carder/user/logout"}
+              %a{:href => "/users/logout"}
                 %i.glyphicon.glyphicon-log-out
                 退出
-

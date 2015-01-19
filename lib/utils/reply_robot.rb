@@ -1,83 +1,47 @@
 #encoding: utf-8
-require "yaml"
 require "erb"
+require "json"
 
 module Sinatra
   module ReplyRobot 
-    # command instance methods
-    module InstanceMethods
-      def load_yaml(file_path)
-        file_contents = File.read(file_path)
-        YAML.load(ERB.new(file_contents).result).to_hash
-      end
-    end
-    # only for command
-    module CommandInstanceMethods
-      def cmd_query(options)
-        command, index, rest = options
-        card = @message.weixiner.cards.first(index: index)
-        if card
-          "录入状态: %s完成.\n" % (card.is_over ? "" : "未") + 
-          "上传时间: %s" % card.created_at.strftime("%Y-%m-%d %H:%M")
-        else
-          "未查找名片ID: %d." % index
-        end
-      end
-    end
     # command parser
     class Command 
-      include InstanceMethods
-      include CommandInstanceMethods
       attr_reader :key, :command, :raw_cmd, :exec_cmd
-      def initialize(message, yaml)
+      def initialize(message)
         @message  = message
         @result   = []
-        @raw_cmd  = message.content 
-        @commands = yaml["command"]
+        @raw_cmd  = message.content.to_s.strip
       end
-      def self.exec(raw_cmd, yaml)
-        reply = new(raw_cmd, yaml)
+      def self.exec(raw_cmd)
+        reply = new(raw_cmd)
         reply.handler
       end
       def handler
-        @response = find_key ? parse : help
-        result = []
-        if @exec_cmd
-          result.push "执行命令:\n %s" % @exec_cmd 
+        if @raw_cmd =~ /^\?/ or @raw_cmd.force_encoding('UTF-8').start_with?("？")
+            help
+        elsif @raw_cmd =~ /\s账户绑定\s+/
+          email = @raw_cmd.split[1]
+          user = ::User.first(email: email)
+          if user.nil?
+            status = "帐户绑定失败."
+            status << "原因: 帐户(%s)不存在." % email
+          else
+            state = @message.weixiner.update(user_id: user.id)
+            status = "帐户绑定: %s" % (state ? "成功" : "失败")
+          end
         else
-          result.push "命令无效.\n命令列表:\n"
+          "handler#todo#{@raw_cmd}"
         end
-        result.push @response
-        result.join("\n")
-      end
-      # whether command exist in yaml
-      def find_key
-        @key = @commands.keys.find do |key|
-          regexp = @commands[key]["regexp"]
-          Regexp.new(regexp) =~ @raw_cmd
-        end
-      end
-      # parse command when @key exist
-      def parse
-         regexp = @commands[@key]["regexp"]
-         Regexp.new(regexp) =~ @raw_cmd
-         @exec_cmd = $&
-         send(:cmd_query, @exec_cmd.split)
       end
       # help menu
       def help
-        @commands.keys.map do |key|
-          "c%s %s" % [key, @commands[key]["human"]]
-        end.join("\n")
+        "帮助菜单:\n 说明你想记录的文字、语音、图片、位置..."
       end
     end # Command
 
     class Parser
-      include InstanceMethods
-      def initialize(message, weixin_yaml)
+      def initialize(message)
         @message     = message
-        @weixin_yaml = weixin_yaml
-        @yaml        = load_yaml(@weixin_yaml)
         @msg_type_hash = {
           "text"     => "文本",
           "news"     => "新闻",
@@ -93,38 +57,62 @@ module Sinatra
 
       def handler
         case @message.msg_type
-        when "text"  then 
-          Command.exec(@message, @yaml)
-        when "image" then 
-          "%s\n名片ID: %s\n" % [@yaml["image"], @message.card.index]
-        when "event" then 
-          @message.weixiner.update(status: @message.event)
-          @yaml["event"][@message.event]
         when "voice" then
-          "感谢您的[%s]反馈." % @msg_type_hash["voice"]
-        when "video" then
-          "感谢您的[%s]反馈." % @msg_type_hash["video"]
+          result = %Q{"%s"\n\n} % @message.recognition.force_encoding('UTF-8')
+          result += "分解:\n"
+          if phantom = @message.phantom
+            result += phantom.process
+            if change_log = ChangeLog.first(remark: "message#%d" % @message.id)
+              result += "\n\n hi %s" % change_log.author
+              result += "\n更新日志创建成功."
+            end
+          else
+            result += "未创建"
+          end
+          return result
+        when "text"  then 
+          Command.exec(@message)
+        when "event" then 
+          case @message.event.downcase
+          when "subscribe"
+            @message.weixiner.update(status: @message.event)
+            "你好，感谢您参与[小6语记]\n如有疑问请输入: ?"
+          when "unsubscribe"
+            @message.weixiner.update(status: @message.event)
+            "期待您的再次关注"
+          when "click"
+            case @message.event_key.downcase
+            when "personal_report"
+              @message.weixiner.personal_report
+            else
+              "click#%s TODO" % @message.event_key
+            end
+          when "view"
+            cache_file= File.join(ENV["APP_ROOT_PATH"], "tmp/weixin_menu_view.cache")
+            command = "echo '%s,%s' >> %s" % [Time.now.to_i, @message.from_user_name, cache_file]
+            `#{command}`
+            return "event#view TODO"
+          end
         else 
           "类型为[%s],暂不支持!" % @message.msg_type
         end
       end
 
-      def self.exec(message, weixin_yaml)
-        parser = new(message, weixin_yaml)
+      def self.exec(message)
+        parser = new(message)
         parser.handler
       end
     end
 
     module ReplyHelpers
       def reply_robot(message)
-        Sinatra::ReplyRobot::Parser.exec(message, settings.weixin_yaml)
+        Sinatra::ReplyRobot::Parser.exec(message)
       end
     end
 
     def self.registered(robot)
       robot.set     :weixin_name,     "NAME"
       robot.set     :weixin_desc,     "DESC"
-      robot.set     :weixin_yaml,     "DESC"
       robot.helpers  ReplyHelpers
     end
   end # ReplyRobot

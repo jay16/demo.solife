@@ -1,0 +1,30 @@
+.row
+  - url = "/cpanel/change_log" + (@callback.id ? "/#{@callback.id}" : "")
+  - form_for @callback, url, id: "callbackForm", class: "form-horizontal", role: "form" do |f|
+    .form-group
+      = f.label "主题", class: "col-lg-2 control-label"
+      .col-lg-4
+        = f.text_field :title, class: "form-control", placeholder: "更新主题"
+    .form-group
+      = f.label "内容", class: "col-lg-2 control-label"
+      .col-lg-8
+        = f.text_area :content, class: "form-control", placeholder: "更新类型、更新内容", rows: "10"
+    .form-group
+      = f.label "耗时", class: "col-lg-2 control-label"
+      .col-lg-8
+        = f.text_field :duration, class: "form-control", placeholder: "使用时间,单位: 分钟"
+    .form-group
+      = f.label "标签", class: "col-lg-2 control-label"
+      .col-lg-8
+        = f.text_field :tag, class: "form-control", placeholder: "多个标签，使用空格分隔"
+    .form-group
+      = f.label "公开", class: "col-lg-2 control-label"
+      .col-lg-8{style: "border: none;"}
+        = f.check_box :publish, class: "form-control checkbox"
+    .form-group
+      .col-lg-offset-2.col-lg-4
+        = f.submit "提交", class: "btn btn-default"
+
+= stylesheet_link_tag "bootstrapValidator.css"
+= javascript_include_tag "bootstrapValidator.js"
+- javascript_include_tag "user_login.js"

@@ -10,6 +10,7 @@ default: &default
     subtitle: "Carder"
     slogan: "爱生活、爱记录"
     favicon: "/images/favicon.ico"
+    footer: "weixin.solife.us"
   alipay:
     pid: '' 
     secret: ''

@@ -15,6 +15,10 @@ gem "sinatra-logger", "~>0.1.1"
 # This project is now part of sinatra-contrib.
 # gem "sinatra-reloader" 
 
+gem "actionmailer"
+gem "warden", "~>1.2.3"
+gem "sinatra_more", "~>0.3.43"
+
 #db
 gem "dm-core", "~>1.2.1"
 gem "dm-migrations", "~>1.2.0"
@@ -30,13 +34,10 @@ gem "sass", "~>3.3.7"
 gem "therubyracer", "~>0.12.1"
 gem "coffee-script", "~>2.2.0"
 
-#gem "passenger", "~>4.0.53"
-#gem "thin", "~>1.6.2"
 gem "unicorn", "~>4.8.3"
-gem "capistrano", "~>2.15.5"
 gem "rake", "~>10.3.2"
 gem "settingslogic", "~>2.0.9"
-#gem "rest-client", "~>1.7.2"
+gem "httparty", "~>0.13.3"
 
 #代码覆盖率
 #rake stats

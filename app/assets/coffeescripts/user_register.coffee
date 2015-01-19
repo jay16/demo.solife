@@ -33,7 +33,7 @@ $(document).ready ->
           remote:
             type: "post"
             delay: true
-            url: "/carder/user/check_email_exist"
+            url: "/user/check_email_exist"
             message: "该邮箱已被注册"
       "user[password]":
         validators:

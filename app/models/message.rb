@@ -13,6 +13,10 @@ class Message # 微信消息
     # debug it without below two
     property :create_time    , String#  , :required => true
     property :msg_id         , String#  , :required => true
+    # voice
+    property :media_id       , Text
+    property :format         , String
+    property :recognition    , Text
     # text
     property :content        , Text
     # image
@@ -28,6 +32,7 @@ class Message # 微信消息
     property :url            , Text
     # event
     property :event          , String
+    property :event_key      , String
     property :latitude       , String
     property :precision      , String
 
@@ -40,8 +45,9 @@ class Message # 微信消息
       messages = self.weixiner.messages
       message_count = messages.count
       today_s_count = messages.all(:created_on => Time.now).count
-      text = "第%d条消息\n" % message_count + 
-        "今天第%d条消息" % today_s_count
+      text = ""
+      text << "第%d条消息\n" % message_count
+      text << "今天第%d条消息" % today_s_count
       update(response: text)
       self.response
     end

@@ -1,6 +1,6 @@
 ﻿#encoding: utf-8
 require "model-base"
-class User
+class Callback
     include DataMapper::Resource
     include Utils::DataMapper::Model
     #extend  Utils::DataMapper::Model
@@ -15,19 +15,10 @@ class User
     property :province  , String  
     property :city      , String  
 
-    has n, :weixiners
-
-    after :create do |obj|
-      # name default from email
-      update(name: email.split(/@/).first) if name.nil? 
-    end
-
-    def admin?
-      @is_admin ||= Settings.admins.split(/;/).include?(self.email)
-    end
+    belongs_to :weixiner, required: false
 
     # instance methods
     def human_name
-      "用户"
+      "回调函数"
     end
 end
