@@ -16,6 +16,7 @@ class User
     property :city      , String  
 
     has n, :weixiners
+    has n, :callbacks , through: :weixiners
 
     after :create do |obj|
       # name default from email

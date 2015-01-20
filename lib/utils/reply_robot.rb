@@ -19,7 +19,7 @@ module Sinatra
       def handler
         if @raw_cmd =~ /^\?/ or @raw_cmd.force_encoding('UTF-8').start_with?("？")
             help
-        elsif @raw_cmd =~ /\s账户绑定\s+/
+        elsif @raw_cmd =~ /^账户绑定\s+/
           email = @raw_cmd.split[1]
           user = ::User.first(email: email)
           if user.nil?

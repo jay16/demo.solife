@@ -7,13 +7,10 @@ class Callback
     include Utils::ActionLogger
 
     property :id        , Serial 
-    property :email     , String  , :required => true, :unique => true
-    property :name      , String
-    property :password  , String  , :required => true
-    property :gender    , Boolean 
-    property :country   , String  
-    property :province  , String  
-    property :city      , String  
+    property :outer_url , String  , :required => true
+    property :token     , String  , :required => true
+    property :keyword   , String  , :required => true
+    property :desc      , Text
 
     belongs_to :weixiner, required: false
 

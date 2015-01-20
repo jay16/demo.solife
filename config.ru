@@ -5,6 +5,7 @@
   "/weixin"           => "WeixinController",
   "/account"          => "Account::HomeController",
   "/account/users"    => "Account::UsersController",
+  "/account/callbacks"=> "Account::CallbacksController",
   "/account/weixiners"=> "Account::WeixinersController",
   "/account/messages" => "Account::MessagesController",
   "/cpanel"           => "Cpanel::HomeController",

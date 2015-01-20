@@ -37,7 +37,7 @@
             remote: {
               type: "post",
               delay: true,
-              url: "/user/check_email_exist",
+              url: "/users/check_email_exist",
               message: "该邮箱已被注册"
             }
           }
