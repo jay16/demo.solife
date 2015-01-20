@@ -39,11 +39,13 @@ class WeixinController < ApplicationController
 
     reply = "消息创建成功."
     Timeout::timeout(4) do # weixin limit 5s callback
-      reply = reply_robot(message)
+      reply << message.reply
+      reply << "\n" + reply_robot(message).to_s
+      message.update(response: reply.strip)
     end
 
     weixin.sender(msg_type: "text") do |msg|
-      msg.content = reply
+      msg.content = message.response
       msg.to_xml
     end
   end

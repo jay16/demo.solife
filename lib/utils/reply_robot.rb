@@ -30,7 +30,24 @@ module Sinatra
             status = "帐户绑定: %s" % (state ? "成功" : "失败")
           end
         else
-          "handler#todo#{@raw_cmd}"
+          callbacks = @message.weixiner.callbacks.find_all { |cb| @raw_cmd.start_with?(cb.keyword.strip) }
+          callbacks.each do |callback|
+            raw_text = @raw_cmd.sub(callback.keyword.strip, "").strip
+            status, *result = raw_text.process_pattern
+            if status
+              hash = ::JSON.parse(result[0])
+              hash = hash.merge({nText: raw_text})
+
+              data = callback.callback_datas.new({params: hash.to_s})
+              data.save_with_logger
+
+              filepath = ::File.join(ENV["APP_ROOT_PATH"], "public/callbacks", data.id.to_s+".cb")
+              File.open(filepath, "w+") { |file| file.puts(hash.to_s) }
+            end
+          end
+          unless callbacks.empty?
+            "执行%d次回调函数." % callbacks.count
+          end
         end
       end
       # help menu
@@ -58,18 +75,7 @@ module Sinatra
       def handler
         case @message.msg_type
         when "voice" then
-          result = %Q{"%s"\n\n} % @message.recognition.force_encoding('UTF-8')
-          result += "分解:\n"
-          if phantom = @message.phantom
-            result += phantom.process
-            if change_log = ChangeLog.first(remark: "message#%d" % @message.id)
-              result += "\n\n hi %s" % change_log.author
-              result += "\n更新日志创建成功."
-            end
-          else
-            result += "未创建"
-          end
-          return result
+          @message.recognition.force_encoding('UTF-8')
         when "text"  then 
           Command.exec(@message)
         when "event" then 

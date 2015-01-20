@@ -46,10 +46,8 @@ class Message # 微信消息
       message_count = messages.count
       today_s_count = messages.all(:created_on => Time.now).count
       text = ""
-      text << "第%d条消息\n" % message_count
-      text << "今天第%d条消息" % today_s_count
-      update(response: text)
-      self.response
+      text << "\n第%d条消息" % message_count
+      text << "\n今天第%d条消息" % today_s_count
     end
 
     # instance methods

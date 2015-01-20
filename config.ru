@@ -1,17 +1,18 @@
 #encoding: utf-8
 @app_routes_map = {
-  "/"                 => "HomeController",
-  "/users"            => "UsersController",
-  "/weixin"           => "WeixinController",
-  "/account"          => "Account::HomeController",
-  "/account/users"    => "Account::UsersController",
-  "/account/callbacks"=> "Account::CallbacksController",
-  "/account/weixiners"=> "Account::WeixinersController",
-  "/account/messages" => "Account::MessagesController",
-  "/cpanel"           => "Cpanel::HomeController",
-  "/cpanel/users"     => "Cpanel::UsersController",
-  "/cpanel/weixiners" => "Cpanel::WeixinersController",
-  "/cpanel/messages"  => "Cpanel::MessagesController"
+  "/"                       => "HomeController",
+  "/users"                  => "UsersController",
+  "/weixin"                 => "WeixinController",
+  "/account"                => "Account::HomeController",
+  "/account/users"          => "Account::UsersController",
+  "/account/callbacks"      => "Account::CallbacksController",
+  "/account/callback_datas" => "Account::CallbackDatasController",
+  "/account/weixiners"      => "Account::WeixinersController",
+  "/account/messages"       => "Account::MessagesController",
+  "/cpanel"                 => "Cpanel::HomeController",
+  "/cpanel/users"           => "Cpanel::UsersController",
+  "/cpanel/weixiners"       => "Cpanel::WeixinersController",
+  "/cpanel/messages"        => "Cpanel::MessagesController"
 }
 
 require "./config/boot.rb"

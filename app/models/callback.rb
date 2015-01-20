@@ -13,6 +13,7 @@ class Callback
     property :desc      , Text
 
     belongs_to :weixiner, required: false
+    has n, :callback_datas
 
     # instance methods
     def human_name

@@ -9,7 +9,8 @@
         %th 昵称
         %th url
         %th token
-        %th keyword
+        %th 关键字
+        %th 数据
         %th 编辑
     %tbody
       - @callbacks.each do |callback|
@@ -18,6 +19,7 @@
           %td= callback.outer_url
           %td= callback.token
           %td= callback.keyword
+          %td= callback.callback_datas.count
           %td
             = link_to "明细", "/account/callbacks/%d" % callback.id 
             |

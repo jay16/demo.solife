@@ -17,6 +17,7 @@ class User
 
     has n, :weixiners
     has n, :callbacks , through: :weixiners
+    has n, :callback_datas, through: :callbacks
 
     after :create do |obj|
       # name default from email

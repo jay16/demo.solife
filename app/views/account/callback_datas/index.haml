@@ -1,0 +1,19 @@
+-#encoding: utf-8
+.row
+  %h1 回调数据
+
+.row{style: "margin-top: 5px; background: white;"}
+  %table.table.table-striped.table-condensed
+    %thead
+      %tr
+        %th url
+        %th{style: "width: 50%;"} 参数
+        %th 响应
+        %th 状态
+    %tbody
+      - @callback_datas.each do |data|
+        %tr
+          %td= data.callback.outer_url
+          %td= data.params
+          %td= data.response
+          %td= data.result
