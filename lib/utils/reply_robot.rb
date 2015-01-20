@@ -36,9 +36,10 @@ module Sinatra
             status, *result = raw_text.process_pattern
             if status
               hash = ::JSON.parse(result[0])
-              hash = hash.merge({nText: raw_text})
+              hash["nText"]  = raw_text
+              hash["nToken"] = callback.token
 
-              data = callback.callback_datas.new({params: hash.to_s})
+              data = callback.callback_datas.new({params: hash.to_s.gsub("=>", ":")})
               data.save_with_logger
 
               filepath = ::File.join(ENV["APP_ROOT_PATH"], "public/callbacks", data.id.to_s+".cb")

@@ -9,7 +9,7 @@ class CallbackData
     property :id        , Serial 
     property :params    , Text    , :required => true
     property :result    , String  , :required => true , :default => "waiting"
-    property :response  , String
+    property :response  , Text 
 
     belongs_to :callback, required: false
 
