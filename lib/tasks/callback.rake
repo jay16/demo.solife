@@ -58,39 +58,50 @@ namespace :callback do
     printf("Completed %s in %s - %s\n\n", now.strftime("%Y-%m-%d %H:%M:%S"), "%dms" % ((eint - bint)*1000).to_i, info)
   end
 
+  def http_get(url, echostr, callback_data)
+    begin
+      response = HTTParty.get "%s?echostr=%s" % [url, echostr]
+      if response.body == echostr
+        return true
+      else
+        callback_data.update({response: "%s <=> %s" % [response.body, echostr], result: "fail#get"})
+        return false
+      end
+    rescue => e
+      callback_data.update({response: e.message, result: "fail#get"})
+      return false
+    end
+  end
+
+  def http_post(url, callback_data)
+    begin
+      Timeout::timeout(4) do
+        params = ::JSON.parse(callback_data.params) 
+        params[:format] = "json"
+        response = HTTParty.post url, body: params, headers: {'ContentType' => 'application/json'} 
+        callback_data.update({response: response.body, result: "ok"})
+      end
+    rescue => e
+      callback_data.update({response: e.message, result: "fail#post"})
+    end
+  end
+
   desc "callback request action."
   task :request do
     CallbackData.all(result: "waiting").each do |callback_data|
-      url = callback_data.callback.outer_url
-      puts url
-      response = HTTParty.get url
-      body  = (response.body rescue "").strip
-      token = callback_data.callback.token.strip
-      puts token
-      if body == token
-        begin
-          Timeout::timeout(4) do
-            params = ::JSON.parse(callback_data.params) 
-            params[:format] = "json"
-            response = HTTParty.post url, body: params, headers: {'ContentType' => 'application/json'} 
-            puts response.body
-            callback_data.update({response: response.body, result: "ok"})
-            puts callback_data.errors.map { |key, value| "%s => %s" % [key, value] }
-          end
-        rescue => e
-          puts e.message rescue "fuck!"
-          callback_data.update({response: e.message, result: "fail rescue"})
-          puts callback_data.errors.map { |key, value| "%s => %s" % [key, value] }
-        end
+      url      = callback_data.callback.outer_url
+      echostr  = Time.now.strftime("%y%m%d%H%M%S")
+
+      if http_get(url, echostr, callback_data)
+        http_post(url, callback_data)
+        puts callback_data.result + "\n\t" + callback_data.response
       else
-        info = "\nGet %s" % url
-        info << "%s <=> %s\n" % [body, token]
-        callback_data.update({response: info.strip, result: "fail"})
-        puts info
+        puts callback_data.result + "\n\t" + callback_data.response
       end
 
-      filepath = File.join(ENV["APP_ROOT_PATH"], "public/callbacks", callback_data.id.to_s+".cb")
-      run_command("rm #{filepath}")
+      filepath = File.join(ENV["APP_ROOT_PATH"], "public/callbacks")
+      cbfile   = callback_data.id.to_s + ".cb"
+      run_command("cd #{filepath} && test -f #{cbfile} && rm #{cbfile}")
     end
   end
 
