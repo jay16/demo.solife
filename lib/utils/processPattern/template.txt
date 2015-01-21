@@ -1,0 +1,76 @@
+[我今天吃饭花了两百六十万元] - Remain:[吃饭],Type:[饮食],Money:[2600000],Time:[0]
+
+[吃了一百五十万零三百元的便当] - Remain:[吃便当],Type:[饮食],Money:[1500300],Time:[0]
+
+[吃了三百万元的便当] - Remain:[吃便当],Type:[饮食],Money:[3000000],Time:[0]
+
+[电影票50元] - Remain:[电影票],Type:[生活],Money:[50],Time:[0]
+
+[花了半小时去吃饭] - Remain:[去吃饭],Type:[饮食],Money:[0],Time:[30]
+
+[吃了10.5元的便当] - Remain:[吃便当],Type:[饮食],Money:[10.50],Time:[0]
+
+[三点三小时上课] - Remain:[上课],Type:[学习],Money:[0],Time:[198]
+
+[三个小时上课] - Remain:[上课],Type:[学习],Money:[0],Time:[180]
+
+[我花了五千五买车] - Remain:[买车],Type:[购物],Money:[5500],Time:[0]
+
+[看电影六千六百五十元] - Remain:[看电影],Type:[娱乐],Money:[6650],Time:[0]
+
+[七个半小时睡觉] - Remain:[睡觉],Type:[生活],Money:[0],Time:[450]
+
+[一小时看书] - Remain:[看书],Type:[学习],Money:[0],Time:[60]
+
+[35分钟学习] - Remain:[学习],Type:[学习],Money:[0],Time:[35]
+
+[和女朋友约会45分] - Remain:[和女朋友约会],Type:[交际],Money:[0],Time:[45]
+
+[请客吃饭1.5小时] - Remain:[请客吃饭],Type:[交际],Money:[0],Time:[90]
+
+[花了五千零五十买水果] - Remain:[买水果],Type:[购物],Money:[5050],Time:[0]
+
+[去理发两小时] - Remain:[去理发],Type:[生活],Money:[0],Time:[120]
+
+[下午四点去医院花了三点五小时] - Remain:[四点去医院],Type:[生活],Money:[0],Time:[210]
+
+[去医院花了十五小时] - Remain:[去医院],Type:[生活],Money:[0],Time:[900]
+
+[去商场买东西] - process failed
+
+[一刻钟玩] - Remain:[玩],Type:[娱乐],Money:[0],Time:[15]
+
+[打架花了两小时二十分钟] - Remain:[打架],Type:[生活],Money:[0],Time:[140]
+
+[打人花了2个小时40分钟] - Remain:[打人],Type:[交际],Money:[0],Time:[160]
+
+[打车去三元桥花了100] - Remain:[打车去桥花了100],Type:[交通],Money:[3],Time:[0]
+
+[看电影一十五元六角八分] - Remain:[看电影],Type:[娱乐],Money:[15.68],Time:[0]
+
+[看电影一十五元六角] - Remain:[看电影],Type:[娱乐],Money:[15.60],Time:[0]
+
+[看电影八角] - Remain:[看电影],Type:[娱乐],Money:[0.80],Time:[0]
+
+[看电影8角] - Remain:[看电影],Type:[娱乐],Money:[0.80],Time:[0]
+
+[看电影六角八分] - Remain:[看电影],Type:[娱乐],Money:[0.68],Time:[0]
+
+[看电影1角8分] - Remain:[看电影],Type:[娱乐],Money:[0.18],Time:[0]
+
+[看电影一十五元] - Remain:[看电影],Type:[娱乐],Money:[15],Time:[0]
+
+[一十五元六角八分看电影] - Remain:[看电影],Type:[娱乐],Money:[15.68],Time:[0]
+
+[睡觉一整天] - Remain:[睡觉],Type:[生活],Money:[0],Time:[480]
+
+[花了我的一百五买衣服] - Remain:[买衣服],Type:[购物],Money:[150],Time:[0]
+
+[花了一百五买衣服] - Remain:[买衣服],Type:[购物],Money:[150],Time:[0]
+
+[花了我一百五买衣服] - Remain:[买衣服],Type:[购物],Money:[150],Time:[0]
+
+[花了ididi 的一百五dd3edss买衣服] - Remain:[dd3edss买衣服],Type:[购物],Money:[150],Time:[0]
+
+[一百五元花的买衣服] - Remain:[花的买衣服],Type:[购物],Money:[150],Time:[0]
+
