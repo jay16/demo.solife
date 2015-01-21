@@ -13,7 +13,6 @@ config/*.yml
 config/*.yaml
 
 # 本地同步脚本
-unicorn.sh
 sync_images_and_db.rb
 
 # 项目本地文件夹
