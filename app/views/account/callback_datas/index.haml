@@ -16,9 +16,10 @@
           %td= data.callback.outer_url
           %td= data.params
           %td
-            - if data.response.length < 50
-              = data.response
+            - response = data.response || "空"
+            - if response.length < 50
+              = response
             - else
-              = data.response[0..49].encode(:xml => :text)
-              = link_to "详细", "/account/callback_datas/%d/response" % data.id, target: "blank"
-          %td= data.result
+              = response[0..49].encode(:xml => :text)
+              = link_to "详细", "/account/callback_datas/%d/response" % data.id, target: "blank" if data.id
+          %td= data.result || "等待"
