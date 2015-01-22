@@ -35,18 +35,19 @@ module Sinatra
                   :pic_url,
                   :title, :description, :url,
                   :location_y, :location_x, :scale, :label,
-                  :event, :latitude, :precision
+                  :event, :event_key, :latitude, :precision,
+                  :media_id, :format, :recognition
       def initialize(raw_message)
         if raw_message.instance_of?(String)
           @raw_message = raw_message
         else
           raise "raw_message should String, not %s" % raw_message.class
         end
-        @robot            = @raw_message.scan(/<ToUserName><!\[CDATA\[(.*)\]\]><\/ToUserName>/).flatten.join
-        @user             = @raw_message.scan(/<FromUserName><!\[CDATA\[(.*)\]\]><\/FromUserName>/).flatten.join
-        @create_time      = @raw_message.scan(/<CreateTime>(\d+)<\/CreateTime>/).flatten.join
-        @msg_type         = @raw_message.scan(/<MsgType><!\[CDATA\[(.*)\]\]><\/MsgType>/).flatten.join
-        @msg_id           = @raw_message.scan(/<MsgId>(\d+)<\/MsgId>/).flatten.join
+        @robot       = @raw_message.scan(/<ToUserName><!\[CDATA\[(.*)\]\]><\/ToUserName>/).flatten.join
+        @user        = @raw_message.scan(/<FromUserName><!\[CDATA\[(.*)\]\]><\/FromUserName>/).flatten.join
+        @create_time = @raw_message.scan(/<CreateTime>(\d+)<\/CreateTime>/).flatten.join
+        @msg_type    = @raw_message.scan(/<MsgType><!\[CDATA\[(.*)\]\]><\/MsgType>/).flatten.join
+        @msg_id      = @raw_message.scan(/<MsgId>(\d+)<\/MsgId>/).flatten.join
       end
       def self.message(raw_message)
         msg = new(raw_message)
@@ -69,10 +70,13 @@ module Sinatra
           @url           = @raw_message.scan(/<Url><!\[CDATA\[(.*)\]\]><\/Url>/).flatten.join
         elsif event?
           @event         = @raw_message.scan(/<Event><!\[CDATA\[(.*)\]\]><\/Event>/).flatten.join
+          @event_key     = @raw_message.scan(/<EventKey><!\[CDATA\[(.*)\]\]><\/EventKey>/).flatten.join
           @latitude      = @raw_message.scan(/<Latitude>(.*)<\/Latitude>/).flatten.join
           @precision     = @raw_message.scan(/<Precision>(.*)<\/Precision>/).flatten.join
         elsif voice?
-          # TODO
+          @media_id      = @raw_message.scan(/<MediaId><!\[CDATA\[(.*)\]\]><\/MediaId>/).flatten.join 
+          @format        = @raw_message.scan(/<Format><!\[CDATA\[(.*)\]\]><\/Format>/).flatten.join
+          @recognition   = @raw_message.scan(/<Recognition><!\[CDATA\[(.*)\]\]><\/Recognition>/).flatten.join
         elsif video?
           # TODO
         else

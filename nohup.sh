@@ -3,6 +3,7 @@
 environment=$(test -z "$2" && echo "production" || echo "$2")
 app_root_path=$(cat ./tmp/app_root_path)
 callback_path=$(cat ./tmp/callbacks_path)
+watchdog_pid_file=${app_root_path}/tmp/pids/nohup.pid
 
 case "$1" in
     start)
@@ -12,7 +13,7 @@ case "$1" in
         then
             nohup /bin/sh ${app_root_path}/lib/script/watch_dog.sh ${environment} ${app_root_path} ${callback_path} >> log/nohup.log 2>&1 &
             echo -e "\t nohup start $(test $? -eq 0 && echo "successfully" || echo "failed")."
-            echo $! > ${app_root_path}/tmp/pids/nohup.pid
+            echo $! > ${watchdog_pid_file}
             test -f nohup.out && rm nohup.out
         else
             echo -e "\t nohup start failed - process is already running."

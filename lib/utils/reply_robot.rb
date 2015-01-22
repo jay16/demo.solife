@@ -4,8 +4,35 @@ require "json"
 
 module Sinatra
   module ReplyRobot 
+    module UtilsMethods
+      def execute_callback(message, text)
+        callbacks = message.weixiner.callbacks.find_all { |cb| text.start_with?(cb.keyword.strip) }
+        callbacks.each do |callback|
+          raw_text = text.sub(callback.keyword.strip, "").strip
+          status, *result = raw_text.process_pattern
+          if status
+            hash = ::JSON.parse(result[0])
+            hash["nText"]  = raw_text
+            hash["nToken"] = callback.token
+
+            data = callback.callback_datas.new({params: hash.to_s.gsub("=>", ":")})
+            data.save_with_logger
+
+            filepath = ::File.join(ENV["APP_ROOT_PATH"], "public/callbacks", data.id.to_s+".cb")
+            File.open(filepath, "w+") { |file| file.puts(hash.to_s) }
+          end
+        end
+        puts "*"*10
+        puts callbacks.count
+        puts "*"*10
+        unless callbacks.empty?
+          "执行%d次回调函数." % callbacks.count
+        end
+      end
+    end
     # command parser
     class Command 
+      include UtilsMethods
       attr_reader :key, :command, :raw_cmd, :exec_cmd
       def initialize(message)
         @message  = message
@@ -30,25 +57,7 @@ module Sinatra
             status = "帐户绑定: %s" % (state ? "成功" : "失败")
           end
         else
-          callbacks = @message.weixiner.callbacks.find_all { |cb| @raw_cmd.start_with?(cb.keyword.strip) }
-          callbacks.each do |callback|
-            raw_text = @raw_cmd.sub(callback.keyword.strip, "").strip
-            status, *result = raw_text.process_pattern
-            if status
-              hash = ::JSON.parse(result[0])
-              hash["nText"]  = raw_text
-              hash["nToken"] = callback.token
-
-              data = callback.callback_datas.new({params: hash.to_s.gsub("=>", ":")})
-              data.save_with_logger
-
-              filepath = ::File.join(ENV["APP_ROOT_PATH"], "public/callbacks", data.id.to_s+".cb")
-              File.open(filepath, "w+") { |file| file.puts(hash.to_s) }
-            end
-          end
-          unless callbacks.empty?
-            "执行%d次回调函数." % callbacks.count
-          end
+          execute_callback(@message, @raw_cmd)
         end
       end
       # help menu
@@ -58,6 +67,7 @@ module Sinatra
     end # Command
 
     class Parser
+      include UtilsMethods
       def initialize(message)
         @message     = message
         @msg_type_hash = {
@@ -76,14 +86,17 @@ module Sinatra
       def handler
         case @message.msg_type
         when "voice" then
-          @message.recognition.force_encoding('UTF-8')
+          recognition = @message.recognition.force_encoding('UTF-8') || ""
+          text = %{\n您说: "%s"\n} % recognition
+          text << execute_callback(@message, recognition) if recognition.strip.length > 0
+          text
         when "text"  then 
           Command.exec(@message)
         when "event" then 
           case @message.event.downcase
           when "subscribe"
             @message.weixiner.update(status: @message.event)
-            "你好，感谢您参与[小6语记]\n如有疑问请输入: ?"
+            "你好，感谢您关注[SOLife]\n如有疑问请输入: ?"
           when "unsubscribe"
             @message.weixiner.update(status: @message.event)
             "期待您的再次关注"

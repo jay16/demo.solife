@@ -29,11 +29,17 @@ case "$1" in
         echo -e "\t port: ${PORT} \n\t environment: ${ENVIRONMENT}"
         bundle exec ${UNICORN} -c ${CONFIG_FILE} -p ${PORT} -E ${ENVIRONMENT} -D  
         echo -e "\t unicorn start $(test $? -eq 0 && echo "successfully" || echo "failed")."
+
+        echo "## start nohup"
+        /bin/sh nohup.sh start
         ;;  
     stop)  
         echo "## stop unicorn"
         kill -QUIT `cat tmp/pids/unicorn.pid`  
         echo -e "\t unicorn stop $(test $? -eq 0 && echo "successfully" || echo "failed")."
+
+        echo "## stop nohup"
+        /bin/sh nohup.sh stop
         ;;  
     restart|force-reload)  
         kill -USR2 `cat tmp/pids/unicorn.pid`  
