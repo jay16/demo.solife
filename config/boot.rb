@@ -60,3 +60,6 @@ require "form-helpers"
 recursion_require("app/helpers", /_helper\.rb$/, root_path)
 recursion_require("app/controllers", /_controller\.rb$/, root_path, [/^application_/])
 
+system("echo '%s' > %s" % [root_path, File.join(root_path, "tmp/app_root_path")])
+system("echo '%s' > %s" % [File.join(root_path, "public/callbacks"), File.join(root_path, "tmp/callbacks_path")])
+
