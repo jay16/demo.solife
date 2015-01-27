@@ -1,6 +1,8 @@
 #encoding: utf-8
 require "erb"
 require "json"
+require "timeout"
+require "lib/utils/weixin_utils.rb"
 
 module Sinatra
   module ReplyRobot 
@@ -96,9 +98,19 @@ module Sinatra
           case @message.event.downcase
           when "subscribe"
             @message.weixiner.update(status: @message.event)
+            begin
+              ::Timeout::timeout(4) do # weixin limit 5s callback
+                ::WeixinUtils::Operation.generate_weixiner_info(@message.weixiner)
+              end
+            rescue => e
+              puts e.message
+              puts "Error#weixiner info get failed."
+            end
+
             "你好，感谢您关注[SOLife]\n如有疑问请输入: ?"
           when "unsubscribe"
             @message.weixiner.update(status: @message.event)
+            
             "期待您的再次关注"
           when "click"
             case @message.event_key.downcase

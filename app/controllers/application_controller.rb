@@ -3,7 +3,6 @@ require "sinatra/decompile"
 require 'digest/md5'
 require "json"
 require 'sinatra/advanced_routes'
-require "lib/utils/weixin_utils.rb"
 class ApplicationController < Sinatra::Base
   register Sinatra::Reloader if development?
   register Sinatra::Flash
@@ -33,7 +32,6 @@ class ApplicationController < Sinatra::Base
     @params = @params.merge({ip: remote_ip, browser: remote_browser})
 
     print_format_logger
-    #WeixinUtils::Operation.generate_weixiner_info(Weixiner.all)
   end
 
   #def self.inherited(subclass)

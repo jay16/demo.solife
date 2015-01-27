@@ -49,6 +49,7 @@ module WeixinUtils
     def generate_weixiner_info(weixiners)
       abort "access_token missing" unless @options[:weixin_access_token]
 
+      weixiners = [weixiners] unless weixiners.respond_to?(:each)
       weixiners.each do |weixiner|
         next if weixiner.weixiner_info
         params = []
@@ -60,9 +61,6 @@ module WeixinUtils
         end
         user_info_url  = "%s/user/info?%s" % [@options[:weixin_base_url], params.join("&")]
         hash = ::JSON.parse(open(user_info_url).read)
-        puts "*"*10
-        puts weixiner.weixiner_info.class
-        puts "*"*10
         weixiner_info = ::WeixinerInfo.new(hash)
         weixiner_info.save_with_logger
         weixiner.weixiner_info = weixiner_info

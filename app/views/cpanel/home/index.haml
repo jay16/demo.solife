@@ -1,7 +1,9 @@
 .row
-  %h1 概况
+  %h1 数据概况
 
 .row
+  :css
+    .table a { color: black; }
   %table.table.table-condensed
     %thead
       %tr
@@ -21,3 +23,35 @@
         %td 微信消息
         %td= @messages.count
         %td
+
+.row
+  %h1 代码状态
+
+.row
+  %table.table.table-condensed
+    %thead
+      %tr
+        %th 参数
+        %th 状态
+        %th 备注
+    %tbody
+      %tr
+        %td app root path
+        %td= ENV["APP_ROOT_PATH"]
+        %td
+      %tr
+        %td environment
+        %td= ENV["RACK_ENV"]
+        %td
+      %tr
+        %td language 
+        %td= link_to "Ruby #{RUBY_VERSION} -p#{RUBY_PATCHLEVEL if defined? RUBY_PATCHLEVEL }", "https://github.com/ruby/ruby", target: "blank"
+        %td
+      %tr
+        %td web app
+        %td= link_to "Sinatra ~> #{Sinatra::VERSION}", "https://github.com/bmizerany/sinatra", target: "blank"
+        %td
+      %tr
+        %td http server
+        %td= link_to "Unicorn ~> #{Unicorn::Const::UNICORN_VERSION}", "https://github.com/defunkt/unicorn", target: "blank"
+        %td port#todo
