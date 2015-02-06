@@ -40,8 +40,12 @@ class WeixinController < ApplicationController
 
     reply = "消息创建成功.\n"
     Timeout::timeout(4) do # weixin limit 5s callback
-      reply << message.reply
-      reply << "\n" + reply_robot(message).to_s
+      reply << message.reply + "\n"
+
+      clear_reply, reply_content = reply_robot(message)
+      reply.clear if clear_reply
+      reply << reply_content
+
       message.update(response: reply.strip)
     end
 

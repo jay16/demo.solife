@@ -89,7 +89,7 @@ module Sinatra
           text = %{\n您说: "%s"\n} % recognition
           text << execute_callback(@message, recognition) if recognition.strip.length > 0
           text
-        when "text"  then 
+        when "text"  then
           Command.exec(@message)
         when "event" then 
           case @message.event.downcase
@@ -104,7 +104,7 @@ module Sinatra
               puts "Error#weixiner info get failed."
             end
 
-            "你好，感谢您关注[SOLife]\n如有疑问请输入: ?"
+            [true, "你好，感谢您关注[SOLife]\n如有疑问请输入: ?"]
           when "unsubscribe"
             @message.weixiner.update(status: @message.event)
             
@@ -112,7 +112,7 @@ module Sinatra
           when "click"
             case @message.event_key.downcase
             when "personal_report"
-              @message.weixiner.personal_report
+              [true, @message.weixiner.personal_report]
             else
               "click#%s TODO" % @message.event_key
             end
@@ -129,7 +129,8 @@ module Sinatra
 
       def self.exec(message)
         parser = new(message)
-        parser.handler
+        result = parser.handler || ""
+        result.is_a?(Array) ? result : [false, result]
       end
     end
 

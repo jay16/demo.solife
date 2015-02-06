@@ -16,7 +16,6 @@ config/*.yaml
 sync_images_and_db.rb
 
 # 项目本地文件夹
-shared/
 log/
 db/
 tmp/
