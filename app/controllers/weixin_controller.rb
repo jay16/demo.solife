@@ -33,11 +33,12 @@ class WeixinController < ApplicationController
     _params[:from_user_name] = _params.delete("user")
     _params[:to_user_name]   = _params.delete("robot")
 
+    #weixiner = Weixiner.first(id: 1)
     weixiner = Weixiner.first_or_create(uid: _params[:from_user_name])
     message = weixiner.messages.new(_params)
     message.save_with_logger
 
-    reply = "消息创建成功."
+    reply = "消息创建成功.\n"
     Timeout::timeout(4) do # weixin limit 5s callback
       reply << message.reply
       reply << "\n" + reply_robot(message).to_s
@@ -45,6 +46,7 @@ class WeixinController < ApplicationController
     end
 
     weixin.sender(msg_type: "text") do |msg|
+      #msg.content = weixiner.personal_report
       msg.content = message.response
       msg.to_xml
     end

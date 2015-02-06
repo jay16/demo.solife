@@ -94,8 +94,8 @@ namespace :weixin do
           "key" => "PERSONAL_REPORT"
       }, {
           "type" => "view",
-          "name" => "关于小6",
-          "url" => "http://xiao6yuji.com/about"
+          "name" => "关于",
+          "url" => "http://weixin.solife.us/about"
        }]
     }.to_json
     response = HTTParty.post menu_url, body: menu_params, headers: {'ContentType' => 'application/json'} 

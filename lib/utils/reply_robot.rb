@@ -24,11 +24,8 @@ module Sinatra
             File.open(filepath, "w+") { |file| file.puts(hash.to_s) }
           end
         end
-        puts "*"*10
-        puts callbacks.count
-        puts "*"*10
         unless callbacks.empty?
-          "执行%d次回调函数." % callbacks.count
+          "\n注: 执行%d次回调函数." % callbacks.count
         end
       end
     end
