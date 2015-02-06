@@ -2,5 +2,23 @@
 
 .jumbotron
   %h1 SOLife
-  %p segment of life - 生活点点滴滴
+  %p &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;segment of life 
+
+%p.lead 通过微信消息#文字、图片、语音、位置等记录自己生活的点点滴滴. 
+.bs-docs-section
+  .bs-callout.bs-callout-danger
+    %h4 关于solife
+    %p 缩写于SegmentOfLife, 存在意义于实时记录生活，而不局限于博文等格式化方式。实时记录,事后整理。
+
+  .bs-callout.bs-callout-danger
+    %h4 亮点功能 
+    %p 支持第三方网站回调呼叫，传递微信消息信息。
+    %p 后台配置:
+    %p &nbsp;&nbsp;&nbsp;&nbsp; url: 第三方网站链接
+    %p &nbsp;&nbsp;&nbsp;&nbsp; token: 用于第三方网站识别该回调函数执行角色
+    %p &nbsp;&nbsp;&nbsp;&nbsp; 关键字: 微信消息#文本、语音中以该关键字开头时被激活, 例如: 消息记录
+    %p 比如： 
+    %p &nbsp;&nbsp;&nbsp;&nbsp; 文本消息 “消费记录 我买衣服花了 1 千块”，自动转化为 ［nRemain：买衣服］［nMoney：1000］［nCategory：购物］, 同时以JSON格式POST至第三方网站网址 
+
+%a.btn.btn-success{href: "http://mp.weixin.qq.com/s?__biz=MzA3NDA3ODYwMQ==&mid=203189224&idx=1&sn=d53a7fe414560518627d7ae32d0c6ad0#rd"} 微信关注
 

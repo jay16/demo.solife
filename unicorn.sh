@@ -27,7 +27,7 @@ case "$1" in
 
         echo "## start unicorn"
         echo -e "\t port: ${PORT} \n\t environment: ${ENVIRONMENT}"
-        bundle exec ${UNICORN} -c ${CONFIG_FILE} -p ${PORT} -E ${ENVIRONMENT} -D  
+        bundle exec ${UNICORN} -c ${CONFIG_FILE} -p ${PORT} -E ${ENVIRONMENT} -D > /dev/null 2>&1
         echo -e "\t unicorn start $(test $? -eq 0 && echo "successfully" || echo "failed")."
 
         echo "## start nohup"
