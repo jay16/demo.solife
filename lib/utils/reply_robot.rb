@@ -23,10 +23,9 @@ module Sinatra
             filepath = ::File.join(ENV["APP_ROOT_PATH"], "public/callbacks", data.id.to_s+".cb")
             File.open(filepath, "w+") { |file| file.puts(hash.to_s) }
           end
-        end
-        unless callbacks.empty?
-          "\n注: 执行%d次回调函数." % callbacks.count
-        end
+        end 
+        remark = "\n注: 执行%d次回调函数." % callbacks.count unless callbacks.empty?
+        return remark || ""
       end
     end
     # command parser
@@ -85,10 +84,10 @@ module Sinatra
       def handler
         case @message.msg_type
         when "voice" then
-          recognition = @message.recognition.force_encoding('UTF-8') || ""
+          recognition = @message.recognition.force_encoding('UTF-8').strip || ""
           text = %{\n您说: "%s"\n} % recognition
-          text << execute_callback(@message, recognition) if recognition.strip.length > 0
-          text
+          text << execute_callback(@message, recognition) unless recognition.empty?
+          text.strip
         when "text"  then
           Command.exec(@message)
         when "event" then 

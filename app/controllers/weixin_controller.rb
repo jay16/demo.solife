@@ -33,8 +33,8 @@ class WeixinController < ApplicationController
     _params[:from_user_name] = _params.delete("user")
     _params[:to_user_name]   = _params.delete("robot")
 
-    #weixiner = Weixiner.first(id: 1)
     weixiner = Weixiner.first_or_create(uid: _params[:from_user_name])
+    #weixiner = Weixiner.first(id: 1)
     message = weixiner.messages.new(_params)
     message.save_with_logger
 
