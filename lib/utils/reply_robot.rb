@@ -16,6 +16,7 @@ module Sinatra
             hash = ::JSON.parse(result[0])
             hash["nText"]  = raw_text
             hash["nToken"] = callback.token
+            hash["nMsgType"] = "微信#%s" % message.msg_type_human_name
 
             data = callback.callback_datas.new({params: hash.to_s.gsub("=>", ":")})
             data.save_with_logger
@@ -68,23 +69,16 @@ module Sinatra
       include UtilsMethods
       def initialize(message)
         @message     = message
-        @msg_type_hash = {
-          "text"     => "文本",
-          "news"     => "新闻",
-          "music"    => "音乐",
-          "image"    => "图片",
-          "link"     => "链接",
-          "video"    => "视频",
-          "voice"    => "音频",
-          "location" => "位置",
-          "event"    => "事件"
-        }
       end
 
       def handler
         case @message.msg_type
         when "voice" then
           recognition = @message.recognition.force_encoding('UTF-8').strip || ""
+          # bad  您说: "消费记录买东西一百元"
+          # good 您说: "#消费记录#买东西一百元"
+          # bug: 回调函数关键字 [消费][消费记录]
+          # $_$ 您说: "##消费#记录#买东西一百元"
           text = %{\n您说: "%s"\n} % recognition
           text << execute_callback(@message, recognition) unless recognition.empty?
           text.strip

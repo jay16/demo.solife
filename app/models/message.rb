@@ -41,6 +41,18 @@ class Message # 微信消息
 
     belongs_to :weixiner, :required => false
 
+    def msg_type_human_name
+      { "text"     => "文本",
+        "news"     => "新闻",
+        "music"    => "音乐",
+        "image"    => "图片",
+        "link"     => "链接",
+        "video"    => "视频",
+        "voice"    => "语音",
+        "location" => "位置",
+        "event"    => "事件"
+      }.fetch(self.msg_type, "未知")
+    end
     def reply
       messages = self.weixiner.messages
       message_count = messages.count
