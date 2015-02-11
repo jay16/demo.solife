@@ -74,7 +74,7 @@ module Sinatra
       def handler
         case @message.msg_type
         when "voice" then
-          recognition = @message.recognition.force_encoding('UTF-8').strip || ""
+          recognition = @message.recognition_with_punctuation.force_encoding('UTF-8').strip || ""
           # bad  您说: "消费记录买东西一百元"
           # good 您说: "#消费记录#买东西一百元"
           # bug: 回调函数关键字 [消费][消费记录]

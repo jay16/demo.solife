@@ -22,7 +22,7 @@ module StringMethods
     result = IO.popen(cmd) do |stdout| 
         stdout.readlines#.reject(&method) 
     end
-    status = $?.exitstatus.zero?
+    status = $?.exitstatus.zero? rescue false
 
     shell  = cmd.split(/\n/).map { |line| "\t`" + line + "`" }.join("\n")
     result = ["bash: no output"] if result.empty?

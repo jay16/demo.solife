@@ -16,7 +16,7 @@ class Message # 微信消息
     # voice
     property :media_id       , Text
     property :format         , String
-    property :recognition    , Text
+    property :recognition    , Text , :default => ""
     # text
     property :content        , Text
     # image
@@ -60,6 +60,34 @@ class Message # 微信消息
       text = ""
       text << "\n第%d条消息" % message_count
       text << "\n今天第%d条消息" % today_s_count
+    end
+
+    def recognition_with_punctuation
+      _recognition = self.recognition.dup.force_encoding('UTF-8').strip || ""
+      { "逗号"   => ",",
+        "句号"   => "。",
+        "空格"   => " ",
+        "左括号" => "(",
+        "右括号" => ")",
+        "感叹号" => "!",
+        "分号"   => ";",
+        "问号"   => "?",
+        "波浪符" => "~",
+        "连字号" => "-",
+        "破折号" => "--",
+        "下划线" => "_",
+        "冒号"   => ":",
+        "省略号" => "...",
+        "单引号" => "'",
+        "又引号" => '"',
+        "左花括号" => "{",
+        "右花括号" => "}",
+        "左圆括号" => "(",
+        "右圆括号" => ")"
+      }.each do |key, value|
+        _recognition.gsub!(key, value) if _recognition =~ /#{key}/
+      end
+      return _recognition
     end
 
     # instance methods
