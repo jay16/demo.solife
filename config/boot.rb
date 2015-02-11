@@ -62,4 +62,5 @@ recursion_require("app/controllers", /_controller\.rb$/, root_path, [/^applicati
 
 system("echo '%s' > %s" % [root_path, File.join(root_path, "tmp/app_root_path")])
 system("echo '%s' > %s" % [File.join(root_path, "public/callbacks"), File.join(root_path, "tmp/callbacks_path")])
+system("echo '%s' > %s" % [File.join(root_path, "public/change_logs"), File.join(root_path, "tmp/change_logs_path")])
 

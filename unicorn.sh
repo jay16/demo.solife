@@ -13,6 +13,7 @@ case "$1" in
         test -d log || mkdir log
         test -d tmp || mkdir -p tmp/pids
         test -d public/callbacks || mkdir -p public/callbacks
+        test -d public/change_logs || mkdir -p public/change_logs
 
         echo  "## compile phantom's C codes"
         cd ${APP_ROOT_PATH}

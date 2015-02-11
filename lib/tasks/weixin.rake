@@ -121,4 +121,51 @@ namespace :weixin do
     response = HTTParty.get menu_url
     puts_response(response)
   end
+
+  task :sendall => :simple do
+    Rake::Task["weixin:token"].invoke
+    abort "access_token missing" unless @options[:weixin_access_token]
+
+    change_logs_path = File.join(ENV["APP_ROOT_PATH"], "public/change_logs")
+    content = ""
+    Dir.entries(change_logs_path).grep(/\.cl$/) do |file|
+      cl_id = file.sub(".cl","")
+      change_log = ChangeLog.first(id: cl_id.to_i)
+      next unless change_log.publish
+      content << "\n标题: %s" % change_log.title
+      content << "\n内容: %s" % change_log.content
+      content << "\n标签: %s" % change_log.tag
+      content << "\n"
+    end
+    unless content.strip.empty?
+      sendall_url = "%s/message/mass/sendall?access_token=%s" % [@options[:weixin_base_url], @options[:weixin_access_token]]
+      sendall_params = {
+         "filter" => {
+            "is_to_all" => true
+         },
+         "text" => {
+            "content" => content
+         },
+          "msgtype" => "text"
+      }.to_json
+      response = HTTParty.post sendall_url, body: sendall_params, headers: {'ContentType' => 'application/json'} 
+      puts_response(response)
+    end
+  end
+
+  task :preview => :simple do
+    Rake::Task["weixin:token"].invoke
+    abort "access_token missing" unless @options[:weixin_access_token]
+
+    preview_url = "%s/message/mass/preview?access_token=%s" % [@options[:weixin_base_url], @options[:weixin_access_token]]
+    preview_params = {
+    "touser" => "oibc6t6XBrs88ewnV-ucmd7yOMYg",
+    "text"   => {           
+           "content" => "CONTENT"            
+           },     
+    "msgtype" => "text"
+    }.to_json
+    response = HTTParty.post preview_url, body: preview_params, headers: {'ContentType' => 'application/json'} 
+    puts_response(response)
+  end
 end

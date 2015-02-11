@@ -12,7 +12,8 @@
   "/cpanel"                 => "Cpanel::HomeController",
   "/cpanel/users"           => "Cpanel::UsersController",
   "/cpanel/weixiners"       => "Cpanel::WeixinersController",
-  "/cpanel/messages"        => "Cpanel::MessagesController"
+  "/cpanel/messages"        => "Cpanel::MessagesController",
+  "/cpanel/change_log"      => "Cpanel::ChangeLogController"
 }
 
 require "./config/boot.rb"

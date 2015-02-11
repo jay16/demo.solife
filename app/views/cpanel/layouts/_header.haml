@@ -19,8 +19,8 @@
           %li= link_to "微信消息", "/cpanel/messages"
 
         %ul.nav.navbar-nav.navbar-right
-          %li.hidden
-            = link_to "更新日志", "/change_log"
+          %li
+            = link_to "更新日志", "/cpanel/change_log"
           - unless current_user
             %li
               = link_to "注册", "/user/register"

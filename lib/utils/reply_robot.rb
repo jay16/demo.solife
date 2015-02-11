@@ -22,7 +22,7 @@ module Sinatra
             data.save_with_logger
 
             filepath = ::File.join(ENV["APP_ROOT_PATH"], "public/callbacks", data.id.to_s+".cb")
-            File.open(filepath, "w+") { |file| file.puts(hash.to_s) }
+            ::File.open(filepath, "w+") { |file| file.puts(hash.to_s) }
           end
         end 
         remark = "\n注: 执行%d次回调函数." % callbacks.count unless callbacks.empty?
