@@ -18,9 +18,13 @@ do
     fi
 
     # check change_logs every day 09:00
-    if [[ $(date '+%H') -eq 9 && 
-          $(date '+%S') -lt 5 && 
-          $(ls ${CHANGE_LOG_PATH} | wc -l) -eq 0 ]];
+    hour=$(date '+%H')
+    minute=$(date '+%M')
+    second=$(date '+%S')
+    if [[ $((10#$hour%12))   -eq 10  && 
+          $((10#$minute%60)) -gt 10 && 
+          $((10#$second%60)) -lt 5  &&
+          $(ls ${CHANGE_LOG_PATH} | wc -l) -gt 0 ]];
     then
         /bin/bash -l -c "cd ${APP_ROOT_PATH} && RACK_ENV=${ENVIRONMENT} bundle exec rake weixin:sendall >> ./log/weixin_sendall.log 2>&1"
     fi
