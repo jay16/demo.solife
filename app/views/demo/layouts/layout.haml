@@ -1,0 +1,61 @@
+-# coding: UTF-8
+/
+  \     _                                 _ _  __
+  \  __| | ___ _ __ ___   ___   ___  ___ | (_)/ _| ___  _   _ ___
+  \ / _` |/ _ \ '_ ` _ \ / _ \ / __|/ _ \| | | |_ / _ \| | | / __|
+  \| (_| |  __/ | | | | | (_) |\__ \ (_) | | |  _|  __/| |_| \__ \
+  \ \__,_|\___|_| |_| |_|\___(_)___/\___/|_|_|_|  \___(_)__,_|___/  
+  \===============================================================
+  \                                                demo.solife.us
+  
+  \App Environments:
+  \--------------------------------------------------------
+  \Ruby:  #{RUBY_VERSION}-p#{RUBY_PATCHLEVEL if defined? RUBY_PATCHLEVEL}
+  \power by <Sinatra>
+!!!
+%html
+  %head
+    %title Demo - segment of life
+    %meta{name: "renderer", content:"webkit"}
+    %meta{"http-equiv" => "X-UA-Compatible", content: "IE=edge"}
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
+    %meta{"http-equiv" => "content-type", content: "text/html", charset: "UTF-8"}
+    %link{href: "http://solife-images.u.qiniudn.com/favicon.so.ico", rel: "shortcut icon"}
+    = javascript_include_tag "http://libs.baidu.com/jquery/1.9.0/jquery.js"
+    = javascript_include_tag "http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"
+    = stylesheet_link_tag "http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css"
+    = stylesheet_link_tag "application.css"
+    = javascript_include_tag "application.js"
+    -if mobile? 
+      %meta{:content => "no", :name => "apple-mobile-web-app-capable"}
+      %meta{:content => "True", :name => "HandheldFriendly"}
+      %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no", :name => "viewport"}/
+      :css
+        body { max-width: 1000px; min-width:300px; }
+
+  %body{style: "background:#f0f0f0;"}
+    .navbar.navbar-inverse.navbar-fixed-top{:role => "banner", :style => "text-shadow: 0 -1px 0 rgba(0,0,0,.15);background-color: #563d7c;border-color: #463265;box-shadow: 0 1px 0 rgba(255,255,255,.1); color: white;"}
+      .container{style: "padding-left:0px;"}
+        %div{class: "#{mobile? ? 'col-sm-12' : 'col-sm-10 col-sm-offset-1'}", style: "padding-left:0px;"}
+          .navbar-header
+            %a.navbar-brand{:href => "javascript:void(0);", style: "color:white;"} 实验室 
+    .container{style: "margin-top: 55px;"}
+      .row
+        .col-sm-12{style: "text-align:center;"}
+          .loading.hidden 加载中...
+          = flash_message
+    .container
+      .row
+        %div{class: "#{mobile? ? 'col-sm-12' : 'col-sm-10 col-sm-offset-1'}"}
+          = yield
+    .container
+      .row.center
+        .footer &copy; #{Time.now.strftime("%Y")} sinatra. vps: #{link_to "DigitalOcean", "https://www.digitalocean.com/?refcode=72daceb2139a", {:target => "_blank"}}
+
+:javascript
+  $(function() {
+    $('body').tooltip({
+      selector: "[data-toggle=tooltip]",
+      container: "body"
+    })
+  })

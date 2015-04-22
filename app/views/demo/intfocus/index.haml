@@ -1,0 +1,50 @@
+=javascript_include_tag "/javascripts/intfocus.js"
+%h1 IntFocus网站状态监控
+
+- if @is_admin
+  %a{onclick: "IntFocus.addUrl();", class: "right btn btn-default btn-primary", style: "margin-top: -40px;", "data-toggle" => "tooltip", "data-original-title" => "添加监控链接"}
+    %span.glyphicon.glyphicon-plus
+- else
+  %a{onclick: "IntFocus.inputToken();", class: "right btn btn-default", style: "margin-top: -40px;", "data-toggle" => "tooltip", "data-original-title" => "验证Token进行管理"}
+    %span.glyphicon.glyphicon-eye-open
+
+:css
+  .form-group { padding: 0px; }
+
+
+%table.table.table-strip.table-condensed.table-bordered
+  %thead
+    %th 域名别名
+    %th 测试类型 
+    %th 更新时间
+    %th 测试状态
+    - if @is_admin
+      %th 移除
+  %tbody
+    -@list.each do |data|
+      - ret = @datas.select { |l| l[1].strip == data[1].strip }.first
+      - next if ret.nil?
+      %tr
+        %td= data.first
+        %td= data.last
+        %td= ret.first
+        %td
+          =chk_ping_state(data, ret)
+        - if @is_admin
+          %td
+            %a{href: "javascript:void(0);", onclick: "IntFocus.removeUrl('"+"#{data.join(',').strip}"+"')"} 
+              %span.glyphicon.glyphicon-trash
+    -end if !@list.empty?
+
+
+/ Modal
+#myModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content#myModalContent
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+        %h4#myModalLabel.modal-title loading
+      .modal-body{style: "min-height:100px;"}
+        loading
+      .modal-footer
+        %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close

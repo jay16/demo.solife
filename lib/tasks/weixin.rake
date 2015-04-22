@@ -149,6 +149,7 @@ namespace :weixin do
           "msgtype" => "text"
       }.to_json
       response = HTTParty.post sendall_url, body: sendall_params, headers: {'ContentType' => 'application/json'} 
+      puts content
       puts_response(response)
       system("rm -f %s/*.cl" % File.join(ENV["APP_ROOT_PATH"], "public/change_logs"))
     end

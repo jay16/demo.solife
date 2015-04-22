@@ -1,0 +1,47 @@
+= javascript_include_tag "openfind.js"
+
+.row
+  .jumbotron
+    %h1 Openfind
+    %h2 名单/模板下载
+
+
+%input{:name => "url", :type => "hidden", :value => "#{Settings.openfind.url}"}/
+
+.row
+  #warn.alert.alert-warning.hidden
+
+.row
+  .bs-example{style:"height:100px;"}
+    %form.form-inline.col-sm-12{"accept-charset" => "UTF-8", :action => "/openfind/members", :method => "post", :role => "form"}
+      %div{:style => "margin:0;padding:0;display:inline"}
+        %input{:name => "utf8", :type => "hidden", :value => "✓"}
+          %input{:name => "authenticity_token", :type => "hidden", :value => "Ars8u2IK2o9rbtiQbBiQyIUE2abBAkjlwxQKAUp0T+Y="}/
+      .form-group.col-sm-8
+        %input#members.form-control{:name => "url", :placeholder => "http://cndemo.openfind.com/china/order/show.php", :type => "text"}
+      %input.btn.btn-default{:name => "commit", :type => "submit", :value => "名单下载", :disabled => "disabled"}
+
+.row
+  .alert.alert-success
+    注意事项：<br>
+    1. 以记事本打开下载文件，[另存为]设置编码格式为UTF-8<br>
+    2. 使用office打开后，另存为.xls文件<br>
+
+.row
+  .bs-example{style:"height:100px;"}
+    %form.form-inline.col-sm-12{"accept-charset" => "UTF-8", :action => "/openfind/template", :method => "post", :role => "form"}
+      %div{:style => "margin:0;padding:0;display:inline"}
+        %input{:name => "utf8", :type => "hidden", :value => "✓"}
+          %input{:name => "authenticity_token", :type => "hidden", :value => "Ars8u2IK2o9rbtiQbBiQyIUE2abBAkjlwxQKAUp0T+Y="}/
+      .form-group.col-sm-8
+        %input#template.form-control{:name => "url", :placeholder => "http://cndemo.openfind.com/china/epaper/2012_12", :type => "text"}
+      %input.btn.btn-default{:name => "commit", :type => "submit", :value => "模板下载", :disabled => "disabled"}
+
+.row
+  .alert.alert-success
+    注意事项：<br>所下载的zip模板不符合FocusMail,需要手工修改以下几点：<br>
+    1. 解压zip文件至当前文件夹中，<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;查看index.html编码是否为UTF-8(或直接[另存为]过程中设置编码格式为UTF-8)<br>
+    2. 通过浏览器打开index.html查看图片是否完整（确定图片都已下载到images文件中）<br>
+    3. 选中index.html与images文件夹右键选择添加至压缩文件，选择格式为zip<br>
+    4. 在FocusMail中新建模板预览查看。<br>

@@ -17,6 +17,8 @@ default: &default
     seller_email: "" 
     return_url: ""
     notify_url: ""
+  openfind:
+    url:  "http://cndemo.openfind.com"
   cdn:
     qiniu:
       bucket: "bucket-name"

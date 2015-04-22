@@ -1,0 +1,15 @@
+.modal-header
+  %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+  %h4#myModalLabel.modal-title= @transaction.subject
+.modal-body{style:"max-height:300px;overflow:auto;"}
+  %table.table.table-hover.table-bordered
+    - skips = ["@_repository", "@_persistence_state", "@id", "@sign"]
+    - @transaction.instance_variables.each do |var|
+      - next if var.to_s.include?("_id")
+      - next if skips.include?(var.to_s)
+      - next if (value = @transaction.instance_variable_get(var)).nil?
+      %tr
+        %td= var.to_s.gsub("@", "")
+        %td= value.is_a?(String) ? value.gsub(/\@(.*?)\./,"@***.") : value #secret email
+.modal-footer
+  %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} 关闭

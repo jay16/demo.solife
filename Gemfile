@@ -39,8 +39,12 @@ gem "rake", "~>10.3.2"
 gem "settingslogic", "~>2.0.9"
 gem "httparty", "~>0.13.3"
 
-#代码覆盖率
-#rake stats
+# demo
+gem "nokogiri", "~>1.6.2.1"
+gem "spreadsheet", "~>0.9.7"
+gem "rubyzip", '~> 1.1.4'
+gem 'zip-zip', "~>0.3"
+gem "alipay_dualfun", :github => "happypeter/alipay_dualfun"
 
 # for erb operation
 gem "tilt", "~>1.4.1"

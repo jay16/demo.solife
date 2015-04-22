@@ -7,6 +7,9 @@ UNICORN=unicorn
 CONFIG_FILE=config/unicorn.rb  
  
 APP_ROOT_PATH=$(pwd)
+source ~/.bash_profile
+source ~/.bashrc
+cd ${APP_ROOT_PATH}
 
 case "$1" in  
     start)  

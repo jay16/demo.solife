@@ -1,6 +1,7 @@
 #encoding: utf-8
-@app_routes_map = {
-  "/"                       => "HomeController",
+require "./config/boot.rb"
+
+{ "/"                       => "HomeController",
   "/users"                  => "UsersController",
   "/weixin"                 => "WeixinController",
   "/account"                => "Account::HomeController",
@@ -13,12 +14,11 @@
   "/cpanel/users"           => "Cpanel::UsersController",
   "/cpanel/weixiners"       => "Cpanel::WeixinersController",
   "/cpanel/messages"        => "Cpanel::MessagesController",
-  "/cpanel/change_log"      => "Cpanel::ChangeLogController"
-}
-
-require "./config/boot.rb"
-
-@app_routes_map.each_pair do |path, mod|
-  clazz = mod.split("::").inject(Object) {|o,c| o.const_get c}
+  "/cpanel/change_log"      => "Cpanel::ChangeLogController",
+  "/alipay"                 => "Demo::TransactionsController",
+  "/openfind"               => "Demo::OpenfindController",
+  "/sql"                    => "Demo::SqlController"
+}.each_pair do |path, mod|
+  clazz = mod.split("::").inject(Object) { |obj,c| obj.const_get(c) }
   map(path) { run clazz }
 end
