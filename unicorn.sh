@@ -54,6 +54,11 @@ case "$1" in
     deploy)
         echo "RACK_ENV=production bundle exec rake remote:deploy"
         ;;
+    weixin_group_message)
+        source ~/.bashrc
+        source ~/.bash_profile
+        bundle exec rake weixin:send_group_message
+        ;;
     *)  
         echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload|deploy}" >&2  
         exit 3  
