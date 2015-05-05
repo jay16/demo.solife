@@ -9,7 +9,7 @@ class Demo::TransactionsController < Demo::ApplicationController
   end
 
 
-  # post /checkout
+  # post /alipay/checkout
   post "/checkout" do
     options = {
       :partner           => Settings.alipay.pid,
@@ -27,23 +27,23 @@ class Demo::TransactionsController < Demo::ApplicationController
     redirect AlipayDualfun.trade_create_by_buyer_url(options)
   end
 
-  # post /transactions/notify
+  # post /alipay/transactions/notify
   post "/transactions/notify" do
     find_or_create_transaction!
 
     haml :notify
   end
 
-  # get /transactions/done
+  # get /alipay/transactions/done
   get "/transactions/done" do
     find_or_create_transaction!
 
     flash[:success] = "付款成功啦!"
-    redirect "/", :notice => "done"
+    redirect "/alipay"#, :notice => "done"
   end
 
   # show
-  # get /transactions/:out_trade_no
+  # get /alipay/transactions/:out_trade_no
   get "/transactions/:out_trade_no" do
     @transaction = Transaction.first(:out_trade_no => params[:out_trade_no])
     haml :modal

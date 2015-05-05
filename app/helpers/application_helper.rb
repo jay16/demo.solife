@@ -3,8 +3,7 @@
   # flash#success/warning/danger message will show
   # when redirect between action
   def flash_message
-    return if !defined?(flash)
-    return if flash.empty?
+    return if not defined?(flash) or flash.empty?
     # hash key must be symbol
     hash = flash.inject({}) { |h, (k, v)| h[k.to_s] = v; h; }
     # bootstrap#v3 [alert] javascript plugin

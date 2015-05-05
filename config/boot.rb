@@ -1,10 +1,11 @@
+#encoding: utf-8
 require "rubygems"
 
 root_path = File.dirname(File.dirname(__FILE__))#File.expand_path("../../", __FILE__)
-ENV["APP_NAME"]  ||= "solife_weixin"
+ENV["APP_NAME"]  ||= "solife-demo"
 ENV["RACK_ENV"]  ||= "development"
 ENV["ASSET_CDN"] ||= "false"
-ENV["VIEW_PATH"]  = "%s/app/views" % root_path
+ENV["VIEW_PATH"]     = "%s/app/views" % root_path
 ENV["APP_ROOT_PATH"] = root_path
 
 begin
@@ -15,6 +16,10 @@ begin
 rescue => e
   puts e.backtrace &&  exit
 end
+puts "="*10
+puts ENV["RACK_ENV"]
+
+puts "="*10
 Bundler.require(:default, ENV["RACK_ENV"])
 
 # execute linux shell command

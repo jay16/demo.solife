@@ -26,7 +26,9 @@
     = stylesheet_link_tag "http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css"
     = stylesheet_link_tag "application.css"
     = javascript_include_tag "application.js"
+    - container_main_div_class = 'col-sm-10 col-sm-offset-1'
     -if mobile? 
+    - container_main_div_class = 'col-sm-12'
       %meta{:content => "no", :name => "apple-mobile-web-app-capable"}
       %meta{:content => "True", :name => "HandheldFriendly"}
       %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no", :name => "viewport"}/
@@ -36,17 +38,17 @@
   %body{style: "background:#f0f0f0;"}
     .navbar.navbar-inverse.navbar-fixed-top{:role => "banner", :style => "text-shadow: 0 -1px 0 rgba(0,0,0,.15);background-color: #563d7c;border-color: #463265;box-shadow: 0 1px 0 rgba(255,255,255,.1); color: white;"}
       .container{style: "padding-left:0px;"}
-        %div{class: "#{mobile? ? 'col-sm-12' : 'col-sm-10 col-sm-offset-1'}", style: "padding-left:0px;"}
+        %div{class: container_main_div_class, style: "padding-left:0px;"}
           .navbar-header
             %a.navbar-brand{:href => "javascript:void(0);", style: "color:white;"} 实验室 
     .container{style: "margin-top: 55px;"}
       .row
-        .col-sm-12{style: "text-align:center;"}
+        %div{class: container_main_div_class, style: "text-align:center;"}
           .loading.hidden 加载中...
           = flash_message
     .container
       .row
-        %div{class: "#{mobile? ? 'col-sm-12' : 'col-sm-10 col-sm-offset-1'}"}
+        %div{class: container_main_div_class}
           = yield
     .container
       .row.center

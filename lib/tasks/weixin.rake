@@ -1,20 +1,20 @@
 #encoding:utf-8
 desc "task operation around weixin"
 namespace :weixin do
-
   def lasttime(info, &block)
      bint = Time.now.to_f
      yield
      eint = Time.now.to_f
      printf("%-10s - %s\n", "[%dms]" % ((eint - bint)*1000).to_i, info)
   end
+
   def puts_response(response)
     puts "code:"
     puts response.code
     puts "body:"
-    puts response.body
+    puts response.body.force_encoding("utf-8")
     puts "message:"
-    puts response.message
+    puts response.message.force_encoding("utf-8")
     puts "headers:"
     puts response.headers.inspect
   end
@@ -122,37 +122,38 @@ namespace :weixin do
     puts_response(response)
   end
 
-  task :sendall => :simple do
+  task :send_group_message => :simple do
     Rake::Task["weixin:token"].invoke
     abort "access_token missing" unless @options[:weixin_access_token]
 
-    change_logs_path = File.join(ENV["APP_ROOT_PATH"], "public/change_logs")
-    content = ""
-    Dir.entries(change_logs_path).grep(/\.cl$/) do |file|
-      cl_id = file.sub(".cl","")
-      change_log = ChangeLog.first(id: cl_id.to_i)
-      next unless change_log.publish
-      content << "\n标题: %s" % change_log.title
-      content << "\n内容: %s" % change_log.content
-      content << "\n标签: %s" % change_log.tag
-      content << "\n"
-    end
-    unless content.strip.empty?
-      sendall_url = "%s/message/mass/sendall?access_token=%s" % [@options[:weixin_base_url], @options[:weixin_access_token]]
-      sendall_params = {
-         "filter" => {
-            "is_to_all" => true
-         },
-         "text" => {
-            "content" => content
-         },
-          "msgtype" => "text"
-      }.to_json
-      response = HTTParty.post sendall_url, body: sendall_params, headers: {'ContentType' => 'application/json'} 
-      puts content
-      puts_response(response)
-      system("rm -f %s/*.cl" % File.join(ENV["APP_ROOT_PATH"], "public/change_logs"))
-    end
+    # get report content from consume.solife.us
+    api_url = "%s.json?token=%s" % [Settings.consume.api_url, Settings.consume.token]
+    response = HTTParty.get api_url
+    weixin_message = JSON.parse(response.body)["report"].force_encoding("utf-8")
+    raise "group member report is empty!" unless weixin_message
+    puts weixin_message
+
+    # get group-id from weixin.qq.com
+    groups_url = "%s/groups/get?access_token=%s" % [@options[:weixin_base_url], @options[:weixin_access_token]]
+    response = HTTParty.get groups_url
+    puts_response(response)
+    groups = JSON.parse(response.body.force_encoding("utf-8"))["groups"]
+    group_id = groups.find { |group| group["name"].eql?("爱生活") }["id"]
+
+    # send message with weixin.qq.com
+    sendall_url = "%s/message/mass/sendall?access_token=%s" % [@options[:weixin_base_url], @options[:weixin_access_token]]
+    sendall_params = {
+       "filter" => {
+          "is_to_all" => false,
+          "group_id"  => group_id
+       },
+       "text" => {
+          "content" => weixin_message
+       },
+        "msgtype" => "text"
+    }.to_json
+    response = HTTParty.post sendall_url, body: sendall_params, headers: {'ContentType' => 'application/json'} 
+    puts_response(response)
   end
 
   task :preview => :simple do

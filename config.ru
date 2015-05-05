@@ -1,7 +1,8 @@
 #encoding: utf-8
 require "./config/boot.rb"
 
-{ "/"                       => "HomeController",
+{ 
+  "/"                       => "HomeController",
   "/users"                  => "UsersController",
   "/weixin"                 => "WeixinController",
   "/account"                => "Account::HomeController",

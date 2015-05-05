@@ -12,7 +12,7 @@
         %input{:name => "utf8", :type => "hidden", :value => "✓"}
           %input{:name => "authenticity_token", :type => "hidden", :value => "R1vA5j+UdbfiAgs9Ks2b0ishtFU0HnxboX8YPGEiS1A="}/
       .form-group.col-sm-5
-        %input#price.form-control{:max => "1000", :min => "0.01", :name => "price", :placeholder => "商品价格(price)", :type => "number"}
+        %input#price.form-control{:max => "1000", :min => "1", :name => "price", :placeholder => "商品价格(price)", :type => "number"}
       .form-group.col-sm-5
         %a.btn.btn-default.btn-sm.btn-primary{onclick: "Transactions.minus();"}
           %i.glyphicon.glyphicon-minus
@@ -39,9 +39,6 @@
         付款完成后，
         %strong{style:"font-size:120%;"} 请不要关闭支付宝窗口
         , 将自动跳回本站，方便您继续操作。
-
-.row
-  = flash_message
 
 .row
   %h2 交易记录

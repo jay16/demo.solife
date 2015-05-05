@@ -4,10 +4,10 @@ require 'digest/md5'
 require "json"
 require 'sinatra/advanced_routes'
 class ApplicationController < Sinatra::Base
-  register Sinatra::Reloader if development?
+  register Sinatra::Reloader if development? or test?
   register Sinatra::Flash
   register Sinatra::Decompile
-  register(Sinatra::Logger)
+  register Sinatra::Logger
   register SinatraMore::MarkupPlugin
   # register Sinatra::AdvancedRoutes
   # register Sinatra::Auth
@@ -96,34 +96,14 @@ class ApplicationController < Sinatra::Base
   end
 
   def print_format_logger
-    request_info = @request_body ? %Q{Request:\n #{@request_body }} : ""
-    log_info = %Q{
-#{request.request_method} #{request.path} for #{request.ip} at #{Time.now.to_s}
-Parameters:\n #{@params.to_s}
-#{request_info}
-    }
+    request_info = @request_body.empty? ? %Q{Request:\n #{@request_body }} : ""
+    log_info = <<-EOF
+    #{request.request_method} #{request.path} for #{request.ip} at #{Time.now.to_s}
+    Parameters:\n #{@params.to_s}
+    #{request_info}
+    EOF
     puts log_info
     logger.info log_info
-  end
-
-  def request_body(body = request.body)
-    @request_body = case body
-    when StringIO then body.string
-    when Tempfile then body.read
-    # gem#passenger is ugly!
-    #     it will change the structure of REQUEST
-    #     detail at: https://github.com/phusion/passenger/blob/master/lib/phusion_passenger/utils/tee_input.rb
-    when (defined?(PhusionPassenger) and PhusionPassenger::Utils::TeeInput)
-      body.read
-    # gem#unicorn
-    #     it also change the strtucture of REQUEST
-    when (defined?(Unicorn) and Unicorn::TeeInput)
-      body.read
-    when Rack::Lint::InputWrapper
-      body.read
-    else
-      body.to_str
-    end
   end
 
 
@@ -141,23 +121,24 @@ Parameters:\n #{@params.to_s}
   end
 
   def request_body(body = request.body)
-    @request_body = case body
+    case body
     when StringIO then body.string
-    when Tempfile then body.read
-    # gem#passenger is ugly!
-    #     it will change the structure of REQUEST
-    #     detail at: https://github.com/phusion/passenger/blob/master/lib/phusion_passenger/utils/tee_input.rb
-    when (defined?(PhusionPassenger) and PhusionPassenger::Utils::TeeInput)
-      body.read
-    # gem#unicorn
-    #     it also change the strtucture of REQUEST
-    when (defined?(Unicorn) and Unicorn::TeeInput)
-      body.read
-    when Rack::Lint::InputWrapper
-      body.read
+    when Tempfile,
+      # gem#passenger is ugly!
+      #     it will change the structure of REQUEST
+      #     detail at: https://github.com/phusion/passenger/blob/master/lib/phusion_passenger/utils/tee_input.rb
+      (defined?(PhusionPassenger) and PhusionPassenger::Utils::TeeInput),
+      # gem#unicorn
+      #     it also change the strtucture of REQUEST
+      (defined?(Unicorn) and Unicorn::TeeInput),
+      (defined?(Rack) and Rack::Lint::InputWrapper)
+
+      body.read if body.respond_to?(:read)
     else
       body.to_str
-    end
+    end.to_s.strip
+  rescue => e
+    e.message
   end
 
   def print_query_sql(collection)
