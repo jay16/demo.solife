@@ -1,5 +1,5 @@
 #encoding: utf-8 
-class Demo::IlearnController < Demo::ApplicationController
+class Demo::ISearchController < Demo::ApplicationController
   set :views, ENV["VIEW_PATH"] + "/demo"
   set :layout, :"layouts/layout"
 
@@ -78,17 +78,16 @@ class Demo::IlearnController < Demo::ApplicationController
       ]
     }]
   end
-  # get /ilearn
+  # get /demo/isearch
   get "/" do
     @structure = JSON.pretty_generate(@structure[0])
     haml :index, layout: settings.layout
   end
-
   template :index do
     "%pre= @structure"
   end
 
-  # get /ilearn/api
+  # get /demo/isearch/api
   get "/api" do
     paths = (params[:path] || "/").split("/").map { |i| i.empty? ? nil : i }.compact.unshift("/")
     current, _structure = 0, Marshal.load(Marshal.dump(@structure))
@@ -101,11 +100,28 @@ class Demo::IlearnController < Demo::ApplicationController
     rescue => e
       structure = e.message
     end
-    structure = simple(structure)
+    hash = simple(structure)
 
-    content_type "application/json"
-    body   structure.to_json
-    status 200
+    respond_with_json hash, 200
+  end
+
+  route :get, :post, "/login" do
+    username = params[:user] || ""
+    password = params[:password] || ""
+    error = []
+    error << "user name is incorrect" unless username.eql?("root") 
+    error << "password is incorrect" unless password.eql?("admin")
+
+    if error.empty?
+      info = "login successfully."
+      code = 1
+    else
+      info = "login fails for: %s." % error.join(", ")
+      code = -1
+    end
+
+    hash = { code: code, info: info }
+    respond_with_json hash, 200
   end
 
   private 

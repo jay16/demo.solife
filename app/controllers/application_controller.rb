@@ -3,12 +3,14 @@ require "sinatra/decompile"
 require 'digest/md5'
 require "json"
 require 'sinatra/advanced_routes'
+require "sinatra/multi_route"
 class ApplicationController < Sinatra::Base
   register Sinatra::Reloader if development? or test?
   register Sinatra::Flash
   register Sinatra::Decompile
   register Sinatra::Logger
   register SinatraMore::MarkupPlugin
+  register Sinatra::MultiRoute
   # register Sinatra::AdvancedRoutes
   # register Sinatra::Auth
   
@@ -144,6 +146,13 @@ class ApplicationController < Sinatra::Base
   def print_query_sql(collection)
     #logger.info %Q(\nSQL:\n %s\n) % DataMapper.repository.adapter.send(:select_statement,collection.query).join(" ")
   end
+
+  def respond_with_json hash, code = nil
+    content_type "application/json"
+    body   hash.to_json
+    status code || 200
+  end
+
 
   # 404 page
   not_found do

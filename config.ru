@@ -1,8 +1,7 @@
 #encoding: utf-8
 require "./config/boot.rb"
 
-{ 
-  "/"                       => "HomeController",
+{ "/"                       => "HomeController",
   "/users"                  => "UsersController",
   "/weixin"                 => "WeixinController",
   "/account"                => "Account::HomeController",
@@ -18,7 +17,8 @@ require "./config/boot.rb"
   "/cpanel/change_log"      => "Cpanel::ChangeLogController",
   "/alipay"                 => "Demo::TransactionsController",
   "/openfind"               => "Demo::OpenfindController",
-  "/sql"                    => "Demo::SqlController"
+  "/sql"                    => "Demo::SqlController",
+  "/demo/isearch"           => "Demo::ISearchController"
 }.each_pair do |path, mod|
   clazz = mod.split("::").inject(Object) { |obj,c| obj.const_get(c) }
   map(path) { run clazz }
