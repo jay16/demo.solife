@@ -36,6 +36,9 @@ namespace :remote do
       database_name = "%s_%s" % [ENV["APP_NAME"], ENV["RACK_ENV"]]
       remote_db_path = "%s/db/%s.db" % [remote_root_path, database_name]
       local_db_path  = "%s/db/%s.db" % [ENV["APP_ROOT_PATH"], database_name]
+
+      command = "cd %s && /bin/sh unicorn.sh restart" % remote_root_path
+      execute!(ssh, command)
       #File.delete(local_db_path) if File.exist?(local_db_path)
       #ssh.scp.download!(remote_db_path, local_db_path)
     end

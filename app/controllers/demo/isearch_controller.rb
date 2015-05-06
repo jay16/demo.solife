@@ -105,19 +105,24 @@ class Demo::ISearchController < Demo::ApplicationController
     respond_with_json hash, 200
   end
 
+  # params
+  #   user:     username or email
+  #   password: just password
+  #   lang:     app i18 language
   route :get, :post, "/login" do
     username = params[:user] || ""
     password = params[:password] || ""
+    applang  = params[:lang] || "zh-CN"
     error = []
-    error << "user name is incorrect" unless username.eql?("root") 
-    error << "password is incorrect" unless password.eql?("admin")
+    error << "用户名错误" unless username.eql?("root") 
+    error << "登陆密码错误" unless password.eql?("admin")
 
     if error.empty?
-      info = "login successfully."
+      info = { uid: 1, date: Time.now.strftime("%Y-%m-%d %H:%M:%S")}
       code = 1
     else
-      info = "login fails for: %s." % error.join(", ")
-      code = -1
+      info = { error: error.join("\n") }
+      code = 0
     end
 
     hash = { code: code, info: info }
