@@ -7,8 +7,9 @@ UNICORN=unicorn
 CONFIG_FILE=config/unicorn.rb  
  
 APP_ROOT_PATH=$(pwd)
-source ~/.bash_profile
-source ~/.bashrc
+source ~/.bashrc       > /dev/null 2>&1
+source ~/.bash_profile > /dev/null 2>&1
+export LANG=zh_CN.UTF-8
 cd ${APP_ROOT_PATH}
 
 case "$1" in  
@@ -55,8 +56,6 @@ case "$1" in
         echo "RACK_ENV=production bundle exec rake remote:deploy"
         ;;
     weixin_group_message)
-        source ~/.bashrc
-        source ~/.bash_profile
         bundle exec rake weixin:send_group_message
         ;;
     *)  

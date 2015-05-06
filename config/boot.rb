@@ -1,7 +1,8 @@
 #encoding: utf-8
 require "rubygems"
 
-root_path = File.dirname(File.dirname(__FILE__))#File.expand_path("../../", __FILE__)
+root_path = File.dirname(File.dirname(__FILE__))
+# Modiy APP_NAME/RACK_ENV will switch sqlite.db realtime.
 ENV["APP_NAME"]  ||= "solife-demo"
 ENV["RACK_ENV"]  ||= "development"
 ENV["ASSET_CDN"] ||= "false"
@@ -16,10 +17,6 @@ begin
 rescue => e
   puts e.backtrace &&  exit
 end
-puts "="*10
-puts ENV["RACK_ENV"]
-
-puts "="*10
 Bundler.require(:default, ENV["RACK_ENV"])
 
 # execute linux shell command
