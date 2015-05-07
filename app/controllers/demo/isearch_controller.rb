@@ -4,103 +4,85 @@ class Demo::ISearchController < Demo::ApplicationController
   set :layout, :"layouts/layout"
 
   before do
-    @structure = [{
-      :path => "/",
+    @content = {
+      :id   => "0",
       :type => "dir",
+      :desc => "",
+      :name => "dir_0",
       :datas => [
         {
-        :path => "一级目录1",
+        :id   => "1",
+        :name => "dir_1",
         :type => "dir",
+        :desc => "dir_1",
         :datas => [
-          { :path => "二级目录1.1",
+          { :id   => "3",
+            :name => "dir_3",
             :type => "dir",
+            :desc => "dir_3",
             :datas => [ 
-              { :path => "三级文件1.1.1", :type => "file" },
-              { :path => "三级文件1.1.2", :type => "file" },
-              { :path => "三级文件1.1.3", :type => "file" },
-              { :path => "三级文件1.1.4", :type => "file" }
+              { :id => "4", name: "file_4", :type => "file", desc: "file-4", url: "url" },
+              { :id => "5", name: "file_5", :type => "file", desc: "file-5", url: "url" },
+              { :id => "6", name: "file_6", :type => "file", desc: "file-6", url: "url" },
+              { :id => "7", name: "file_7", :type => "file", desc: "file-7", url: "url" },
+              { :id => "8", name: "file_8", :type => "file", desc: "file-8", url: "url" }
             ]
-          },
-          { :path => "二级目录1.2",
-            :type => "dir",
-            :datas => [ 
-              { :path => "三级文件1.2.1", :type => "file" },         
-              { :path => "三级文件1.2.2", :type => "file" },
-              { :path => "三级文件1.2.3", :type => "file" },
-              { :path => "三级文件1.2.4", :type => "file" }
-            ]
-          },
-          { :path => "二级目录1.3",
-            :type => "dir",
-            :datas => [ 
-              { :path => "三级文件1.3.1", :type => "file" },
-              { :path => "三级文件1.3.2", :type => "file" },
-              { :path => "三级文件1.3.3", :type => "file" },
-              { :path => "三级文件1.3.4", :type => "file" }
-            ]
-          }
-        ]
-      },
-      {
-      :path => "一级目录2",
-      :type => "dir",
-      :datas => [
-        { :path => "二级目录2.1",
-          :type => "dir",
-          :datas => [ 
-            { :path => "三级文件2.1.1", :type => "file" },
-            { :path => "三级文件2.1.2", :type => "file" }
-          ]
+          }]
         },
-        { :path => "二级目录2.2",
-          :type => "dir",
-          :datas => [ 
-            { :path => "三级文件2.2.1", :type => "file" },
-            { :path => "三级文件2.2.2", :type => "file" },
-            { :path => "三级文件2.2.3", :type => "file" }
-          ]
+        {
+          :id   => "9",
+          :name => "file_9",
+          :type => "file",
+          :desc => "",
+          :url  => ""
         },
-        { :path => "二级目录1.3",
-          :type => "dir",
-          :datas => [ 
-            { :path => "三级文件1.3.1", :type => "file" },
-            { :path => "三级文件1.3.2", :type => "file" },
-            { :path => "三级文件1.3.3", :type => "file" },
-            { :path => "三级文件1.3.4", :type => "file" }
-          ]
+        {
+          :id   => "10",
+          :name => "file_10",
+          :type => "file",
+          :desc => "",
+          :url  => ""
+        },
+        {
+          :id   => "11",
+          :name => "file_11",
+          :type => "file",
+          :desc => "",
+          :url  => ""
+        },
+        {
+          :id   => "12",
+          :name => "file_12",
+          :type => "file",
+          :desc => "",
+          :url  => ""
         }
       ]
-      },
-      {
-        :path => "一级文件3",
-        :type => "file",
-      }
-      ]
-    }]
+    }
   end
   # get /demo/isearch
   get "/" do
-    @structure = JSON.pretty_generate(@structure[0])
+    @content = JSON.pretty_generate(@content)
     haml :index, layout: settings.layout
   end
   template :index do
-    "%pre= @structure"
+    "%pre= @content"
   end
 
-  # get /demo/isearch/api
-  get "/api" do
-    paths = (params[:path] || "/").split("/").map { |i| i.empty? ? nil : i }.compact.unshift("/")
-    current, _structure = 0, Marshal.load(Marshal.dump(@structure))
-    begin
-      while current < paths.length
-        structure = _structure.find { |hash| hash[:path] == paths[current] }
-        _structure = structure[:datas]
-        current += 1
-      end
-    rescue => e
-      structure = e.message
+  # get /demo/isearch/content
+  get "/content" do
+    id   = params[:id] || "0"
+    type = params[:type] 
+    user = params[:user]
+    content = Marshal.load(Marshal.dump(@content))
+
+    if id.eql?(content[:id])
+      hash = content
+    else
+      hash = content[:datas].find { |h| h[:id].eql?(id) }
     end
-    hash = simple(structure)
+
+    hash = simple(hash)
 
     respond_with_json hash, 200
   end
@@ -132,9 +114,11 @@ class Demo::ISearchController < Demo::ApplicationController
   private 
 
   def simple(hash)
+    simple_hash = []
     hash[:datas].each do |h|
       h.delete(:datas) if h.has_key?(:datas)
+      simple_hash << h
     end if hash.has_key?(:datas)
-    return hash
+    return simple_hash
   end
 end
