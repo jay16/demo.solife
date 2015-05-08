@@ -62,6 +62,7 @@ class Demo::ISearchController < Demo::ApplicationController
   end
   # get /demo/isearch
   get "/" do
+    #@content = hash_resursion(@content, "3")
     @content = JSON.pretty_generate(@content)
     haml :index, layout: settings.layout
   end
@@ -79,12 +80,31 @@ class Demo::ISearchController < Demo::ApplicationController
     if id.eql?(content[:id])
       hash = content
     else
-      hash = content[:datas].find { |h| h[:id].eql?(id) }
+      hash = hash_resursion(content, id)
     end
 
-    hash = simple(hash)
+    hash = simple(hash) rescue hash
 
     respond_with_json hash, 200
+  end
+
+  def hash_resursion(hash, id)
+    @result_hash = nil
+    _hash_resursion(hash, id)
+    return @result_hash
+  end
+
+  def _hash_resursion(hash, id)
+    return unless hash.has_key?(:datas)
+    return if @result_hash
+
+    if _hash = hash[:datas].find { |h| h[:id].eql?(id) or h["id"].eql?(id) }
+      @result_hash = _hash
+    else
+      _hash = Marshal.load(Marshal.dump(hash))
+      _hash[:datas].each { |h| _hash_resursion(h, id) }
+    end
+
   end
 
   # params

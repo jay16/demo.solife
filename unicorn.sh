@@ -54,6 +54,7 @@ case "$1" in
         ;;  
     deploy)
         # ./unicorn.sh deploy | xargs -I cmd /bin/sh -c cmd
+        # ./unicorn.sh deploy | sh
         echo "RACK_ENV=production bundle exec rake remote:deploy"
         ;;
     weixin_group_message)
