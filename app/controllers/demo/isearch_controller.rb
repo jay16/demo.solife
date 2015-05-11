@@ -2,63 +2,11 @@
 class Demo::ISearchController < Demo::ApplicationController
   set :views, ENV["VIEW_PATH"] + "/demo"
   set :layout, :"layouts/layout"
+  helpers Demo::ISearchHelper
 
   before do
-    @content = {
-      :id   => "0",
-      :type => "dir",
-      :desc => "",
-      :name => "dir_0",
-      :datas => [
-        {
-        :id   => "1",
-        :name => "dir_1",
-        :type => "dir",
-        :desc => "dir_1",
-        :datas => [
-          { :id   => "3",
-            :name => "dir_3",
-            :type => "dir",
-            :desc => "dir_3",
-            :datas => [ 
-              { :id => "4", name: "file_4", :type => "file", desc: "file-4", url: "url" },
-              { :id => "5", name: "file_5", :type => "file", desc: "file-5", url: "url" },
-              { :id => "6", name: "file_6", :type => "file", desc: "file-6", url: "url" },
-              { :id => "7", name: "file_7", :type => "file", desc: "file-7", url: "url" },
-              { :id => "8", name: "file_8", :type => "file", desc: "file-8", url: "url" }
-            ]
-          }]
-        },
-        {
-          :id   => "9",
-          :name => "file_9",
-          :type => "file",
-          :desc => "",
-          :url  => ""
-        },
-        {
-          :id   => "10",
-          :name => "file_10",
-          :type => "file",
-          :desc => "",
-          :url  => ""
-        },
-        {
-          :id   => "11",
-          :name => "file_11",
-          :type => "file",
-          :desc => "",
-          :url  => ""
-        },
-        {
-          :id   => "12",
-          :name => "file_12",
-          :type => "file",
-          :desc => "",
-          :url  => ""
-        }
-      ]
-    }
+    @content  = isearch_content
+    @poetries = isearch_poetries
   end
   # get /demo/isearch
   get "/" do
@@ -86,6 +34,27 @@ class Demo::ISearchController < Demo::ApplicationController
     hash = simple(hash) rescue hash
 
     respond_with_json hash, 200
+  end
+
+  get "/download/:id.zip" do
+    filename = "%s.zip" % params[:id]
+    poetry = @poetries[params[:id].to_i - 1]
+
+    tmppath  = File.join(ENV["APP_ROOT_PATH"], "tmp")
+    scriptpath  = File.join(ENV["APP_ROOT_PATH"], "lib/script/generate_isearch_file.sh")
+    filepath = File.join(tmppath, filename)
+    
+
+    unless File.exist?(filepath)
+      command = <<-SCRIPT 
+        cd #{tmppath} \ 
+        /bin/sh #{scriptpath} #{params[:id]} "#{poetry[0]}" "#{poetry[1]}"
+      SCRIPT
+      puts command
+      `#{command}`
+    end
+
+    send_file(filepath, filename: filename)
   end
 
   def hash_resursion(hash, id)
@@ -137,6 +106,7 @@ class Demo::ISearchController < Demo::ApplicationController
     simple_hash = []
     hash[:datas].each do |h|
       h.delete(:datas) if h.has_key?(:datas)
+      h[:url] = "http://localhost:3000/demo/isearch/download/%s.zip" % h[:id]
       simple_hash << h
     end if hash.has_key?(:datas)
     return simple_hash
