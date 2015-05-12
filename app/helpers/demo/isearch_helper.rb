@@ -4,54 +4,54 @@ module Demo
     def isearch_content
     {
       :id   => "0",
-      :type => "dir",
+      :type => "0",
       :desc => "",
       :name => "dir_0",
       :datas => [
         {
         :id   => "1",
         :name => "dir_1",
-        :type => "dir",
+        :type => "0",
         :desc => "dir_1",
         :datas => [
           { :id   => "3",
             :name => "dir_3",
-            :type => "dir",
+            :type => "0",
             :desc => "dir_3",
             :datas => [ 
-              { :id => "4", name: "file_4", :type => "file", desc: "file-4", url: "url" },
-              { :id => "5", name: "file_5", :type => "file", desc: "file-5", url: "url" },
-              { :id => "6", name: "file_6", :type => "file", desc: "file-6", url: "url" },
-              { :id => "7", name: "file_7", :type => "file", desc: "file-7", url: "url" },
-              { :id => "8", name: "file_8", :type => "file", desc: "file-8", url: "url" }
+              { :id => "4", name: "file_4", :type => "1", desc: "file-4", url: "url" },
+              { :id => "5", name: "file_5", :type => "1", desc: "file-5", url: "url" },
+              { :id => "6", name: "file_6", :type => "1", desc: "file-6", url: "url" },
+              { :id => "7", name: "file_7", :type => "1", desc: "file-7", url: "url" },
+              { :id => "8", name: "file_8", :type => "1", desc: "file-8", url: "url" }
             ]
           }]
         },
         {
           :id   => "9",
           :name => "file_9",
-          :type => "file",
+          :type => "1",
           :desc => "",
           :url  => ""
         },
         {
           :id   => "10",
           :name => "file_10",
-          :type => "file",
+          :type => "1",
           :desc => "",
           :url  => ""
         },
         {
           :id   => "11",
           :name => "file_11",
-          :type => "file",
+          :type => "1",
           :desc => "",
           :url  => ""
         },
         {
           :id   => "12",
           :name => "file_12",
-          :type => "file",
+          :type => "1",
           :desc => "",
           :url  => ""
         }
@@ -61,6 +61,8 @@ module Demo
 
     def isearch_poetries
       poetry_list = <<-POETRY
+      《行行重行行》之一
+  　　行行重行行，与君生别离。   相去万余里，各在天一涯。   道路阻且长，会面安可知。   胡马依北风，越鸟巢南枝。   相去日已远，衣带日已缓。   浮云蔽白日，游子不顾反。   思君令人老，岁月忽已晚。   弃捐勿复道，努力加餐饭。
       《行行重行行》之一
   　　行行重行行，与君生别离。   相去万余里，各在天一涯。   道路阻且长，会面安可知。   胡马依北风，越鸟巢南枝。   相去日已远，衣带日已缓。   浮云蔽白日，游子不顾反。   思君令人老，岁月忽已晚。   弃捐勿复道，努力加餐饭。
   　　《青青河畔草》之二

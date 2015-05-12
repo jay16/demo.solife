@@ -5,9 +5,20 @@ class Demo::ISearchController < Demo::ApplicationController
   helpers Demo::ISearchHelper
 
   before do
-    @content  = isearch_content
     @poetries = isearch_poetries
+    @content  = isearch_content
+    hash_resursion_assign_poetry(@content)
   end
+
+  def hash_resursion_assign_poetry(hash)
+    hash[:datas].each do |h|
+      poetry = @poetries.at(h[:id].to_i)
+      h[:name] = poetry[0]
+      h[:desc] = poetry[1]
+      hash_resursion_assign_poetry(h) if h[:type].eql?("0")
+    end
+  end
+
   # get /demo/isearch
   get "/" do
     #@content = hash_resursion(@content, "3")
@@ -20,7 +31,7 @@ class Demo::ISearchController < Demo::ApplicationController
 
   # get /demo/isearch/content
   get "/content" do
-    id   = params[:id] || "0"
+    id   = (params[:id] || "0").to_s
     type = params[:type] 
     user = params[:user]
     content = Marshal.load(Marshal.dump(@content))
@@ -73,7 +84,6 @@ class Demo::ISearchController < Demo::ApplicationController
       _hash = Marshal.load(Marshal.dump(hash))
       _hash[:datas].each { |h| _hash_resursion(h, id) }
     end
-
   end
 
   # params
