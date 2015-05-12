@@ -19,8 +19,11 @@ font_name=${font_url##*/}
 test -f ${font_name} || wget ${font_url}
 test -d ${id}/images || mkdir -p ${id}/images
 
-convert -background white -fill blue -font ${font_name} -pointsize 72 label:"${poetry_title}-[${id}]" ${id}/images/poetry_title.gif
+convert -background white -fill blue -font ${font_name} -pointsize 72 label:"${id}-${poetry_title}" ${id}/images/poetry_title.gif
+test $? -eq 0 && echo "generate poetry title successfully."
+
 convert -background white -fill blue -font ${font_name} -pointsize 72 label:"${poetry_body}" ${id}/images/poetry_body.gif
+test $? -eq 0 && echo "generate poetry body successfully."
 
 echo "<html>
 		<body>
