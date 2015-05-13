@@ -47,6 +47,15 @@ class Demo::ISearchController < Demo::ApplicationController
     respond_with_json hash, 200
   end
 
+  get "/offline" do
+    datas = (1..300).map do |i|
+      poetry = @poetries.at(i % @poetries.count)
+      { id: i, type: 1, name: poetry[0], desc: poetry[1], tags: "", page_count: 1, zip_url: zip_url(i) }
+    end
+
+    respond_with_json datas, 200
+  end
+
   get "/download/:id.zip" do
     filename = "%s.zip" % params[:id]
     poetry = @poetries[params[:id].to_i - 1]
@@ -112,11 +121,22 @@ class Demo::ISearchController < Demo::ApplicationController
 
   private 
 
+  def zip_url(id)
+    local_url = "http://localhost:3000/demo/isearch/download/%s.zip" % id;
+    vps_url   = "http://demo.solife.us/demo/isearch/download/%s.zip" % id
+
+    case ENV["PLATFORM_OS"]
+    when "darwin" then local_url
+    when "linux"  then vps_url
+    else local_url 
+    end
+  end
+
   def simple(hash)
     simple_hash = []
     hash[:datas].each do |h|
       h.delete(:datas) if h.has_key?(:datas)
-      h[:url] = "http://localhost:3000/demo/isearch/download/%s.zip" % h[:id]
+      h[:url] = zip_url(h[:id])
       simple_hash << h
     end if hash.has_key?(:datas)
     return simple_hash

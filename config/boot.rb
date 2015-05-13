@@ -34,6 +34,7 @@ if result[0].strip == "root"
 else
   warn "warning: [#{result[0].strip}] can't execute chown/chmod"
 end
+ENV["PLATFORM_OS"] = `uname -s`.strip.downcase
 
 # 扩充require路径数组
 # require 文件时会在$:数组中查找是否存在
