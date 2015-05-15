@@ -46,6 +46,68 @@ class Demo::ISearchController < Demo::ApplicationController
 
     respond_with_json hash, 200
   end
+  require "cgi"
+  get "/reorganize" do
+    content, file_index = [], 100
+
+    tmp_path = File.join(ENV['APP_ROOT_PATH'], "tmp")
+    tmp_bash = "tmp.sh"
+    @poetries.each_slice(@poetries.count/3) do |array|
+      zip_path = File.join(tmp_path, "#{file_index}.zip")
+
+      desc = {
+        name: "文件#{file_index} - 内容重组",
+        type: "1",
+        desc: "描述文件 - #{file_index}",
+        zip_url: zip_url(file_index)
+      }
+      unless File.exist?(zip_path)
+        command = <<-BASH
+          #!/bin/bash
+
+          font_url="http://solife-code.u.qiniudn.com/STXINGKA.ttf"
+          font_name=${font_url##*/}
+
+          test -f ${font_name} || wget ${font_url}
+          test -d #{file_index}/images || mkdir -p #{file_index}/images
+        BASH
+        page_order = []
+        array.each_with_index do |poetry, page_index|
+           page_order << page_index
+           command << %Q{\nconvert -background white -fill blue -font ${font_name} -pointsize 72 label:"#{poetry.join('\n')}" #{file_index}/images/#{page_index}.png}
+           command << <<-BASH
+             \necho " 
+             <html>
+              <body>
+                <img src='./images/#{page_index}.png'>
+              </body>
+             </html>" > #{file_index}/#{page_index}.html
+           BASH
+        end
+        desc[:order] = page_order
+        command << <<-BASH
+          echo '#{desc.to_json}' > #{file_index}/desc.json
+
+          test -f #{file_index}.zip && rm #{file_index}.zip
+          zip -r #{file_index}.zip #{file_index}/
+        BASH
+        
+        File.open(File.join(tmp_path, tmp_bash), "w+") do |file|
+          file.write(command.gsub(/^(\s+)/, ""))
+        end
+        `cd #{tmp_path} && /bin/sh #{tmp_bash}`
+      end
+      content << desc
+      file_index += 1
+    end
+
+    respond_with_json content, 200
+    #@show = CGI.escapeHTML(@show)
+    #haml :reorganize, layout: settings.layout
+  end
+  template :reorganize do
+    "%pre= @show"
+  end
 
   get "/offline" do
     datas = (1..300).map do |i|

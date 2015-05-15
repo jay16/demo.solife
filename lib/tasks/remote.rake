@@ -22,7 +22,7 @@ namespace :remote do
     Net::SSH.start(Settings.server.host, Settings.server.user, :password => Settings.server.password) do |ssh|
       command = "cd %s && git reset --hard HEAD && git pull" % remote_root_path
       execute!(ssh, command)
-
+=begin
       # check whether remote server exist yaml file
       yamls.each do |yaml|
         command = "test -f %s/%s && echo '%s - exist' || echo '%s - not found.'" % [remote_config_path, yaml, yaml, yaml]
@@ -36,7 +36,7 @@ namespace :remote do
       database_name = "%s_%s" % [ENV["APP_NAME"], ENV["RACK_ENV"]]
       remote_db_path = "%s/db/%s.db" % [remote_root_path, database_name]
       local_db_path  = "%s/db/%s.db" % [ENV["APP_ROOT_PATH"], database_name]
-
+=end
       command = "cd %s && /bin/sh unicorn.sh restart" % remote_root_path
       execute!(ssh, command)
       #File.delete(local_db_path) if File.exist?(local_db_path)
