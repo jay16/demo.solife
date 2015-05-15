@@ -58,7 +58,7 @@ class Demo::ISearchController < Demo::ApplicationController
       desc = {
         name: "文件#{file_index} - 内容重组",
         type: "1",
-        id: file_index,
+        id: file_index.to_s,
         desc: "描述文件 - #{file_index}",
         url: zip_url(file_index)
       }
