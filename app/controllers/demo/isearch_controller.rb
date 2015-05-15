@@ -58,8 +58,9 @@ class Demo::ISearchController < Demo::ApplicationController
       desc = {
         name: "文件#{file_index} - 内容重组",
         type: "1",
+        id: file_index,
         desc: "描述文件 - #{file_index}",
-        zip_url: zip_url(file_index)
+        url: zip_url(file_index)
       }
       unless File.exist?(zip_path)
         command = <<-BASH
