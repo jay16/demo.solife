@@ -60,7 +60,7 @@ namespace :callback do
 
   def http_get(url, echostr, callback_data)
     begin
-      response = HTTParty.get "%s?echostr=%s" % [url, echostr]
+      response = HTTParty.get "%s?format=text&echostr=%s" % [url, echostr]
       if response.body == echostr
         return true
       else
