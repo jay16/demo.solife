@@ -70,19 +70,18 @@ class Demo::ISearchController < Demo::ApplicationController
           font_name=${font_url##*/}
 
           test -f ${font_name} || wget ${font_url}
-          test -d #{file_index}/images || mkdir -p #{file_index}/images
         BASH
         page_order = []
         array.each_with_index do |poetry, page_index|
-           page_order << page_index
-           command << %Q{\nconvert -background white -fill blue -font ${font_name} -pointsize 72 label:"#{poetry.join('\n')}" #{file_index}/images/#{page_index}.png}
+           page_order << "#{file_index}_#{page_index}"
+           command << %Q{\nconvert -background white -fill blue -font ${font_name} -pointsize 72 label:"#{poetry.join('\n')}" #{file_index}/#{file_index}_#{page_index}.gif}
            command << <<-BASH
              \necho " 
              <html>
               <body>
-                <img src='./images/#{page_index}.png'>
+                <img src='./#{file_index}_#{page_index}.gif'>
               </body>
-             </html>" > #{file_index}/#{page_index}.html
+             </html>" > #{file_index}/#{file_index}_#{page_index}.html
            BASH
         end
         desc[:order] = page_order
