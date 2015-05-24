@@ -11,10 +11,11 @@ module Sinatra
         callbacks = message.weixiner.callbacks.find_all { |cb| text.start_with?(cb.keyword.strip) }
         callbacks.each do |callback|
           raw_text = text.sub(callback.keyword.strip, "").strip
-          status, *result = raw_text.process_pattern
+          consume_text, consume_amount = raw_text.process_consume
           if status
             hash = ::JSON.parse(result[0])
-            hash["nText"]  = raw_text
+            hash["nMoney"] = consume_amount
+            hash["nText"]  = consume_text
             hash["nToken"] = callback.token
             hash["nMsgType"] = "微信#%s" % message.msg_type_human_name
 
@@ -25,7 +26,9 @@ module Sinatra
             ::File.open(filepath, "w+") { |file| file.puts(hash.to_s) }
           end
         end 
-        remark = "\n注: 执行%d次回调函数." % callbacks.count unless callbacks.empty?
+        unless callbacks.empty?
+          remark = "\n注: 执行%d次回调函数." % callbacks.count 
+        end
         return remark || ""
       end
     end
