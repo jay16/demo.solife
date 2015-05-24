@@ -7,12 +7,35 @@ UNICORN=unicorn
 CONFIG_FILE=config/unicorn.rb  
  
 APP_ROOT_PATH=$(pwd)
-source ~/.bashrc       > /dev/null 2>&1
-source ~/.bash_profile > /dev/null 2>&1
+# user bash environment for crontab job.
+shell_used=${SHELL##*/}
+echo "** shell used: ${shell_used}"
+test -f ~/.${shell_used}_profile && source ~/.${shell_used}_profile > /dev/null 2>1&
+test -f ~/.${shell_used}rc && source ~/.${shell_used}rc > /dev/null 2>1&
 export LANG=zh_CN.UTF-8
 cd ${APP_ROOT_PATH}
-
-case "$1" in  
+# use the current .ruby-version's command
+bundle_command=$(rbenv which bundle)
+gem_command=$(rbenv which gem)
+case "$1" in      
+    gem)
+        shift 1
+        $gem_commnd $@
+    ;;
+    precompile)
+        RAILS_ENV=production $bundle_command exec rake assets:clean
+        RAILS_ENV=production $bundle_command exec rake assets:my_precompile
+    ;;
+    bundle)
+        echo "## bundle install"
+        $bundle_command install --local > /dev/null 2>&1 
+        if test $? -eq 0 
+        then
+          echo -e "\t bundle install --local successfully."
+        else
+          $bundle_command install
+        fi
+    ;;
     start)  
         test -d log || mkdir log
         test -d tmp || mkdir -p tmp/pids
@@ -32,7 +55,7 @@ case "$1" in
 
         echo "## start unicorn"
         echo -e "\t port: ${PORT} \n\t environment: ${ENVIRONMENT}"
-        bundle exec ${UNICORN} -c ${CONFIG_FILE} -p ${PORT} -E ${ENVIRONMENT} -D > /dev/null 2>&1
+        $bundle_command exec ${UNICORN} -c ${CONFIG_FILE} -p ${PORT} -E ${ENVIRONMENT} -D > /dev/null 2>&1
         echo -e "\t unicorn start $(test $? -eq 0 && echo "successfully" || echo "failed")."
 
         echo "## start nohup"
@@ -58,7 +81,7 @@ case "$1" in
         echo "RACK_ENV=production bundle exec rake remote:deploy"
         ;;
     weixin_group_message)
-        bundle exec rake weixin:send_group_message
+        $bundle_command exec rake weixin:send_group_message
         ;;
     *)  
         echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload|deploy}" >&2  

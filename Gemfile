@@ -1,6 +1,9 @@
 #encoding: utf-8
-source "http://ruby.taobao.org"
-#source "http://gemcutter.org"
+if `uname -s`.strip.eql?("Darwin")
+  source "http://ruby.taobao.org"
+else
+  source "https://rubygems.org"
+end
 
 if defined? Encoding
   Encoding.default_external = Encoding::UTF_8

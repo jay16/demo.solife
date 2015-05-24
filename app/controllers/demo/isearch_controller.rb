@@ -70,6 +70,7 @@ class Demo::ISearchController < Demo::ApplicationController
           font_name=${font_url##*/}
 
           test -f ${font_name} || wget ${font_url}
+          test -d ${file_index} || mkdir ${file_index}
         BASH
         page_order = []
         array.each_with_index do |poetry, page_index|
