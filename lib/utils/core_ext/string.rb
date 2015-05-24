@@ -2,7 +2,7 @@
 module StringMethods
   def self.included(base)
     base.class_eval do
-      [:process_pattern].each do |method_name|
+      [:process_pattern,:process_consume].each do |method_name|
         next unless method_defined?(method_name)
         location = self.method(method_name).source_location rescue next
         next if location[0] == __FILE__
