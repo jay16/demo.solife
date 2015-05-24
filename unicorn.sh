@@ -1,22 +1,25 @@
-#!/bin/sh  
+#!/bin/bash  
 # 
 PORT=$(test -z "$2" && echo "4000" || echo "$2")
 ENVIRONMENT=$(test -z "$3" && echo "production" || echo "$3")
 
 UNICORN=unicorn  
-CONFIG_FILE=config/unicorn.rb  
- 
+CONFIG_FILE=config/unicorn.rb   
 APP_ROOT_PATH=$(pwd)
+
 # user bash environment for crontab job.
 shell_used=${SHELL##*/}
 echo "** shell used: ${shell_used}"
 test -f ~/.${shell_used}_profile && source ~/.${shell_used}_profile > /dev/null 2>1&
 test -f ~/.${shell_used}rc && source ~/.${shell_used}rc > /dev/null 2>1&
 export LANG=zh_CN.UTF-8
-cd ${APP_ROOT_PATH}
+
 # use the current .ruby-version's command
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 bundle_command=$(rbenv which bundle)
 gem_command=$(rbenv which gem)
+
+cd ${APP_ROOT_PATH}
 case "$1" in      
     gem)
         shift 1

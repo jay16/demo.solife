@@ -36,8 +36,8 @@ module StringMethods
   # result:
   # ["手机钢化膜(45元)\n卸装油(88元)\n测试(20元)",264.5]
   def process_consume
-      reg = /((\d+\.\d+|\d+)[元|块])/
-      array, amount = [], 0
+      reg = /((\d+\.\d+|\d+)\s*[元|块])/
+      str, array, amount = str.clone, [], 0
       while index = str =~ reg
         array << "%s(%s)" % [str[0..index-1], $1]
         amount += $2.to_f
