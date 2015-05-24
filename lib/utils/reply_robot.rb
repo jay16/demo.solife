@@ -12,19 +12,19 @@ module Sinatra
         callbacks.each do |callback|
           raw_text = text.sub(callback.keyword.strip, "").strip
           consume_text, consume_amount = raw_text.process_consume
-          if status
-            hash = ::JSON.parse(result[0])
-            hash["nMoney"] = consume_amount
-            hash["nText"]  = consume_text
-            hash["nToken"] = callback.token
-            hash["nMsgType"] = "微信#%s" % message.msg_type_human_name
+    
+          record = {}
+          record["nMoney"] = consume_amount
+          record["nText"]  = consume_text
+          record["nToken"] = callback.token
+          record["nMsgType"] = "微信#%s" % message.msg_type_human_name
 
-            data = callback.callback_datas.new({params: hash.to_s.gsub("=>", ":")})
-            data.save_with_logger
+          data = callback.callback_datas.new({params: record.to_s.gsub("=>", ":")})
+          data.save_with_logger
 
-            filepath = ::File.join(ENV["APP_ROOT_PATH"], "public/callbacks", data.id.to_s+".cb")
-            ::File.open(filepath, "w+") { |file| file.puts(hash.to_s) }
-          end
+          filepath = ::File.join(ENV["APP_ROOT_PATH"], "public/callbacks", data.id.to_s+".cb")
+          ::File.open(filepath, "w+") { |file| file.puts(record.to_s) }
+
         end 
         unless callbacks.empty?
           remark = "\n注: 执行%d次回调函数." % callbacks.count 
