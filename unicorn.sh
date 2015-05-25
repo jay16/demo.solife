@@ -10,8 +10,8 @@ APP_ROOT_PATH=$(pwd)
 # user bash environment for crontab job.
 shell_used=${SHELL##*/}
 echo "** shell used: ${shell_used}"
-test -f ~/.${shell_used}_profile && source ~/.${shell_used}_profile > /dev/null 2>1&
-test -f ~/.${shell_used}rc && source ~/.${shell_used}rc > /dev/null 2>1&
+[ -f ~/.${shell_used}_profile ] && source ~/.${shell_used}_profile > /dev/null 2&>1
+[ -f ~/.${shell_used}rc ] && source ~/.${shell_used}rc > /dev/null 2&>1
 export LANG=zh_CN.UTF-8
 
 # use the current .ruby-version's command

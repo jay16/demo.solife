@@ -1,10 +1,10 @@
 ﻿ENV["RACK_ENV"] = "test"
 #require 'capybara/dsl'
 #require "capybara/rspec"
-require "factory_girl"
 require "rack/test"
 require File.expand_path '../../config/boot.rb', __FILE__
-require File.expand_path '../factories/transaction_factory.rb', __FILE__
+#require "factory_girl"
+#require File.expand_path '../factories/transaction_factory.rb', __FILE__
 
 module RSpecMixin
   include Rack::Test::Methods

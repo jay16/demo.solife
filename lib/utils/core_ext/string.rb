@@ -43,10 +43,11 @@ module StringMethods
         amount += $2.to_f
         str = str[index+$1.length..-1]
       end
+      puts array.to_s
       # the rest unmatch string also usefully
-      array << str unless index
-
-      [array.join(" \n"), amount] 
+      array << str if str.length > 0
+      puts array.to_s
+      [array.compact.join(" \n"), amount] 
   end
 end
 class String
