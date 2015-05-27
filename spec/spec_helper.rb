@@ -3,6 +3,7 @@
 #require "capybara/rspec"
 require "rack/test"
 require File.expand_path '../../config/boot.rb', __FILE__
+require "digest/md5"
 #require "factory_girl"
 #require File.expand_path '../factories/transaction_factory.rb', __FILE__
 

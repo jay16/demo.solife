@@ -47,6 +47,7 @@ class Demo::ISearchController < Demo::ApplicationController
     respond_with_json hash, 200
   end
   require "cgi"
+  # get /demo/isearch/reorganize
   get "/reorganize" do
     content, file_index = [], 100
 
@@ -110,6 +111,7 @@ class Demo::ISearchController < Demo::ApplicationController
     "%pre= @show"
   end
 
+  # get /demo/isearch/offline
   get "/offline" do
     datas = (1..300).map do |i|
       poetry = @poetries.at(i % @poetries.count)
@@ -119,6 +121,7 @@ class Demo::ISearchController < Demo::ApplicationController
     respond_with_json datas, 200
   end
 
+  # get /demo/isearch/download/1.zip
   get "/download/:id.zip" do
     filename = "%s.zip" % params[:id]
     poetry = @poetries[params[:id].to_i - 1]
@@ -140,24 +143,8 @@ class Demo::ISearchController < Demo::ApplicationController
     send_file(filepath, filename: filename)
   end
 
-  def hash_resursion(hash, id)
-    @result_hash = nil
-    _hash_resursion(hash, id)
-    return @result_hash
-  end
 
-  def _hash_resursion(hash, id)
-    return unless hash.has_key?(:datas)
-    return if @result_hash
-
-    if _hash = hash[:datas].find { |h| h[:id].eql?(id) or h["id"].eql?(id) }
-      @result_hash = _hash
-    else
-      _hash = Marshal.load(Marshal.dump(hash))
-      _hash[:datas].each { |h| _hash_resursion(h, id) }
-    end
-  end
-
+  # get /demo/isearch/login
   # params
   #   user:     username or email
   #   password: just password
@@ -182,8 +169,47 @@ class Demo::ISearchController < Demo::ApplicationController
     respond_with_json hash, 200
   end
 
+  # get /demo/isearch/notificiations
+  get "/notifications" do
+    lambda_date_format = lambda do |date| 
+      if date and date.respond_to?(:strftime)
+        date.strftime("%Y/%m/%d %H:%M:%S")
+      else
+        # occur_date 随机生成，1/3公告为预告
+        if rand(100) % 3 == 0
+          date = Time.now + 60*60*24*rand(10)
+          date.strftime("%Y/%m/%d")
+        end
+      end
+    end
+    notifications = (1..30).map do |index|
+      { title: "公告通知 %d" % index, msg: "公告内容 #{Time.now.to_s}", created_date: lambda_date_format.call(Time.now), occur_date: lambda_date_format.call(nil), type: "isearch" }
+    end
+
+    respond_with_json notifications, 200
+  end
+
+
   private 
 
+  def hash_resursion(hash, id)
+    @result_hash = nil
+    _hash_resursion(hash, id)
+    return @result_hash
+  end
+
+  def _hash_resursion(hash, id)
+    return unless hash.has_key?(:datas)
+    return if @result_hash
+
+    if _hash = hash[:datas].find { |h| h[:id].eql?(id) or h["id"].eql?(id) }
+      @result_hash = _hash
+    else
+      _hash = Marshal.load(Marshal.dump(hash))
+      _hash[:datas].each { |h| _hash_resursion(h, id) }
+    end
+  end
+  
   def zip_url(id)
     local_url = "http://localhost:3000/demo/isearch/download/%s.zip" % id;
     vps_url   = "http://demo.solife.us/demo/isearch/download/%s.zip" % id

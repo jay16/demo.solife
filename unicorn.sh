@@ -9,16 +9,28 @@ APP_ROOT_PATH=$(pwd)
 
 # user bash environment for crontab job.
 shell_used=${SHELL##*/}
+# crontab environment used *sh* on centos
+if [[ "${shell_used}" == "sh" ]]; 
+then 
+	shell_used="bash"; 
+fi
 echo "** shell used: ${shell_used}"
 [ -f ~/.${shell_used}_profile ] && source ~/.${shell_used}_profile > /dev/null 2&>1
 [ -f ~/.${shell_used}rc ] && source ~/.${shell_used}rc > /dev/null 2&>1
 export LANG=zh_CN.UTF-8
 
+# put below config lines added to ~/.bashrc to make 
+# sure *rbenv* work normally, 
+#
+# 	export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
+# 	export RBENV_ROOT="$HOME/.rbenv"
+# 	if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+#
 # use the current .ruby-version's command
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 bundle_command=$(rbenv which bundle)
 gem_command=$(rbenv which gem)
 
+# make sure command execute in app root path
 cd ${APP_ROOT_PATH}
 case "$1" in      
     gem)
