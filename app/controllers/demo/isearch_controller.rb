@@ -183,7 +183,7 @@ class Demo::ISearchController < Demo::ApplicationController
       end
     end
     notifications = (1..30).map do |index|
-      { title: "公告通知 %d" % index, msg: "公告内容 #{Time.now.to_s}", created_date: lambda_date_format.call(Time.now), occur_date: lambda_date_format.call(nil), type: "isearch" }
+      { title: "公告通知 %d" % index, msg: "公告内容 #{@poetries.sample.flatten.join('\n')}", created_date: lambda_date_format.call(Time.now), occur_date: lambda_date_format.call(nil), type: "isearch" }
     end
 
     respond_with_json notifications, 200
