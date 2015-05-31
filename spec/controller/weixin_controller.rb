@@ -1,10 +1,12 @@
 #encoding:utf-8
 require File.expand_path '../../spec_helper.rb', __FILE__
+require File.expand_path '../../weixin_helper.rb', __FILE__
+
 describe "WeixinController" do
 
   it "weixin server test with echostr params" do
-    echostr = rand_secret
-    get weixin_url("/weixin", {echostr: echostr}, Settings.weixin.token)
+    echostr = Weixin::Utils.rand_secret
+    get Weixin::Utils.base_url("/weixin", Settings.weixin.token, {echostr: echostr})
 
     expect(last_response.status).to be(200)
     expect(last_response.body).to eq(echostr)
@@ -15,9 +17,9 @@ describe "WeixinController" do
     include Sinatra::WeiXinRobot::RobotHelpers
 
     def text_message_rspec(raw_message, expect_message_regexp)
-      message = message_builder(raw_message)
+      message = Weixin::Utils.message_builder(raw_message)
 
-      post weixin_url("/weixin", {}, Settings.weixin.token), message, content_type: 'text/xml; charset=utf-8'
+      post Weixin::Utils.base_url("/weixin", Settings.weixin.token, {}), message, content_type: 'text/xml; charset=utf-8'
 
       receiver = message_receiver(last_response.body)
       expect(receiver.text?).to be(true)
