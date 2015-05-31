@@ -58,6 +58,8 @@ group :development do
   gem "net-scp", "~>1.2.1"
 end
 group :test do
+  gem 'hashie', '~> 2.0'
+  gem 'rest-client', '~>1.7.3'
   gem "rack-test", "~>0.6.2"
   gem "rspec", "~>2.14.1"
 end

@@ -35,6 +35,8 @@ default: &default
   consume:
     api_url: "api-url"
     token: "token"
+  nxscae:
+    stock_url: "stock-url"
 
 production:
   <<: *default

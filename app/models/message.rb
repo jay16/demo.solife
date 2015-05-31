@@ -57,9 +57,11 @@ class Message # 微信消息
       messages = self.weixiner.messages
       message_count = messages.count
       today_s_count = messages.all(:created_on => Time.now).count
-      text = ""
-      text << "\n第%d条消息" % message_count
-      text << "\n今天第%d条消息" % today_s_count
+      text = <<-`TEXT`
+        echo 第#{message_count}条消息
+        echo 今天第#{today_s_count}条消息
+      TEXT
+      text.force_encoding("UTF-8")
     end
 
     def recognition_with_punctuation
