@@ -50,6 +50,8 @@ describe "WeixinController" do
         text_message_rspec("nxscae #{keywords.join(' ')}", /搜索到\s+\d+\s+条结果/)
     	keywords = %w(铜章) 
         text_message_rspec("nxscae #{keywords.join(' ')}", /搜索到\s+\d+\s+条结果/)
+    	keywords = %w(忽略首字段大小写) 
+        text_message_rspec("Nxscae #{keywords.join(' ')}", /搜索到 0 条结果/)
     end
   end
 end

@@ -63,8 +63,8 @@ module Sinatra
             status = "帐户绑定: %s" % (state ? "成功" : "失败")
           end
         # for xiaohe search...
-        elsif @raw_cmd =~ /^nxscae/
-           keywords = @raw_cmd.sub("nxscae", "").strip.split(/\s+/)
+        elsif @raw_cmd =~ /^nxscae/i
+           keywords = @raw_cmd.sub(/nxscae/i, "").strip.split(/\s+/)
            ::Nxscae::Tables.search(keywords, @options)
         else
           execute_callback(@message, @raw_cmd)
