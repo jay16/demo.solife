@@ -52,21 +52,12 @@ case "$1" in
         fi
     ;;
     start)  
+        /bin/sh unicorn.sh bundle
+
         test -d log || mkdir log
         test -d tmp || mkdir -p tmp/pids
         test -d public/callbacks || mkdir -p public/callbacks
         test -d public/change_logs || mkdir -p public/change_logs
-
-        echo  "## compile phantom's C codes"
-        cd ${APP_ROOT_PATH}
-        cd lib/utils/processPattern
-        gcc buildPatternHeader.c -o buildPatternHeader > /dev/null 2>&1
-        echo -e "\t compile header $(test $? -eq 0 && echo "successfully" || echo "failed")."
-        ./buildPatternHeader
-        gcc processPattern.c -o processPattern > /dev/null 2>&1
-        echo -e "\t compile pattern $(test $? -eq 0 && echo "successfully" || echo "failed")."
-        # back to app_root_path
-        cd ${APP_ROOT_PATH}
 
         echo "## start unicorn"
         echo -e "\t port: ${PORT} \n\t environment: ${ENVIRONMENT}"
