@@ -3,6 +3,7 @@ require "erb"
 require "json"
 require "timeout"
 require "lib/utils/weixin_utils.rb"
+require "lib/utils/nxscae.rb"
 
 module Sinatra
   module ReplyRobot 
@@ -24,7 +25,6 @@ module Sinatra
 
           filepath = ::File.join(ENV["APP_ROOT_PATH"], "public/callbacks", data.id.to_s+".cb")
           ::File.open(filepath, "w+") { |file| file.puts(record.to_s) }
-
         end 
         unless callbacks.empty?
           remark = "\n注: 执行%d次回调函数." % callbacks.count 
@@ -35,20 +35,24 @@ module Sinatra
     # command parser
     class Command 
       include UtilsMethods
+
       attr_reader :key, :command, :raw_cmd, :exec_cmd
-      def initialize(message)
+      def initialize(message, options={})
         @message  = message
         @result   = []
         @raw_cmd  = message.content.to_s.strip
+        @options  = options
       end
-      def self.exec(raw_cmd)
-        reply = new(raw_cmd)
+
+      def self.exec(raw_cmd, options)
+        reply = new(raw_cmd, options)
         reply.handler
       end
+
       def handler
         if @raw_cmd =~ /^\?/ or @raw_cmd.force_encoding('UTF-8').start_with?("？")
             help
-        elsif @raw_cmd =~ /^账户绑定\s+/
+        elsif @raw_cmd =~ /^(帐|账)户绑定\s+/
           email = @raw_cmd.split[1]
           user = ::User.first(email: email)
           if user.nil?
@@ -58,10 +62,15 @@ module Sinatra
             state = @message.weixiner.update(user_id: user.id)
             status = "帐户绑定: %s" % (state ? "成功" : "失败")
           end
+        # for xiaohe search...
+        elsif @raw_cmd =~ /^nxscae/
+           keywords = @raw_cmd.sub("nxscae", "").strip.split(/\s+/)
+           ::Nxscae::Tables.search(keywords, @options)
         else
           execute_callback(@message, @raw_cmd)
         end
       end
+      
       # help menu
       def help
         "帮助菜单:\n 说明你想记录的文字、语音、图片、位置..."
@@ -70,8 +79,10 @@ module Sinatra
 
     class Parser
       include UtilsMethods
-      def initialize(message)
-        @message     = message
+
+      def initialize(message, options={})
+        @message = message
+        @options = options
       end
 
       def handler
@@ -86,7 +97,7 @@ module Sinatra
           text << execute_callback(@message, recognition) unless recognition.empty?
           text.strip
         when "text"  then
-          Command.exec(@message)
+          Command.exec(@message, @options)
         when "event" then 
           case @message.event.downcase
           when "subscribe"
@@ -123,8 +134,8 @@ module Sinatra
         end
       end
 
-      def self.exec(message)
-        parser = new(message)
+      def self.exec(message, options)
+        parser = new(message, options)
         result = parser.handler || ""
         result.is_a?(Array) ? result : [false, result]
       end
@@ -132,13 +143,20 @@ module Sinatra
 
     module ReplyHelpers
       def reply_robot(message)
-        Sinatra::ReplyRobot::Parser.exec(message)
+        options = {
+          :weixin_name => settings.weixin_name,
+          :weixin_desc => settings.weixin_desc,
+          :root_path   => settings.root_path,
+          :nxscae_stock_url => settings.nxscae_stock_url
+        }
+        Sinatra::ReplyRobot::Parser.exec(message, options)
       end
     end
 
     def self.registered(robot)
-      robot.set     :weixin_name,     "NAME"
-      robot.set     :weixin_desc,     "DESC"
+      robot.set     :weixin_name,      "NAME"
+      robot.set     :weixin_desc,      "DESC"
+      robot.set     :nxscae_stock_url, "STOCK_URL"
       robot.helpers  ReplyHelpers
     end
   end # ReplyRobot

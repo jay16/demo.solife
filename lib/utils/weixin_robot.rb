@@ -18,6 +18,7 @@ module Sinatra
         Sinatra::WeiXinRobot::Receiver.message(msg)
       end
     end
+
     module MessageHelpers
       methods = %w[text music news image location link event video voice]
       methods.each do |method|
@@ -26,11 +27,12 @@ module Sinatra
         end
       end
     end
+
     class Receiver
       include MessageHelpers
       attr_reader :robot, :user,
                   :create_time,
-                  :raw_meesage,
+                  :raw_message,
                   :content,
                   :pic_url,
                   :title, :description, :url,
@@ -40,6 +42,7 @@ module Sinatra
       def initialize(raw_message)
         if raw_message.instance_of?(String)
           @raw_message = raw_message
+          @raw_message.force_encoding('utf-8') unless @raw_message.encoding.name == 'UTF-8'
         else
           raise "raw_message should String, not %s" % raw_message.class
         end
@@ -56,7 +59,20 @@ module Sinatra
       end
       def handler
         if text?
-          @content       = @raw_message.scan(/<Content><!\[CDATA\[(.*)\]\]><\/Content>/).flatten.join
+          # BUG: 当前Content字段内容有换行时，该正则无法匹配出来
+          # irb(main):025:0> raw_message = "<Content><![CDATA[消息创建成功.
+          # irb(main):026:0" 第26条消息
+          # irb(main):027:0" 今天第26条消息
+          # irb(main):028:0"
+          # irb(main):029:0" ]]></Content>"
+          # => "<Content><![CDATA[消息创建成功.\n第26条消息\n今天第26条消息\n\n]]></Content>"
+          # irb(main):030:0> raw_message
+          # => "<Content><![CDATA[消息创建成功.\n第26条消息\n今天第26条消息\n\n]]></Content>"
+          # irb(main):031:0> raw_message.scan(/<Content><!\[CDATA\[(.*)\]\]><\/Content>/).flatten.join
+          # => ""
+          # irb(main):032:0> raw_message.gsub("\n", "\\n").scan(/<Content><!\[CDATA\[(.*)\]\]><\/Content>/).flatten.join.gsub("\\n", "\n")
+          # => "消息创建成功.\n第26条消息\n今天第26条消息\n\n"
+          @content       = @raw_message.gsub("\n", "\\n").scan(/<Content><!\[CDATA\[(.*)\]\]><\/Content>/).flatten.join.gsub("\\n", "\n")
         elsif image?
           @pic_url       = @raw_message.scan(/<PicUrl><!\[CDATA\[(.*)\]\]><\/PicUrl>/).flatten.join
         elsif location?
@@ -101,6 +117,7 @@ module Sinatra
                     :articles
 
       attr_reader   :user, :robot
+
       def initialize(options={})
         @user               = options.delete(:user)
         @robot              = options.delete(:robot)
@@ -157,6 +174,7 @@ module Sinatra
         xml += news_message if news?
         xml += "<FuncFlag>#{@func_flag}</FuncFlag>"
         xml += "</xml>"
+        xml.force_encoding("UTF-8")
       end
 
       def complete!
@@ -171,7 +189,7 @@ module Sinatra
       robot.helpers  RobotHelpers
       robot.before "#{robot.settings.weixin_path}" do
         if request.request_method == "POST"
-          content_type 'application/xml'
+          content_type 'application/xml; charset=utf-8'
         end
       end
     end
