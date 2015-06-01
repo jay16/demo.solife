@@ -33,9 +33,9 @@ class WeiXin::NBAReportController < WeiXin::ApplicationController
     _params[:from_user_name] = _params.delete("user")
     _params[:to_user_name]   = _params.delete("robot")
 
-    weixiner = Weixiner.first_or_create(name: "nba_report", uid: _params[:from_user_name])
-    message = weixiner.messages.new(_params)
-    message.save_with_logger
+    weixiner = Weixiner.first_or_create({uid: _params[:from_user_name]}, {name: "nba_report"})
+    weixiner.update(name: "nba_report")
+    message = weixiner.messages.create(_params)
 
     Timeout::timeout(4) do # weixin limit 5s callback
       reply_content = reply_robot(message)

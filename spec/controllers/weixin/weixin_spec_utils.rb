@@ -9,13 +9,11 @@ module Weixin
       extend self
 
       def sign_params(params={}, token)
-        puts params.to_s
         sign = Digest::SHA1.hexdigest([token, params[:timestamp], params[:nonce]].collect(&:to_s).compact.sort.join)
         params.merge(signature: sign)
       end
 
       def base_url(url, token, append_params={})
-        puts append_params.to_s
         signed_params = sign_params({
           timestamp: Time.now.to_i,
           nonce: rand_secret

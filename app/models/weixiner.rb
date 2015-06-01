@@ -8,7 +8,7 @@ class Weixiner
 
     property :id  , Serial 
     # 微信公众号名称
-    property :name, String, required: true, default: "solife"
+    property :name, String, default: "solife"
     # 微信公众号id
     property :uid,    String, required: true, unique: true
     property :status, String, default: "subscribe"

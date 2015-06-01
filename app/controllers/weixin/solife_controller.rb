@@ -34,13 +34,9 @@ class WeiXin::SOLifeController < WeiXin::ApplicationController
     _params[:from_user_name] = _params.delete("user")
     _params[:to_user_name]   = _params.delete("robot")
 
-    weixiner = Weixiner.first_or_create(name: "solife", uid: _params[:from_user_name])
-    begin
-    message = weixiner.messages.new(_params)
-    message.save
-  rescue => e
-    puts e.message
-  end
+    weixiner = Weixiner.first_or_create({uid: _params[:from_user_name]}, {name: "solife"})
+    weixiner.update(name: "solife")
+    message = weixiner.messages.create(_params)
 
     reply = ["消息创建成功.", ""]
     Timeout::timeout(4) do # weixin limit 5s callback
