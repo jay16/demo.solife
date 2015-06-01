@@ -1,4 +1,4 @@
-#encoding: utf-8 
+﻿#encoding: utf-8 
 class Demo::TransactionsController < Demo::ApplicationController
   set :views, ENV["VIEW_PATH"] + "/demo/transactions"
 

@@ -7,9 +7,11 @@ class Weixiner
     include Utils::ActionLogger
 
     property :id  , Serial 
-    # 微信名称
-    property :uid,    String, :required => true, :unique => true
-    property :status, String, :default => "subscribe"
+    # 微信公众号名称
+    property :name, String, required: true, default: "solife"
+    # 微信公众号id
+    property :uid,    String, required: true, unique: true
+    property :status, String, default: "subscribe"
 
     belongs_to :user, required: false
     has n, :messages   # 微信消息

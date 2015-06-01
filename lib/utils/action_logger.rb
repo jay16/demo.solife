@@ -1,4 +1,4 @@
-#encoding: utf-8
+﻿#encoding: utf-8
 module Utils
   module ActionLogger
     def self.included(base)

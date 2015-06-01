@@ -1,4 +1,4 @@
-#encoding: utf-8
+﻿#encoding:utf-8
 require "hashie"
 require 'digest/sha1'
 # extract code and logic from [wecheat](!https://github.com/xixilive/wecheat)
@@ -36,7 +36,7 @@ module Weixin
           self.cdatas.each_pair do |k,v|
             nodes << "<#{k}><![CDATA[#{v}]]></#{k}> "
           end
-          "<xml>#{nodes.join}</xml>"
+          "<xml>#{nodes.join}</xml>".force_encoding("UTF-8")
         end
 
         def cdata name, value

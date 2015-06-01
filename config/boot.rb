@@ -1,4 +1,4 @@
-#encoding: utf-8
+﻿#encoding: utf-8
 require "rubygems"
 
 root_path = File.dirname(File.dirname(__FILE__))

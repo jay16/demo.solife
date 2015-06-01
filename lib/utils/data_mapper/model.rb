@@ -1,4 +1,4 @@
-#encoding: utf-8
+ï»¿#encoding: utf-8
 module Utils
   module DataMapper
     module Model
@@ -71,7 +71,7 @@ module Utils
               hash.merge!({ "%s" % property => self.send(property) })
             end
         end
-        # ´òÓ¡±£´æ×´Ì¬
+        # æ‰“å°ä¿å­˜çŠ¶æ€
         # TODO print Colorfully
         def save_with_logger
           _template = "\n\nModel - %s saved" % self.class.name

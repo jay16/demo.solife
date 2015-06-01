@@ -2,11 +2,18 @@ default: &default
   domain: "http://weixin.solife.us"
   admins: "jay_li@intfocus.com;jay_li@solife.us"
   weixin:
-    name: "SOLife"
-    desc: "TODO"
-    token: "weixin-token"
-    app_id: "app-id"
-    app_secret: "app-secret"
+    solife:
+      name: "SOLife"
+      desc: "TODO"
+      token: "weixin-token"
+      app_id: "app-id"
+      app_secret: "app-secret"
+    nba_report:
+      name: "SOLife"
+      desc: "TODO"
+      token: "weixin-token"
+      app_id: "app-id"
+      app_secret: "app-secret"
   website:
     title: "SOLife"
     subtitle: "Carder"

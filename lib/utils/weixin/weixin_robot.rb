@@ -1,4 +1,4 @@
-# encoding: utf-8
+﻿# encoding: utf-8
 # reference:
 #   https://github.com/kennx/weixin_robot/blob/master/lib/sinatra/weixin-robot.rb
 require 'sinatra/base'
@@ -184,7 +184,7 @@ module Sinatra
     end #Reply
     def self.registered(robot)
       robot.set     :weixin_token,    nil
-      robot.set     :weixin_uri,      "http://wwww.your-weixin-bot-url.com/"
+      robot.set     :weixin_uri,      "http://wwww.your-weixin-boot-url.com/"
       robot.set     :weixin_path,     URI(robot.settings.weixin_uri).path.to_s
       robot.helpers  RobotHelpers
       robot.before "#{robot.settings.weixin_path}" do

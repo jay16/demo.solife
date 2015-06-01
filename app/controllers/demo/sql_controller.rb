@@ -1,4 +1,4 @@
-#encoding: utf-8 
+﻿#encoding: utf-8 
 require "%s/lib/utils/demo/sql_parser.rb" % ENV["APP_ROOT_PATH"]
 class Demo::SqlController < Demo::ApplicationController
   set :views, ENV["VIEW_PATH"] + "/demo/sql_parser"

@@ -1,4 +1,4 @@
-#encoding: utf-8
+﻿#encoding: utf-8
 module Demo
   module ISearchHelper
     def isearch_content

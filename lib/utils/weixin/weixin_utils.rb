@@ -1,4 +1,4 @@
-#encoding:utf-8
+﻿#encoding:utf-8
 require "settingslogic"
 require "httparty"
 require "open-uri"

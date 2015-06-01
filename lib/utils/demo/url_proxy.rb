@@ -1,4 +1,4 @@
-class UrlProxy
+﻿class UrlProxy
   class << self
     # read_html_to_local_with_rescue
     def read_html_to_local(output, url, param={})

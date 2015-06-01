@@ -1,4 +1,4 @@
-#encoding: utf-8
+﻿#encoding: utf-8
 module StringMethods
   def self.included(base)
     base.class_eval do

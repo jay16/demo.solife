@@ -1,3 +1,4 @@
+﻿#encoding: utf-8
 require "date"
 
 # make sure /db folder exist

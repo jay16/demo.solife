@@ -1,3 +1,4 @@
+﻿#encoding: utf-8
 set :domain, "solife.us"
 set :application, "carder"
 

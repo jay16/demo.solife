@@ -1,4 +1,4 @@
-#encoding: utf-8
+﻿#encoding: utf-8
 module Utils
   module Boot
     def recursion_require(dir_path, regexp, base_path = ENV["APP_ROOT_PATH"], sort_rules = [])

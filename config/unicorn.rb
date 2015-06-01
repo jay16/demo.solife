@@ -1,3 +1,4 @@
+﻿#encoding: utf-8
 # config/unicorn.rb
 deploy_to  = File.expand_path("../../", __FILE__) 
 puts system("mkdir -p #{deploy_to}/tmp/pids")

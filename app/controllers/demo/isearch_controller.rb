@@ -1,4 +1,4 @@
-#encoding: utf-8 
+﻿#encoding: utf-8 
 class Demo::ISearchController < Demo::ApplicationController
   set :views, ENV["VIEW_PATH"] + "/demo"
   set :layout, :"layouts/layout"

@@ -1,4 +1,4 @@
-module ModuleMethods
+﻿module ModuleMethods
   def self.included(base)
     base.class_eval do
       if method_defined?(:alias_method_chain)

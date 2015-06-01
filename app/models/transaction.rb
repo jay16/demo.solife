@@ -1,4 +1,4 @@
-class Transaction
+﻿class Transaction
     include DataMapper::Resource
 
     property :id, Serial 
