@@ -3,7 +3,9 @@ require "./config/boot.rb"
 
 { "/"                       => "HomeController",
   "/users"                  => "UsersController",
-  "/weixin"                 => "WeixinController",
+  "/weixin"                 => "WeiXin::ApplicationController",
+  "/weixin/consume"         => "WeiXin::ConsumeController",
+  "/weixin/nba-report"      => "WeiXin::NBAReportController",
   "/account"                => "Account::HomeController",
   "/account/users"          => "Account::UsersController",
   "/account/callbacks"      => "Account::CallbacksController",

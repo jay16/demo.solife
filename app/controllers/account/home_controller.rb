@@ -1,5 +1,5 @@
 ﻿#encoding: utf-8 
-require "lib/utils/weixin_utils.rb"
+#require "lib/utils/weixin/weixin_utils.rb"
 class Account::HomeController < Account::ApplicationController
   set :views, ENV["VIEW_PATH"] + "/account/home"
 

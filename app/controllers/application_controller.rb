@@ -84,7 +84,7 @@ class ApplicationController < Sinatra::Base
       response.set_cookie "cookie_before_login_path", {:value=> request.url, :path => "/", :max_age => "2592000"}
 
       flash[:notice] = "继续操作前请登录."
-      redirect "/carder/user/login", 302
+      redirect "/users/login", 302
     end
   end
 

@@ -1,25 +1,25 @@
 #encoding:utf-8
-require File.expand_path '../../spec_helper.rb', __FILE__
-require File.expand_path '../../weixin_helper.rb', __FILE__
+require File.expand_path '../../../spec_helper.rb', __FILE__
+require File.expand_path '../weixin_spec_utils.rb', __FILE__
 
-describe "WeixinController" do
+describe "WeiXin::ConsumeController" do
 
   it "weixin server test with echostr params" do
-    echostr = Weixin::Utils.rand_secret
-    get Weixin::Utils.base_url("/weixin", Settings.weixin.token, {echostr: echostr})
+    echostr = Weixin::Spec::Utils.rand_secret
+    get Weixin::Spec::Utils.base_url("/weixin/consume", Settings.weixin.token, {echostr: echostr})
 
     expect(last_response.status).to be(200)
     expect(last_response.body).to eq(echostr)
   end
 
   describe "weixin server turn it to here when user send message" do
-    require "lib/utils/weixin_robot.rb"
+    require "lib/utils/weixin/weixin_robot.rb"
     include Sinatra::WeiXinRobot::RobotHelpers
 
     def text_message_rspec(raw_message, expect_message_regexp)
-      message = Weixin::Utils.message_builder(raw_message)
+      message = Weixin::Spec::Utils.message_builder(raw_message)
 
-      post Weixin::Utils.base_url("/weixin", Settings.weixin.token, {}), message, content_type: 'text/xml; charset=utf-8'
+      post Weixin::Spec::Utils.base_url("/weixin/consume", Settings.weixin.token, {}), message, content_type: 'text/xml; charset=utf-8'
 
       receiver = message_receiver(last_response.body)
       expect(receiver.text?).to be(true)

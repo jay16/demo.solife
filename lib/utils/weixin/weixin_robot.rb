@@ -1,6 +1,6 @@
 # encoding: utf-8
 # reference:
-# https://github.com/kennx/weixin_robot/blob/master/lib/sinatra/weixin-robot.rb
+#   https://github.com/kennx/weixin_robot/blob/master/lib/sinatra/weixin-robot.rb
 require 'sinatra/base'
 require 'digest/sha1'
 

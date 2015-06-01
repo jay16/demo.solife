@@ -1,4 +1,5 @@
 ﻿#encoding: utf-8
-module Account; end
-class Account::ApplicationController < ApplicationController
+module Account 
+  class ApplicationController < ApplicationController
+  end
 end

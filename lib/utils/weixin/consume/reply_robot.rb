@@ -2,8 +2,8 @@
 require "erb"
 require "json"
 require "timeout"
-require "lib/utils/weixin_utils.rb"
-require "lib/utils/nxscae.rb"
+require "lib/utils/weixin/weixin_utils.rb"
+require "lib/utils/weixin/consume/nxscae.rb"
 
 module Sinatra
   module ReplyRobot 
@@ -27,7 +27,7 @@ module Sinatra
           ::File.open(filepath, "w+") { |file| file.puts(record.to_s) }
         end 
         unless callbacks.empty?
-          remark = "\n注: 执行%d次回调函数." % callbacks.count 
+          remark = "注: 执行%d次回调函数." % callbacks.count 
         end
         return remark || ""
       end

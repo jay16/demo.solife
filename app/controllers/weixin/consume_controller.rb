@@ -1,11 +1,10 @@
 ﻿#encoding: utf-8 
-require "lib/utils/weixin_robot.rb"
-require "lib/utils/reply_robot.rb"
-require "timeout"
-class WeixinController < ApplicationController
+require "lib/utils/weixin/weixin_robot.rb"
+require "lib/utils/weixin/consume/reply_robot.rb"
+class WeiXin::ConsumeController < WeiXin::ApplicationController
   register Sinatra::WeiXinRobot
   register Sinatra::ReplyRobot
-  set :views, ENV["VIEW_PATH"] + "/weixin"
+  set :views, ENV["VIEW_PATH"] + "/weixin/consume"
 
   configure do
     set :weixin_token, Settings.weixin.token 
