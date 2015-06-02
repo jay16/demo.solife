@@ -12,10 +12,12 @@ task :environment => "Gemfile.lock" do
   eval "Rack::Builder.new {( " + File.read(File.expand_path('../config.ru', __FILE__)) + "\n )}"
 end
 
+desc "set up environment for weixin send group message"
 task :simple do
-  require "settingslogic"
   require "open-uri"
   require "json"
+  require "settingslogic"
+
   @options ||= {}
   @options[:rack_env] = ENV["RACK_ENV"] ||= "production"
   ENV["APP_ROOT_PATH"] = @options[:app_root_path] = Dir.pwd
@@ -30,8 +32,10 @@ task :simple do
     end
   end
 
-  @options[:weixin_app_id]     = Settings.weixin.app_id
-  @options[:weixin_app_secret] = Settings.weixin.app_secret
+  @options[:weixin_app_id]     = Settings.weixin.solife.app_id
+  @options[:weixin_app_secret] = Settings.weixin.solife.app_secret
   @options[:weixin_base_url]   = "https://api.weixin.qq.com/cgi-bin"
+
+  puts @options
 end
 Dir.glob('lib/tasks/*.rake').each { |file| load file }
