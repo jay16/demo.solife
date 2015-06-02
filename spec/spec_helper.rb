@@ -21,7 +21,7 @@ module RSpecMixin
     eval builder
   end
 
-  Capybara.app = Sinatra::Application.new
+  Capybara.app = Sinatra::Application
 
 
   Dir[File.join(ENV["APP_ROOT_PATH"], "spec/factories/*.rb")].each { |f| require f }

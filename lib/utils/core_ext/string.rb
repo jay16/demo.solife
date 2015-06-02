@@ -7,7 +7,7 @@ module StringMethods
         location = self.method(method_name).source_location rescue next
         next if location[0] == __FILE__
 
-        warn "\tRemove Method - #{method_name} defiend in:\n\t%s\n\tand reload file in \n\t%s" % [location, __FILE__]
+        # warn "\tRemove Method - #{method_name} defiend in:\n\t%s\n\tand reload file in \n\t%s" % [location, __FILE__]
         remove_method method_name
       end
     end
@@ -43,10 +43,9 @@ module StringMethods
         amount += $2.to_f
         str = str[index+$1.length..-1]
       end
-      puts array.to_s
       # the rest unmatch string also usefully
       array << str if str.length > 0
-      puts array.to_s
+
       [array.compact.join(" \n"), amount] 
   end
 

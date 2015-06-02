@@ -3,7 +3,7 @@
     base.class_eval do
       if method_defined?(:alias_method_chain)
         location = self.method(:alias_method_chain).source_location
-        warn "Remove Method - alias_method_chain defiend in:\n%s\nand reload file in %s" % [location, __FILE__]
+        # warn "Remove Method - alias_method_chain defiend in:\n%s\nand reload file in %s" % [location, __FILE__]
         remove_method :alias_method_chain
       end
     end

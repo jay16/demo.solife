@@ -24,49 +24,102 @@ require "rest-client"
 module Nxscae
   class Tables
     def self.search(keywords, options={})
-      simulator_browser = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36"
-
-      timestamp = Time.now.strftime("%y%m%d%H")
-      cachefile = "%s/tmp/nxscae-stock.%s.json" % [options[:app_root],timestamp]
-
-      unless File.exist?(cachefile)
-        response = RestClient.post options[:nxscae_stock_url], { user_agent: simulator_browser, :content_type => :json }
-        hash = JSON.parse(response.body)
-      else
-        hash = JSON.parse(IO.read(cachefile))
-      end
-
-      products = hash["tables"]
-      products = products.find_all do |product|
-        is_what_i_want = true
-        keywords.each do |keyword|
-          unless product["fullname"] =~ /#{keyword}/
-            is_what_i_want = false
-            break
-          end
-        end
-        is_what_i_want
-      end unless keywords.empty?
+      nxscae = new(options)
+      keywords = keywords.to_s.split(/\s+/) unless keywords.is_a?(Array)
+      products = nxscae.search(keywords)
 
       raw_result = products.map do |product|
-        <<-`HEREDOC`
-        echo "藏品简称: #{product['fullname']}"
-        echo "今开盘价: #{product['OpenPrice']}"
-        echo "最新价格: #{product['CurPrice']}"
+        (<<-HEREDOC).gsub(/^ {10}/, '')
+          藏品简称: #{product['fullname']}
+          最新价格: #{product['CurPrice']}
+          昨日收盘: #{product['YesterBalancePrice']}
+          股价涨幅: #{product['CurrentGains']}%
         HEREDOC
       end.join("\n")
 
-      <<-`HEREDOC`
-        echo "关键字: #{keywords.join(",")}"
-        echo "搜索到 #{products.count} 条结果"
-        echo ""      
-        echo "#{raw_result}"
-        echo ""
-        echo "nxscae时间:"
-        echo "#{hash['time']}"
+      (<<-HEREDOC).gsub(/^ {8}/, '')
+        关键字: #{keywords.join(",")}
+        搜索到 #{products.count} 条结果
+              
+        #{raw_result}
+        
+        nxscae时间:
+        #{nxscae.stock_time}
       HEREDOC
+    end
+
+    attr_accessor :nxscaes, :is_cache
+    def initialize(options={})
+      @options  = options
+      @nxscaes  = {}
+      @is_cache = false
+    end
+
+    def stock_time
+      @nxscaes["time"]
+    end
+
+    def cache_files_path(timestamp)
+      "%s/tmp/nxscae-tables.%s.json" % [@options[:app_root], timestamp]
+    end
+    
+    def clear_cache_files
+      `rm #{@options[:app_root]}/tmp/nxscae-tables.*.json`
+    end
+
+    def read_tables_and_cached
+      simulator_browser = ""
+      response  = RestClient.post @options[:nxscae_stock_url], { user_agent: simulator_browser, :content_type => :json }
+      @nxscaes  = JSON.parse(response.body)
+      cache_tables_when_read
+    end
+
+    def read_tables_when_cached
+      today = Time.now
+      hour  = today.strftime("%H").to_i
+      # 每天下午15时更新盘信息
+      if hour < 15
+        today = today - 60*60*24
+      end
+
+      timestamp = today.strftime("%Y%m%d150000")
+      cachepath = cache_files_path(timestamp)
+      if File.exist?(cachepath)
+        @nxscaes  = JSON.parse(IO.read(cachepath))
+        @is_cache = true
+      else
+        read_tables_and_cached
+        @is_cache = false
+      end
+    end
+
+    def cache_tables_when_read
+      timestamp = @nxscaes["time"].gsub(/\s|:|-/, "")
+      cachepath = cache_files_path(timestamp)
+      File.open(cachepath, "w:UTF-8") { |file| file.puts(@nxscaes.to_json) }
+    end
+
+    def search_tables(keywords)
+      if keywords.empty?
+        @nxscaes["tables"]
+      else
+        @nxscaes["tables"].find_all do |product|
+          is_what_i_want = true
+          keywords.each do |keyword|
+            unless product["fullname"] =~ /#{keyword}/
+              is_what_i_want = false
+              break
+            end
+          end
+          is_what_i_want
+        end
+      end
+    end
+
+    def search(keywords=[])
+      read_tables_when_cached
+      search_tables(keywords)
     end
   end
 end
-
 

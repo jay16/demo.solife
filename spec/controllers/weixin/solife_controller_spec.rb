@@ -44,6 +44,31 @@ describe "WeiXin::SOLifeController" do
       pending "sync db file"
     end
 
+  end
+  describe "nxscae around test" do
+    it "should read nxscae tables info when clear cache files" do
+      options = {app_root: ENV["APP_ROOT_PATH"], nxscae_stock_url: Settings.nxscae.stock_url}
+      nxscae = Nxscae::Tables.new(options)
+      
+      expect(nxscae.is_cache).to_not be_nil
+      expect(nxscae.nxscaes.empty?).to be_true
+
+      nxscae.clear_cache_files
+      nxscae.read_tables_when_cached
+      expect(nxscae.is_cache).to_not be_true
+
+      nxscae.read_tables_when_cached
+      expect(nxscae.is_cache).to be_true
+
+      expect(nxscae.search.empty?).to_not be_true
+      expect(nxscae.search(["没有匹配的关键字"]).empty?).to be_true
+      
+      result = Nxscae::Tables.search(["没有匹配的关键字"], options)
+      expect(result).to match(/搜索到 0 条结果/)
+    end
+
+
+
     it "should respond with nxscae stock info when /^nxscae 铜章/\n NOTE:close VPN!" do
     	keywords = %w() 
       weixin_text_message_test("nxscae #{keywords.join(' ')}", /搜索到\s+\d+\s+条结果/)
