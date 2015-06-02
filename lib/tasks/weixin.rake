@@ -1,7 +1,7 @@
 #encoding:utf-8
 desc "task operation around weixin"
 namespace :weixin do
-  def lasttime(info, &block)
+  def run_lasttime(info, &block)
      bint = Time.now.to_f
      yield
      eint = Time.now.to_f
