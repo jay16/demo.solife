@@ -25,3 +25,4 @@ require "./config/boot.rb"
   clazz = mod.split("::").inject(Object) { |obj,c| obj.const_get(c) }
   map(path) { run clazz }
 end
+

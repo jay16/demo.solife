@@ -35,7 +35,7 @@ class WeiXin::SOLifeController < WeiXin::ApplicationController
     _params[:to_user_name]   = _params.delete("robot")
 
     weixiner = Weixiner.first_or_create({uid: _params[:from_user_name]}, {name: "solife"})
-    weixiner.update(name: "solife")
+    weixiner.update(name: "solife") unless weixiner.name.eql?("solife")
     message = weixiner.messages.create(_params)
 
     reply = ["消息创建成功.", ""]

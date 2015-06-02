@@ -38,4 +38,39 @@ task :simple do
 
   puts @options
 end
+
+desc "Sinatra App routes list"
+task :routes => :environment do
+  if Sinatra::Application.descendants.any?
+    # Classic application structure
+    applications = Sinatra::Application.descendants
+  elsif Sinatra::Base.descendants.any?
+    # Modular application structure
+    applications = Sinatra::Base.descendants
+  else
+    abort("Cannot find any defined routes.....")
+  end
+
+  applications.each do |app|
+    app_name, routes = app.to_s, app.routes
+
+    puts "\nApplication: #{app_name}\n"
+    routes.each do |verb,handlers|
+      next if verb.downcase.eql?("head")
+
+      puts "\n#{verb}:\n"
+      handlers.each do |handler|
+        route_text = handler[0].source.to_s.scan(/\\A(.*?)\\z/).flatten[0]
+        # deal with dot `.`
+        route_text.gsub!(/\(\?:\\\.\|%2\[Ee\]\)/, ".")
+        # deal with params `:id` 
+        # #TODO only for **one** params
+        handler[1].each do |param| route_text.sub!(/\(.*\)/, ":#{param}")
+        end unless handler[1].empty?
+
+        puts route_text
+      end
+    end
+  end
+end
 Dir.glob('lib/tasks/*.rake').each { |file| load file }

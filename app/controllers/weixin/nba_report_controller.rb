@@ -34,12 +34,11 @@ class WeiXin::NBAReportController < WeiXin::ApplicationController
     _params[:to_user_name]   = _params.delete("robot")
 
     weixiner = Weixiner.first_or_create({uid: _params[:from_user_name]}, {name: "nba_report"})
-    weixiner.update(name: "nba_report")
+    weixiner.update(name: "nba_report") unless weixiner.name.eql?("nba_report")
     message = weixiner.messages.create(_params)
 
     Timeout::timeout(4) do # weixin limit 5s callback
       reply_content = reply_robot(message)
-      puts "reply: #{reply_content}"
       message.update(response: reply_content)
     end
 

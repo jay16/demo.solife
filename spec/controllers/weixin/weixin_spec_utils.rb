@@ -82,3 +82,44 @@ module Weixin
     end
   end
 end
+
+# weixin rspec methods
+
+
+def weixin_message_test(url, message, expect_block, change_block)
+  lambda {
+    post url, message, content_type: 'text/xml; charset=utf-8'
+
+    expect(last_response).to be_ok
+    expect(last_response.headers['Content-Type']).to match(/application\/xml;\s*charset\=utf\-8/i)
+
+    expect_block.()
+  }.should {
+    change_block.()
+  }
+end
+
+def weixin_text_message_test(message, expect_messages)
+  message = Weixin::Spec::Utils.message_builder(message)
+  url = Weixin::Spec::Utils.base_url("/weixin/solife", Settings.weixin.solife.token, {})
+
+  weixin_message_test(url, message, 
+    -> { 
+      receiver = message_receiver(last_response.body)
+
+      expect(receiver.text?).to be(true)
+
+      expect_messages = [expect_messages] unless expect_messages.is_a?(Array)
+      expect_messages.each do |expect_message|
+        if expect_message.is_a?(String)
+          expect(receiver.content).to include(expect_message)
+        else
+          expect(receiver.content).to match(expect_message)
+        end
+      end
+    }, 
+    -> {
+      change(Weixiner, :count).by(1)
+      change(Message, :count).by(1)
+  })
+end

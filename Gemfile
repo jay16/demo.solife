@@ -50,7 +50,7 @@ gem 'zip-zip', "~>0.3"
 gem "alipay_dualfun", :github => "happypeter/alipay_dualfun"
 
 # for erb operation
-gem "tilt", "~>1.4.1"
+# gem "tilt", "~>1.4.1"
 
 group :development do
   gem "qiniu", "~>6.3.2"
@@ -62,4 +62,6 @@ group :test do
   gem 'rest-client', '~>1.7.3'
   gem "rack-test", "~>0.6.2"
   gem "rspec", "~>2.14.1"
+  gem "factory_girl", "~>4.5.0"
+  gem "capybara", "~>2.2.1"
 end
