@@ -1,0 +1,18 @@
+/ In production, only one script (pdf.js) is necessary
+/ In production, change the content of PDFJS.workerSrc below
+=javascript_include_tag "pdfJS/src/shared/util.js"
+=javascript_include_tag "pdfJS/src/display/api.js"
+=javascript_include_tag "pdfJS/src/display/metadata.js"
+=javascript_include_tag "pdfJS/src/display/canvas.js"
+=javascript_include_tag "pdfJS/src/display/webgl.js"
+=javascript_include_tag "pdfJS/src/display/pattern_helper.js"
+=javascript_include_tag "pdfJS/src/display/font_loader.js"
+=javascript_include_tag "pdfJS/src/display/annotation_helper.js"
+:javascript
+  // Specify the main script used to create a new PDF.JS web worker.
+  // In production, leave this undefined or change it to point to the
+  // combined `pdf.worker.js` file.
+  PDFJS.workerSrc = 'javascripts/pdfJS/src/worker_loader.js';
+=javascript_include_tag "pdfJS/index.js"
+%div
+  %canvas#the-canvas{:style => "border:1px solid black;"}/

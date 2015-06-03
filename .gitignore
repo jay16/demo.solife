@@ -6,6 +6,7 @@
 #
 *.vcf
 *.gz
+*.pdf
 # 由数据库内容动态改变
 
 # 项目配置文件 => *.yaml.example

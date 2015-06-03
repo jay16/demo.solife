@@ -20,7 +20,9 @@ require "./config/boot.rb"
   "/alipay"                 => "Demo::TransactionsController",
   "/openfind"               => "Demo::OpenfindController",
   "/sql"                    => "Demo::SqlController",
-  "/demo/isearch"           => "Demo::ISearchController"
+  "/demo"                   => "Demo::ApplicationController",
+  "/demo/isearch"           => "Demo::ISearchController",
+  "/demo/pdfjs"             => "Demo::PdfJSController"
 }.each_pair do |path, mod|
   clazz = mod.split("::").inject(Object) { |obj,c| obj.const_get(c) }
   map(path) { run clazz }
