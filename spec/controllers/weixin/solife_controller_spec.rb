@@ -50,15 +50,12 @@ describe "WeiXin::SOLifeController" do
       options = {app_root: ENV["APP_ROOT_PATH"], nxscae_stock_url: Settings.nxscae.stock_url}
       nxscae = Nxscae::Tables.new(options)
       
-      expect(nxscae.is_cache).to_not be_nil
+      expect(nxscae.is_cache).to_not be_true
       expect(nxscae.nxscaes.empty?).to be_true
 
-      nxscae.clear_cache_files
-      nxscae.read_tables_when_cached
+      nxscae.clear_cache_file
+      nxscae.read_tables_with_timeout
       expect(nxscae.is_cache).to_not be_true
-
-      nxscae.read_tables_when_cached
-      expect(nxscae.is_cache).to be_true
 
       expect(nxscae.search.empty?).to_not be_true
       expect(nxscae.search(["没有匹配的关键字"]).empty?).to be_true

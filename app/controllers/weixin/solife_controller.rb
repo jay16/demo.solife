@@ -46,11 +46,7 @@ class WeiXin::SOLifeController < WeiXin::ApplicationController
       reply.clear if clear_reply
       reply << reply_content unless reply_content.strip.empty?
 
-      begin
       message.update(response: reply.join("\n"))
-    rescue => e
-      puts e.message
-    end
     end
 
     weixin.sender(msg_type: "text") do |msg|

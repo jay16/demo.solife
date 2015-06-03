@@ -1,6 +1,7 @@
 ﻿#encoding: utf-8
 require "json"
 require "rest-client"
+require "timeout"
 
 # json structure:
 #
@@ -59,12 +60,12 @@ module Nxscae
       @nxscaes["time"]
     end
 
-    def cache_files_path(timestamp)
-      "%s/tmp/nxscae-tables.%s.json" % [@options[:app_root], timestamp]
+    def cache_file_path
+      "%s/tmp/nxscae-tables.json" % @options[:app_root]
     end
     
-    def clear_cache_files
-      `rm #{@options[:app_root]}/tmp/nxscae-tables.*.json`
+    def clear_cache_file
+      `rm #{@options[:app_root]}/tmp/nxscae-tables.json`
     end
 
     def read_tables_and_cached
@@ -74,29 +75,23 @@ module Nxscae
       cache_tables_when_read
     end
 
-    def read_tables_when_cached
-      today = Time.now
-      hour  = today.strftime("%H").to_i
-      # 每天下午15时更新盘信息
-      if hour < 15
-        today = today - 60*60*24
-      end
-
-      timestamp = today.strftime("%Y%m%d150000")
-      cachepath = cache_files_path(timestamp)
-      if File.exist?(cachepath)
-        @nxscaes  = JSON.parse(IO.read(cachepath))
+    def read_tables_with_timeout
+      begin
+        Timeout::timeout(3.5) do
+          read_tables_and_cached
+          @is_cache = false
+        end
+      rescue => e
+        @nxscaes  = JSON.parse(IO.read(cache_file_path))
         @is_cache = true
-      else
-        read_tables_and_cached
-        @is_cache = false
+        puts e.message
+      ensure
+        puts "read cache?: #{@is_cache}"
       end
     end
 
     def cache_tables_when_read
-      timestamp = @nxscaes["time"].gsub(/\s|:|-/, "")
-      cachepath = cache_files_path(timestamp)
-      File.open(cachepath, "w:UTF-8") { |file| file.puts(@nxscaes.to_json) }
+      File.open(cache_file_path, "w:UTF-8") { |file| file.puts(@nxscaes.to_json) }
     end
 
     def search_tables(keywords)
@@ -117,7 +112,7 @@ module Nxscae
     end
 
     def search(keywords=[])
-      read_tables_when_cached
+      read_tables_with_timeout
       search_tables(keywords)
     end
   end
