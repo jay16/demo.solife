@@ -12,12 +12,12 @@ window.Openfind =
       $("#warn").addClass("hidden")
       $(input).parent().siblings("input[type='submit']").removeAttr("disabled")
     else
-      $("#warn").html("输入链接的域名不正确！请联系管理员")
+      $("#warn").html("输入链接的域名不正确...")
       $("#warn").removeClass("hidden")
       $(input).parent().siblings("input[type='submit']").attr("disabled", "disabled")
 
 $ ->
-  $("input#members").bind "change keyup input", ->
+  $("#memberForm input[name='url']").bind "change keyup input", ->
     Openfind.chk_url(this)
-  $("input#template").bind "change keyup input", ->
+  $("#templateForm input[name='url']").bind "change keyup input", ->
     Openfind.chk_url(this)

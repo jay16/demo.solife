@@ -66,7 +66,7 @@
       }
     },
     initBootstrapNavbarLi: function() {
-      var $_li, is_match, navbar_lis, navbar_right_lis, pathname, _a_href, _a_val, _second_path, _second_val;
+      var $_li, _a_href, _a_val, _second_path, _second_val, is_match, navbar_lis, navbar_right_lis, pathname;
       pathname = window.location.pathname;
       navbar_right_lis = $("#navbar_right_lis").val() || 1;
       navbar_lis = $(".navbar-nav:first li, .navbar-right li:lt(" + navbar_right_lis + ")");

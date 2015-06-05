@@ -6,20 +6,20 @@
     %h2 名单/模板下载
 
 
-%input{:name => "url", :type => "hidden", :value => "#{Settings.openfind.url}"}/
+%input{name: "url", type: "hidden", value: "#{Settings.openfind.url}"}/
 
 .row
   #warn.alert.alert-warning.hidden
 
 .row
   .bs-example{style:"height:100px;"}
-    %form.form-inline.col-sm-12{"accept-charset" => "UTF-8", :action => "/demo/openfind/members", :method => "post", :role => "form"}
-      %div{:style => "margin:0;padding:0;display:inline"}
-        %input{:name => "utf8", :type => "hidden", :value => "✓"}
-          %input{:name => "authenticity_token", :type => "hidden", :value => "Ars8u2IK2o9rbtiQbBiQyIUE2abBAkjlwxQKAUp0T+Y="}/
+    %form#memberForm.form-inline.col-sm-12{"accept-charset" => "UTF-8", action: "/demo/openfind/members", method: "post", role: "form"}
+      %div{style: "margin:0;padding:0;display:inline"}
+        %input{name: "utf8", type: "hidden", value: "✓"}
+          %input{name: "authenticity_token", type: "hidden", value: "Ars8u2IK2o9rbtiQbBiQyIUE2abBAkjlwxQKAUp0T+Y="}/
       .form-group.col-sm-8
-        %input#members.form-control{:name => "url", :placeholder => "http://cndemo.openfind.com/china/order/show.php", :type => "text"}
-      %input.btn.btn-default{:name => "commit", :type => "submit", :value => "名单下载", :disabled => "disabled"}
+        %input.form-control{name: "url", placeholder: "名单链接", type: "text", style: "width: 100%;"}
+      %input.btn.btn-default{name: "commit", type: "submit", value: "名单下载", disabled: "disabled"}
 
 .row
   .alert.alert-success
@@ -29,13 +29,13 @@
 
 .row
   .bs-example{style:"height:100px;"}
-    %form.form-inline.col-sm-12{"accept-charset" => "UTF-8", :action => "/demo/openfind/template", :method => "post", :role => "form"}
-      %div{:style => "margin:0;padding:0;display:inline"}
-        %input{:name => "utf8", :type => "hidden", :value => "✓"}
-          %input{:name => "authenticity_token", :type => "hidden", :value => "Ars8u2IK2o9rbtiQbBiQyIUE2abBAkjlwxQKAUp0T+Y="}/
+    %form#templateForm.form-inline.col-sm-12{"accept-charset" => "UTF-8", action: "/demo/openfind/template", method: "post", role: "form"}
+      %div{style: "margin:0;padding:0;display:inline"}
+        %input{name: "utf8", type: "hidden", value: "✓"}
+          %input{name: "authenticity_token", type: "hidden", value: "Ars8u2IK2o9rbtiQbBiQyIUE2abBAkjlwxQKAUp0T+Y="}/
       .form-group.col-sm-8
-        %input#template.form-control{:name => "url", :placeholder => "http://cndemo.openfind.com/china/epaper/2012_12", :type => "text"}
-      %input.btn.btn-default{:name => "commit", :type => "submit", :value => "模板下载", :disabled => "disabled"}
+        %input.form-control{name: "url", placeholder: "电子报链接", type: "text", style: "width: 100%;"}
+      %input.btn.btn-default{name: "commit", type: "submit", value: "模板下载", disabled: "disabled"}
 
 .row
   .alert.alert-success

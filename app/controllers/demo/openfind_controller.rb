@@ -122,8 +122,4 @@ class Demo::OpenfindController < Demo::ApplicationController
     book.write xls_report
     xls_report.string
   end
-
-  not_found do
-    "sorry"
-  end
 end

@@ -21,10 +21,10 @@
   };
 
   $(function() {
-    $("input#members").bind("change keyup input", function() {
+    $("#memberForm input[name='url']").bind("change keyup input", function() {
       return Openfind.chk_url(this);
     });
-    return $("input#template").bind("change keyup input", function() {
+    return $("#templateForm input[name='url']").bind("change keyup input", function() {
       return Openfind.chk_url(this);
     });
   });

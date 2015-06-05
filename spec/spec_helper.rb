@@ -1,6 +1,7 @@
 ﻿#encoding: utf-8
 ENV["RACK_ENV"] = "test"
 require File.expand_path '../../config/boot.rb', __FILE__
+require 'capybara'
 require 'capybara/dsl'
 require "capybara/rspec"
 require "rack/test"
@@ -13,24 +14,21 @@ module RSpecMixin
   include Capybara::DSL
 
   def app() 
-    # shell = %Q{cd %s/db && cp -f %s_development.db %s_test.db} % [ENV["APP_ROOT_PATH"], ENV["APP_NAME"], ENV["APP_NAME"]]
-    # raise "Error: shell execute fail - \n#{shell}" if not system(shell)
-
-    rackup  = File.read("%s/config.ru" % ENV["APP_ROOT_PATH"])
+    rackup  = IO.read("%s/config.ru" % ENV["APP_ROOT_PATH"])
     builder = "Rack::Builder.new {( %s\n )}" % rackup
     eval builder
   end
 
-  Capybara.app = Sinatra::Application
+  Capybara.app = ApplicationController
 
 
   Dir[File.join(ENV["APP_ROOT_PATH"], "spec/factories/*.rb")].each { |f| require f }
-  #Capybara.register_driver :selenium do |app|
-  #  #profile = Selenium::WebDriver::Chrome::Profile.new
-  #  #profile['extensions.password_manager_enabled'] = false
-  #  Capybara::Selenium::Driver.new(app, :browser => :chrome)
-  #end
-  #Capybara.javascript_driver = :chrome
+  Capybara.register_driver :selenium do |app|
+    #profile = Selenium::WebDriver::Chrome::Profile.new
+    #profile['extensions.password_manager_enabled'] = false
+    Capybara::Selenium::Driver.new(app, :browser => :chrome)
+  end
+  Capybara.javascript_driver = :chrome
 end
 
 RSpec.configure do |config|
