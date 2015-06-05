@@ -3,6 +3,10 @@ module Demo
   class ApplicationController < ApplicationController
     helpers Demo::ApplicationHelper
 
+    get "/" do
+      "<h1>TODO</h1>"
+    end
+
     get "/:file.pdf" do
       send_file File.join(ENV["APP_ROOT_PATH"], "app/views/demo/pdf_js/iSearch.pdf")
     end
