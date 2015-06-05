@@ -18,7 +18,7 @@ gem "sinatra-logger", "~>0.1.1"
 # This project is now part of sinatra-contrib.
 # gem "sinatra-reloader" 
 
-gem "actionmailer"
+gem "actionmailer", "~>4.1.9"
 gem "warden", "~>1.2.3"
 gem "sinatra_more", "~>0.3.43"
 
@@ -31,8 +31,8 @@ gem "dm-timestamps", "~>1.2.0"
 gem "dm-sqlite-adapter", "~>1.2.0"
 
 #assets
-gem "json"
-gem "haml", "~> 4.0.5"
+gem "json", "~>1.8.2"
+gem "haml", "~>4.0.5"
 gem "sass", "~>3.3.7"
 gem "therubyracer", "~>0.12.1"
 gem "coffee-script", "~>2.2.0"
@@ -58,10 +58,11 @@ group :development do
   gem "net-scp", "~>1.2.1"
 end
 group :test do
-  gem 'hashie', '~> 2.0'
+  gem 'hashie', '~>2.0'
   gem 'rest-client', '~>1.7.3'
   gem "rack-test", "~>0.6.2"
   gem "rspec", "~>2.14.1"
   gem "factory_girl", "~>4.5.0"
   gem "capybara", "~>2.2.1"
+  gem "database_cleaner", "~>1.4.1"
 end

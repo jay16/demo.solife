@@ -147,6 +147,11 @@ class ApplicationController < Sinatra::Base
     status code || 200
   end
 
+  def set_seo_meta(title = '',meta_keywords = '', meta_description = '')
+    @page_title = title
+    @meta_keywords = meta_keywords
+    @meta_description = meta_description
+  end
 
   # 404 page
   not_found do

@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   set :views, ENV["VIEW_PATH"] + "/users"
   set :layout, :"../layouts/layout"
 
+  # Get /users
   get "/" do
     redirect "/users/login" unless current_user
     redirect "/cpanel" if current_user and current_user.admin?
@@ -22,19 +23,19 @@ class UsersController < ApplicationController
     haml :login, layout: settings.layout
   end
 
-  # POST login /users/login
+  # POST /users/login
   post "/login" do
     user = User.first(email: params[:user][:email])
     if user and user.password == md5_key(params[:user][:password])
       response.set_cookie "cookie_user_login_state", {:value=> user.email, :path => "/", :max_age => "2592000"}
 
-      flash[:success] = "登陆成功"
+      flash[:success] = "登录成功."
       redirect "/account"
     else
       response.set_cookie "cookie_user_login_state", {:value=> "", :path => "/", :max_age => "2592000"}
       response.set_cookie "_email", {:value=> params[:user][:email], :path => "/", :max_age => "2592000"}
 
-      flash[:warning] = "登陆失败:" + (user ? "密码错误": "用户不存在")
+      flash[:warning] = "登录失败:" + (user ? "密码错误": "用户不存在")
       redirect "/users/login"
     end
   end
@@ -56,7 +57,7 @@ class UsersController < ApplicationController
 
     if user.save
       response.set_cookie "_email", {:value=> user.email, :path => "/", :max_age => "2592000"}
-      flash[:success] = "注册成功，请登陆."
+      flash[:success] = "注册成功，请登录."
 
       redirect "/users/login"
     else

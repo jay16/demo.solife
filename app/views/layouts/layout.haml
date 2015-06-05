@@ -2,12 +2,15 @@
 !!!
 %html
   %head
-    %title= [Settings.website.title, Settings.website.slogan].join(" | ")
+    = render_page_title
+    %meta{"http-equiv" => "content-type", content: "text/html", charset: "UTF-8"}
     %meta{name: "renderer", content:"webkit"}
     %meta{"http-equiv" => "X-UA-Compatible", content: "IE=edge"}
     %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
-    %meta{"http-equiv" => "content-type", content: "text/html", charset: "UTF-8"}
     %link{href: "#{Settings.website.favicon}", rel: "shortcut icon"}
+    %meta{name: "keywords", content: "#{@meta_keywords}"}
+    %meta{name: "description", content: "#{@meta_description}"}
+
     = javascript_include_tag "jquery-2.1.1.min.js"
     = javascript_include_tag "bootstrap.320.min.js"
     = javascript_include_tag "nprogress.js"
@@ -25,16 +28,20 @@
       :css
         body { max-width: 1000px; min-width:300px; }
         .bs-docs-header h1 { text-align: left; padding-left: 10px;}
+    :css
+      .thin-padding { padding-left: 0px; padding-right: 0px; }
 
   %body{style: "background:#f0f0f0;"}
     = render_page_header
     .container#main
       .row
-        %div{class: "#{is_mobile ? 'col-sm-12' : 'col-sm-9 col-sm-offset-1'}", style: "text-align:center;"}
+        %div.thin-padding{class: "#{is_mobile ? 'col-sm-12' : 'col-sm-9 col-sm-offset-1'}", style: "text-align:center;"}
           .loading.hidden 加载中...
-          = flash_message
-      %div{class: "#{is_mobile ? 'col-sm-12' : 'col-sm-9 col-sm-offset-1'}", style: "padding-left:0px;padding-right:0px;"}
-        = yield
+          .row
+            = flash_message
+      .row
+        %div.thin-padding{class: "#{is_mobile ? 'col-sm-12' : 'col-sm-9 col-sm-offset-1'}"}
+          = yield
 
     .container#footer
       .row.center

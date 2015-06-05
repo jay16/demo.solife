@@ -14,12 +14,10 @@ module RSpecMixin
   include Capybara::DSL
 
   def app() 
-    rackup  = IO.read("%s/config.ru" % ENV["APP_ROOT_PATH"])
-    builder = "Rack::Builder.new {( %s\n )}" % rackup
-    eval builder
+    eval("Rack::Builder.new {( %s\n )}" % IO.read("%s/config.ru" % ENV["APP_ROOT_PATH"]))
   end
 
-  Capybara.app = ApplicationController
+  Capybara.app = eval("Rack::Builder.new {( %s\n )}" % IO.read("%s/config.ru" % ENV["APP_ROOT_PATH"]))
 
 
   Dir[File.join(ENV["APP_ROOT_PATH"], "spec/factories/*.rb")].each { |f| require f }
@@ -33,6 +31,12 @@ end
 
 RSpec.configure do |config|
   config.include RSpecMixin
+
+  config.before(:each) do
+    DatabaseCleaner.orm = :data_mapper
+    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.clean
+  end
 end
 
 

@@ -38,6 +38,13 @@
 
   # 不同层级的页面，路径设置不同
   def render_page_header
+    #haml File.join(ENV["APP_ROOT_PATH"], "views/layouts/_header").to_sym
     haml :"../layouts/_header"
+  end
+
+  def render_page_title
+    site_name = "SOLife"
+    title = @page_title ? "#{site_name} | #{@page_title}" : "#{site_name} | Segment Of Life." rescue site_name
+    tag(:title, content: title)
   end
 end

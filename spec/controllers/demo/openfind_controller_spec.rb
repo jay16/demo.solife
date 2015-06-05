@@ -7,20 +7,40 @@ describe "Demo::OpendfindController" do
     get "/demo/openfind"
 
     expect(last_response).to be_ok
-    expect(last_response.body).to include("id='memberForm'")
 
-=begin
     visit "/demo/openfind"
- 
-    File.open("./page.html", "w:utf-8") { |file| file.puts(page.html.to_s) }
-    within("form#memberForm") do
-      fill_in "url", with: "http://cndemo.openfind.com/china/order/show.php"
-    end
-    click_button "名单下载"
 
-    expect(last_response.status).to eq(200)
-    expect(Digest::MD5.hexdigest(last_response.body)).to eq("md5-value")
-=end
+    expect(page).to have_title("SOLife | Openfind电子报")
+
+    expect(page.find_field("members[url]").text).to be_empty
+    expect(page.find_by_id("membersSubmit").disabled?).to be_true
+    expect(page.find_field("template[url]").text).to be_empty
+    expect(page.find_by_id("templateSubmit").disabled?).to be_true
+  end
+
+  it "should download zip file when click [名单下载]" do
+    visit "/demo/openfind"
+   
+    within("#membersForm") do
+      fill_in "members[url]", with: "http://cndemo.openfind.com/china/order/show.php"
+
+      page.find_by_id("membersSubmit").click
+    end
+    expect(page.response_headers['Content-Type']).to eq("text/csv;charset=utf-8")
+    expect(page.response_headers["Content-Disposition"]).to match(/attachment;\s+filename=\"Openfind名单_\d{14}.csv\"/)
+  end
+
+
+  it "should download zip file when click [模板下载]" do
+    visit "/demo/openfind"
+   
+    within("#templateForm") do
+      fill_in "template[url]", with: "http://cndemo.openfind.com/china/epaper/2012_12/"
+
+      page.find_by_id("templateSubmit").click
+    end
+    expect(page.response_headers['Content-Type']).to eq("application/zip")
+    expect(page.response_headers["Content-Disposition"]).to match(/attachment;\s+filename=\"openfind 电子报模板_\d{14}.zip\"/)
   end
 
 end

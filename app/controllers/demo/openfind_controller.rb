@@ -7,21 +7,37 @@ class Demo::OpenfindController < Demo::ApplicationController
   set :views, File.join(ENV["VIEW_PATH"], "demo/openfind")
   set :layout, "../../layouts/layout".to_sym
 
-  # /demo/openfind
+  before do
+    set_seo_meta("Openfind电子报", "Openfind,电子报,名单,模板", "Openfind电子报名单及模板整理辅助")
+  end
+
+  # Get /demo/openfind
   get "/" do
     haml :index, layout: settings.layout
   end
 
+  # Post /demo/openfind/members
   post "/members" do
-    filepath = csv_file_for(params[:url])
-    filename = File.basename(filepath)
-    send_file(filepath, :filename => filename)
+    begin
+      filepath = csv_file_for(params[:members][:url])
+      filename = File.basename(filepath)
+      send_file(filepath, :filename => filename)
+    rescue => e
+      flash[:danger] = "请确保链接在浏览器可以正常打开:#{params[:members][:url]}"
+      redirect "/demo/openfind"
+    end
   end
 
+  # Post /demo/openfind/template
   post "/template" do
-    filepath = dl_template
-    filename = File.basename(filepath)
-    send_file(filepath, :filename => filename)
+    begin
+      filepath = dl_template
+      filename = File.basename(filepath)
+      send_file(filepath, :filename => filename)
+    rescue => e
+      flash[:warning] = "请确保链接在浏览器可以正常打开:#{params[:members][:url]}"
+      redirect "/demo/openfind"
+    end
   end
 
   def dl_template
@@ -34,12 +50,12 @@ class Demo::OpenfindController < Demo::ApplicationController
     Dir.mkdir(images_path) unless File.exist?(images_path)
     
     #下载image并修改链接地址
-    doc = Nokogiri::HTML(open(params[:url]).read)
+    doc = Nokogiri::HTML(open(params[:template][:url]).read)
     doc.css("img").each do |img|
       img_src = img.attr("src")
       next if !%w(.jpg .jpeg .gif .png).include?(File.extname(img_src).downcase)
       begin
-        img_src = concat_img_src(params[:url], img_src) if !%r{^(http|https)://(.*)}.match(img_src)
+        img_src = concat_img_src(params[:template][:url], img_src) if !%r{^(http|https)://(.*)}.match(img_src)
         img_data = open(img_src){|f| f.read }
         puts img_src
       rescue => e

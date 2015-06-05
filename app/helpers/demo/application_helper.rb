@@ -11,5 +11,9 @@ module Demo
     def render_page_header
       haml :"../../layouts/_demo_header"
     end
+
+    def page_title
+      "Openfind 电子报 | Demo"
+    end
   end
 end

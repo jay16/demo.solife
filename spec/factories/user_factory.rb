@@ -1,10 +1,9 @@
 #encoding: utf-8
 FactoryGirl.define do
   factory :user do
-    sequence(:name)  {|n| "name#{n}" }
-    sequence(:email) {|n| "email#{n}@solife.us" }
-    password 'password'
-    password_confirmation 'password'
+    sequence(:name)  { |n| "name#{n}" }
+    sequence(:email) { |n| "email-#{Time.now.to_i}@solife.us" }
+    password "password-#{Time.now.to_i}"
     created_at Time.now
   end
 

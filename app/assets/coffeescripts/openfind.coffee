@@ -1,5 +1,5 @@
 window.Openfind =
-  chk_url: (input) ->
+  chk_url: (input, btn_id) ->
     val = $.trim($(input).val())
     url = $.trim($("input[type='hidden'][name='url']").val())
     regstr = "^"+url.replace("//","\\/\\/")
@@ -10,14 +10,14 @@ window.Openfind =
     if(regexp.test(val))
       $("#warn").html("")
       $("#warn").addClass("hidden")
-      $(input).parent().siblings("input[type='submit']").removeAttr("disabled")
+      $(btn_id).removeAttr("disabled")
     else
       $("#warn").html("输入链接的域名不正确...")
       $("#warn").removeClass("hidden")
-      $(input).parent().siblings("input[type='submit']").attr("disabled", "disabled")
+      $(btn_id).attr("disabled", "disabled")
 
 $ ->
-  $("#memberForm input[name='url']").bind "change keyup input", ->
-    Openfind.chk_url(this)
-  $("#templateForm input[name='url']").bind "change keyup input", ->
-    Openfind.chk_url(this)
+  $("#membersForm input[name='members[url]']").bind "change keyup input", ->
+    Openfind.chk_url(this, "#membersSubmit")
+  $("#templateForm input[name='template[url]']").bind "change keyup input", ->
+    Openfind.chk_url(this, "#templateSubmit")
