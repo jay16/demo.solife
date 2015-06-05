@@ -1,7 +1,7 @@
 ﻿#encoding: utf-8 
 class Demo::ISearchController < Demo::ApplicationController
-  set :views, ENV["VIEW_PATH"] + "/demo"
-  set :layout, :"layouts/layout"
+  set :views, File.join(ENV["VIEW_PATH"], "demo/isearch")
+  set :layout, "../../layouts/layout".to_sym
   helpers Demo::ISearchHelper
 
   before do
@@ -10,18 +10,8 @@ class Demo::ISearchController < Demo::ApplicationController
     hash_resursion_assign_poetry(@content)
   end
 
-  def hash_resursion_assign_poetry(hash)
-    hash[:datas].each do |h|
-      poetry = @poetries.at(h[:id].to_i)
-      h[:name] = poetry[0]
-      h[:desc] = poetry[1]
-      hash_resursion_assign_poetry(h) if h[:type].eql?("0")
-    end
-  end
-
   # get /demo/isearch
   get "/" do
-    #@content = hash_resursion(@content, "3")
     @content = JSON.pretty_generate(@content)
     haml :index, layout: settings.layout
   end
@@ -192,6 +182,15 @@ class Demo::ISearchController < Demo::ApplicationController
 
 
   private 
+
+  def hash_resursion_assign_poetry(hash)
+    hash[:datas].each do |h|
+      poetry = @poetries.at(h[:id].to_i)
+      h[:name] = poetry[0]
+      h[:desc] = poetry[1]
+      hash_resursion_assign_poetry(h) if h[:type].eql?("0")
+    end
+  end
 
   def hash_resursion(hash, id)
     @result_hash = nil

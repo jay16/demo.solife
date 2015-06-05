@@ -1,0 +1,46 @@
+-# coding: UTF-8
+%nav.navbar.navbar-default{role: "navigation", style:"margin-bottom:0px;"}
+  .container
+    %div{class: "#{mobile? ? 'col-sm-12' : 'col-sm-9 col-sm-offset-1'}", style: "padding-left:0px;padding-right:0px;"}
+      / Brand and toggle get grouped for better mobile display
+      .navbar-header
+        %button.navbar-toggle{"data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+        = link_to "控制台", "/", class: "navbar-brand"
+      / Collect the nav links, forms, and other content for toggling
+      .collapse.navbar-collapse{role: "navigation", id:"bs-example-navbar-collapse-1"}
+        %ul.nav.navbar-nav
+          %li.active= link_to "概况", "/cpanel"
+          %li= link_to "注册用户", "/cpanel/users"
+          %li= link_to "微信用户", "/cpanel/weixiners"
+          %li= link_to "微信消息", "/cpanel/messages"
+
+        %ul.nav.navbar-nav.navbar-right
+          %li
+            = link_to "更新日志", "/cpanel/change_log"
+          - unless current_user
+            %li
+              = link_to "注册", "/user/register"
+            %li 
+              = link_to "登陆", "/user/login"
+          - else
+            %input#navbar_right_lis{type: "hidden", value: 1}/
+            %li.dropdown
+              %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+                %i.glyphicon.glyphicon-cog
+                %b.caret
+              %ul.dropdown-menu
+                - if current_user.admin?
+                  %li
+                    %a{:href => "/account"}
+                      %i.glyphicon.glyphicon-wrench
+                      返回前台 
+                  %li.divider
+                %li
+                  %a{:href => "/users/logout"}
+                    %i.glyphicon.glyphicon-log-out
+                    退出
+

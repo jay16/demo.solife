@@ -35,4 +35,9 @@
       .map { |var| obj.instance_variable_get("@%s" % var).to_s }
       .join(" ")
   end
+
+  # 不同层级的页面，路径设置不同
+  def render_page_header
+    haml :"../layouts/_header"
+  end
 end

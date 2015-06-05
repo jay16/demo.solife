@@ -19,6 +19,7 @@ bundle exec rake remote:deploy
   1. different domain mapping different route when point to /demo.
 
     demo.solife.us/hello => demo.solife.us/demo/hello
+    
     demo.solife.us/demo/hello => demo.solife.us/demo/hello
 
     nginx cofiguration:

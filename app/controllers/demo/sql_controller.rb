@@ -1,14 +1,15 @@
 ﻿#encoding: utf-8 
 require "%s/lib/utils/demo/sql_parser.rb" % ENV["APP_ROOT_PATH"]
 class Demo::SqlController < Demo::ApplicationController
-  set :views, ENV["VIEW_PATH"] + "/demo/sql_parser"
+  set :views, File.join(ENV["VIEW_PATH"], "demo/sql_parser")
+  set :layout, "../../layouts/layout".to_sym
 
-  # get /sql
+  # get /demo/sql
   get "/" do
-    haml :index, layout: :"../layouts/layout"
+    haml :index, layout: settings.layout
   end
 
-  # post /sql/parse/insert_with_values
+  # post /demo/sql/parse/insert_with_values
   post "/parse/insert_with_values" do
     begin
       @output = Utils::Demo::SqlAround.parse_insert_with_values(params[:sql])

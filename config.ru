@@ -17,10 +17,10 @@ require "./config/boot.rb"
   "/cpanel/weixiners"       => "Cpanel::WeixinersController",
   "/cpanel/messages"        => "Cpanel::MessagesController",
   "/cpanel/change_log"      => "Cpanel::ChangeLogController",
-  "/alipay"                 => "Demo::TransactionsController",
-  "/openfind"               => "Demo::OpenfindController",
-  "/sql"                    => "Demo::SqlController",
   "/demo"                   => "Demo::ApplicationController",
+  "/demo/alipay"            => "Demo::TransactionsController",
+  "/demo/openfind"          => "Demo::OpenfindController",
+  "/demo/sql"               => "Demo::SqlController",
   "/demo/isearch"           => "Demo::ISearchController",
   "/demo/pdfjs"             => "Demo::PdfJSController"
 }.each_pair do |path, mod|

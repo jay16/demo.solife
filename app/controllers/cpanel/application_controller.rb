@@ -1,8 +1,11 @@
 ﻿#encoding: utf-8
-module Cpanel; end
-class Cpanel::ApplicationController < ApplicationController
-  before do
-    authenticate!
-    redirect "/account" if not current_user.admin?
+module Cpanel
+  class Cpanel::ApplicationController < ApplicationController
+    helpers Cpanel::ApplicationHelper
+
+    before do
+      authenticate!
+      redirect "/account" if not current_user.admin?
+    end
   end
 end

@@ -4,11 +4,12 @@ require "csv"
 require "zip"
 require "fileutils"
 class Demo::OpenfindController < Demo::ApplicationController
-  set :views, ENV["VIEW_PATH"] + "/demo/openfind"
+  set :views, File.join(ENV["VIEW_PATH"], "demo/openfind")
+  set :layout, "../../layouts/layout".to_sym
 
-  # /alipay
+  # /demo/openfind
   get "/" do
-    haml :index, layout: :"../layouts/layout"
+    haml :index, layout: settings.layout
   end
 
   post "/members" do

@@ -1,7 +1,7 @@
 ﻿#encoding: utf-8 
 class Demo::PdfJSController < Demo::ApplicationController
-  set :views, ENV["VIEW_PATH"] + "/demo/pdf_js"
-  set :layout, :"../layouts/layout"
+  set :views, File.join(ENV["VIEW_PATH"], "demo/pdf_js")
+  set :layout, "../../layouts/layout".to_sym
 
   # get /demo/pdfjs
   get "/" do

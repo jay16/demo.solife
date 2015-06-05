@@ -31,41 +31,36 @@ class ApplicationController < Sinatra::Base
     @request_body = request_body
     request_hash = JSON.parse(@request_body) rescue {}
     @params = params.merge(request_hash)
-    @params = @params.merge({ip: remote_ip, browser: remote_browser})
+    @params = @params.merge({ip: request.ip, browser: request.user_agent})
 
     print_format_logger
   end
 
-  #def self.inherited(subclass)
-  #  puts "new subclass: %s" % subclass.to_s if subclass
-  #end
+
   # global functions list
-  def remote_ip
-    request.ip 
-  end
-  def remote_path
-    request.path 
-  end
-  def remote_browser
-    request.user_agent
-  end
   def run_shell(cmd)
-    IO.popen(cmd) { |stdout| stdout.reject(&:empty?) }.unshift($?.exitstatus.zero?)
+    IO.popen(cmd) { |stdout| stdout.reject(&:empty?) }
+      .unshift($?.exitstatus.zero?)
   end 
+
   # global function
   def uuid(str)
     str += Time.now.to_f.to_s
     md5_key(str)
   end
+
   def md5_key(str)
     Digest::MD5.hexdigest(str)
   end
+
   def sample_3_alpha
     (('a'..'z').to_a + ('A'..'Z').to_a).sample(3).join
   end
+
   def regexp_ppc_order
     @regexp_ppc_order ||= Regexp.new(Settings.regexp.order)
   end
+
   def regexp_ppc_order_item
     @regexp_ppc_order_item ||= Regexp.new(Settings.regexp.order_item)
   end
@@ -99,15 +94,14 @@ class ApplicationController < Sinatra::Base
 
   def print_format_logger
     request_info = @request_body.empty? ? %Q{Request:\n #{@request_body }} : ""
-    log_info = <<-EOF
-    #{request.request_method} #{request.path} for #{request.ip} at #{Time.now.to_s}
-    Parameters:\n #{@params.to_s}
-    #{request_info}
+    log_info = (<<-EOF).gsub(/^ {6}/, '')
+      #{request.request_method} #{request.path} for #{request.ip} at #{Time.now.to_s}
+      Parameters:\n #{@params.to_s}
+      #{request_info}
     EOF
     puts log_info
     logger.info log_info
   end
-
 
   # 遍历params寻找二级hash
   def grep_params_model(hash)

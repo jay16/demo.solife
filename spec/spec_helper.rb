@@ -51,7 +51,7 @@ def remote_ip
 end
 
 def remote_path
-  request.env["REQUEST_PATH"] || "/"
+  last_request.env["REQUEST_PATH"] || "/"
 end
 
 def remote_browser
