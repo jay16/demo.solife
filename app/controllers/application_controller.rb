@@ -34,6 +34,8 @@ class ApplicationController < Sinatra::Base
     @params = @params.merge({ip: request.ip, browser: request.user_agent})
 
     print_format_logger
+
+    set_seo_meta("点滴记录", "SOLife,个人实验室", "segment of jay's life!")
   end
 
 

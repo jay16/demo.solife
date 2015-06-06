@@ -3,6 +3,10 @@ class Demo::PdfJSController < Demo::ApplicationController
   set :views, File.join(ENV["VIEW_PATH"], "demo/pdf_js")
   set :layout, "../../layouts/layout".to_sym
 
+  before do
+    set_seo_meta("pdfJS", "pdf.js,在线阅读", "基于pdf.js阅读文档")
+  end
+
   # get /demo/pdfjs
   get "/" do
     haml :index, layout: settings.layout

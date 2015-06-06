@@ -1,6 +1,7 @@
 ﻿#encoding: utf-8 
 class Cpanel::HomeController < Cpanel::ApplicationController
   set :views, ENV["VIEW_PATH"] + "/cpanel/home"
+  set :layout, :"../../layouts/layout"
 
   # root page
   get "/" do
@@ -8,7 +9,7 @@ class Cpanel::HomeController < Cpanel::ApplicationController
     @weixiners = Weixiner.all
     @messages  = Message.all
 
-    haml :index, layout: :"../layouts/layout"
+    haml :index, layout: settings.layout
   end
 
 end

@@ -1,7 +1,7 @@
 ﻿#encoding: utf-8 
 class Cpanel::ChangeLogController < Cpanel::ApplicationController
   set :views, ENV["VIEW_PATH"] + "/cpanel/change_log"
-  set :layout, :"../layouts/layout"
+  set :layout, :"../../layouts/layout"
 
   # Get /cpanel/change_log
   get "/" do

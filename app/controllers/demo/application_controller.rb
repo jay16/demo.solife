@@ -3,8 +3,8 @@ module Demo
   class ApplicationController < ApplicationController
     helpers Demo::ApplicationHelper
 
-    get "/" do
-      "<h1>TODO</h1>"
+    before do
+      set_seo_meta("实验室", "SOLife,实验室", "segment of jay's life!")
     end
 
     get "/:file.pdf" do

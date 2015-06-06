@@ -17,7 +17,7 @@ require "./config/boot.rb"
   "/cpanel/weixiners"       => "Cpanel::WeixinersController",
   "/cpanel/messages"        => "Cpanel::MessagesController",
   "/cpanel/change_log"      => "Cpanel::ChangeLogController",
-  "/demo"                   => "Demo::ApplicationController",
+  "/demo"                   => "Demo::HomeController",
   "/demo/alipay"            => "Demo::TransactionsController",
   "/demo/openfind"          => "Demo::OpenfindController",
   "/demo/sql"               => "Demo::SqlController",

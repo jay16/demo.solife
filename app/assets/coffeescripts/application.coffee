@@ -8,6 +8,8 @@ window.App =
   hideLoading:->
     $(".loading").addClass("hidden")
     $(".loading").html("loading...")
+  removeGlyphicon: ->
+    $("i.glyphicon").remove()
   # checkbox operation
   checkboxState: (self) ->
     state = $(self).attr("checked")

@@ -5,7 +5,7 @@ require "zip"
 require "fileutils"
 class Demo::OpenfindController < Demo::ApplicationController
   set :views, File.join(ENV["VIEW_PATH"], "demo/openfind")
-  set :layout, "../../layouts/layout".to_sym
+  set :layout, :"../../layouts/layout"
 
   before do
     set_seo_meta("Openfind电子报", "Openfind,电子报,名单,模板", "Openfind电子报名单及模板整理辅助")

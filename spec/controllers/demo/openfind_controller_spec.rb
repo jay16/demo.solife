@@ -22,7 +22,7 @@ describe "Demo::OpendfindController" do
     visit "/demo/openfind"
    
     within("#membersForm") do
-      fill_in "members[url]", with: "http://cndemo.openfind.com/china/order/show.php"
+      fill_in "members[url]", with: "#{Settings.openfind.url}/china/order/show.php"
 
       page.find_by_id("membersSubmit").click
     end
@@ -35,7 +35,7 @@ describe "Demo::OpendfindController" do
     visit "/demo/openfind"
    
     within("#templateForm") do
-      fill_in "template[url]", with: "http://cndemo.openfind.com/china/epaper/2012_12/"
+      fill_in "template[url]", with: "#{Settings.openfind.url}/china/epaper/2012_12/"
 
       page.find_by_id("templateSubmit").click
     end

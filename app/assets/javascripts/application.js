@@ -11,6 +11,9 @@
       $(".loading").addClass("hidden");
       return $(".loading").html("loading...");
     },
+    removeGlyphicon: function() {
+      return $("i.glyphicon").remove();
+    },
     checkboxState: function(self) {
       var state;
       state = $(self).attr("checked");

@@ -2,6 +2,7 @@
 #require "lib/utils/weixin/weixin_utils.rb"
 class Account::HomeController < Account::ApplicationController
   set :views, ENV["VIEW_PATH"] + "/account/home"
+  set :layout, :"../../layouts/layout"
 
   before do
     authenticate!
@@ -11,6 +12,6 @@ class Account::HomeController < Account::ApplicationController
     @weixiners = current_user.weixiners
     #WeixinUtils::Operation.generate_weixiner_info(Weixiner.all)
 
-    haml :index, layout: :"../layouts/layout"
+    haml :index, layout: settings.layout
   end
 end
