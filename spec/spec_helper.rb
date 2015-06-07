@@ -4,29 +4,21 @@ require File.expand_path '../../config/boot.rb', __FILE__
 require 'capybara'
 require 'capybara/dsl'
 require "capybara/rspec"
+require 'capybara/poltergeist'
 require "rack/test"
 require "digest/md5"
 require "factory_girl"
 
-#require File.expand_path '../factories/transaction_factory.rb', __FILE__
 module RSpecMixin
   include Rack::Test::Methods
   include Capybara::DSL
 
-  def app() 
-    eval("Rack::Builder.new {( %s\n )}" % IO.read("%s/config.ru" % ENV["APP_ROOT_PATH"]))
-  end
-
-  Capybara.app = eval("Rack::Builder.new {( %s\n )}" % IO.read("%s/config.ru" % ENV["APP_ROOT_PATH"]))
-
+  Capybara.app = eval("Rack::Builder.new {( %s\n )}" % IO.read(File.join(ENV["APP_ROOT_PATH"], "config.ru")))
 
   Dir[File.join(ENV["APP_ROOT_PATH"], "spec/factories/*.rb")].each { |f| require f }
-  Capybara.register_driver :selenium do |app|
-    #profile = Selenium::WebDriver::Chrome::Profile.new
-    #profile['extensions.password_manager_enabled'] = false
-    Capybara::Selenium::Driver.new(app, :browser => :chrome)
-  end
-  Capybara.javascript_driver = :chrome
+  Capybara.javascript_driver = :poltergeist
+
+  def app; Capybara.app end
 end
 
 RSpec.configure do |config|

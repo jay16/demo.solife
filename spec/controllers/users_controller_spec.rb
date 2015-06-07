@@ -44,7 +44,7 @@ describe "UsersController" do
     expect(page).to have_content("登录成功")
     #save_and_open_page("./page.html")
 
-    # page.execute_script("window.App.removeGlyphicon()")
+    #page.execute_script("window.App.removeGlyphicon()")
     #<a href="/cpanel">
     #  <i class="glyphicon glyphicon-wrench"></i>
     #  后台管理

@@ -64,5 +64,6 @@ group :test do
   gem "rspec", "~>2.14.1"
   gem "factory_girl", "~>4.5.0"
   gem "capybara", "~>2.2.1"
+  gem "poltergeist", "~>1.6.0"
   gem "database_cleaner", "~>1.4.1"
-end
+end if `uname -s`.strip.eql?("Darwin")
