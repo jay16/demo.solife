@@ -46,7 +46,7 @@ describe "WeiXin::SOLifeController" do
 
   end
   describe "nxscae around test" do
-    it "should read nxscae tables info when clear cache files" do
+    it_with_network "should read nxscae tables info when clear cache files" do
       options = {app_root: ENV["APP_ROOT_PATH"], nxscae_stock_url: Settings.nxscae.stock_url}
       nxscae = Nxscae::Tables.new(options)
       
@@ -64,9 +64,7 @@ describe "WeiXin::SOLifeController" do
       expect(result).to match(/搜索到 0 条结果/)
     end
 
-
-
-    it "should respond with nxscae stock info when /^nxscae 铜章/\n NOTE:close VPN!" do
+    it_with_network "should respond with nxscae stock info when /^nxscae 铜章/" do
     	keywords = %w() 
       weixin_text_message_test("nxscae #{keywords.join(' ')}", /搜索到\s+\d+\s+条结果/)
     	keywords = %w(铜章) 

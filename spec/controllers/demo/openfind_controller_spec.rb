@@ -18,7 +18,7 @@ describe "Demo::OpendfindController" do
     expect(page.find_by_id("templateSubmit").disabled?).to be_true
   end
 
-  it "should download zip file when click [名单下载]" do
+  it_with_network "should download zip file when click [名单下载]" do
     visit "/demo/openfind"
    
     within("#membersForm") do
@@ -31,7 +31,7 @@ describe "Demo::OpendfindController" do
   end
 
 
-  it "should download zip file when click [模板下载]" do
+  it_with_network "should download zip file when click [模板下载]" do
     visit "/demo/openfind"
    
     within("#templateForm") do
