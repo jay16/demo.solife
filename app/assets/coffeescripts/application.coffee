@@ -2,14 +2,20 @@
 window.App =
   showLoading: ->
     $(".loading").removeClass("hidden")
+
   showLoading: (text) ->
     $(".loading").html(text)
     $(".loading").removeClass("hidden")
-  hideLoading:->
+
+  hideLoading: ->
     $(".loading").addClass("hidden")
     $(".loading").html("loading...")
+
   removeGlyphicon: ->
-    $("i.glyphicon").remove()
+    $(".dropdown-menu i.glyphicon").remove()
+    $(".dropdown-menu a").each ->
+      $(this).text($.trim($(this).text()))
+
   # checkbox operation
   checkboxState: (self) ->
     state = $(self).attr("checked")

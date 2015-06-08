@@ -16,7 +16,7 @@ describe "UsersController" do
     expect(page.find_button("提交").disabled?).to_not be_true
   end
 
-  it "should redirect /account when login successfully." do
+  it "should redirect /account when login successfully." do #, :requires => [:js] 
     visit "/"
 
     click_link("注册")
@@ -42,19 +42,15 @@ describe "UsersController" do
 
     expect(page.current_path).to eq("/account")
     expect(page).to have_content("登录成功")
-    #save_and_open_page("./page.html")
 
-    #page.execute_script("window.App.removeGlyphicon()")
     #<a href="/cpanel">
     #  <i class="glyphicon glyphicon-wrench"></i>
     #  后台管理
     #</a>
-
-    page.find_by_id("backgroundControl").click
+    page.click_link("后台管理", :exact => false)
     expect(page.current_path).to eq("/cpanel")
 
-
-    page.find_by_id("forheadControl").click
+    page.click_link("返回前台", :exact => false)
     expect(page.current_path).to eq("/account")
   end
 end

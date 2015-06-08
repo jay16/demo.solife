@@ -13,9 +13,9 @@ describe "Demo::OpendfindController" do
     expect(page).to have_title("SOLife | Openfind电子报")
 
     expect(page.find_field("members[url]").text).to be_empty
-    expect(page.find_by_id("membersSubmit").disabled?).to be_true
+    expect(page.find_by_id("membersSubmit", exact: false).disabled?).to be_true
     expect(page.find_field("template[url]").text).to be_empty
-    expect(page.find_by_id("templateSubmit").disabled?).to be_true
+    expect(page.find_by_id("templateSubmit", exact: false).disabled?).to be_true
   end
 
   it_with_network "should download zip file when click [名单下载]" do

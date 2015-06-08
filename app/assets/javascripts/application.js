@@ -12,7 +12,10 @@
       return $(".loading").html("loading...");
     },
     removeGlyphicon: function() {
-      return $("i.glyphicon").remove();
+      $(".dropdown-menu i.glyphicon").remove();
+      return $(".dropdown-menu a").each(function() {
+        return $(this).text($.trim($(this).text()));
+      });
     },
     checkboxState: function(self) {
       var state;

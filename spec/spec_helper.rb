@@ -16,6 +16,7 @@ module RSpecMixin
   Capybara.app = eval("Rack::Builder.new {( %s\n )}" % IO.read(File.join(ENV["APP_ROOT_PATH"], "config.ru")))
 
   Dir[File.join(ENV["APP_ROOT_PATH"], "spec/factories/*.rb")].each { |f| require f }
+  # brew install phantomjs
   Capybara.javascript_driver = :poltergeist
 
   def app; Capybara.app end
