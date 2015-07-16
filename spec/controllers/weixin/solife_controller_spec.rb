@@ -46,6 +46,10 @@ describe "WeiXin::SOLifeController" do
 
   end
   describe "nxscae around test" do
+    it "should respond correct test with weixin" do
+        weixin_text_message_test("nxscae", "asdfasfd")
+    end
+
     it_with_network "should read nxscae tables info when clear cache files" do
       options = {app_root: ENV["APP_ROOT_PATH"], nxscae_stock_url: Settings.nxscae.stock_url}
       nxscae = Nxscae::Tables.new(options)

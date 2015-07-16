@@ -21,4 +21,8 @@ class Demo::ISearchController < Demo::ApplicationController
       "file not found: %@" % params[:filename]
     end
   end
+
+  post "/" do
+    respond_with_json params
+  end
 end

@@ -8,7 +8,7 @@ module WeiXin
 
     # GET /weixin
     get "/" do
-      redirect_to "/"
+      "please point to /weixin/detail-weixin-name"
     end
   end 
 end
