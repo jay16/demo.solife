@@ -50,9 +50,15 @@ class WeiXin::SOLifeController < WeiXin::ApplicationController
     end
 
     weixin.sender(msg_type: "text") do |msg|
-      #msg.content = weixiner.personal_report
-      msg.content = message.response || reply.join("\n")
+      msg.content = truncate_text(message.response)
       msg.to_xml
     end
+  end
+
+  def truncate_text(text)
+    return "服务器出现bug^_^" unless text
+    return text if text.length <= 1000
+
+    text[0...1000] + "\n..."
   end
 end
