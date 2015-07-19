@@ -88,6 +88,9 @@ case "$1" in
     weixin_group_message)
         $bundle_command exec rake weixin:send_group_message
         ;;
+    nxscae_update)
+        $bundle_command exec rake nxscae:update
+        ;;
     *)  
         echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload|deploy}" >&2  
         exit 3  
