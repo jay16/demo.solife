@@ -1,4 +1,5 @@
 ﻿#encoding: utf-8
+require 'lazy_high_charts'
 module Demo
   module ISearchHelper
     def isearch_content

@@ -43,8 +43,12 @@
   end
 
   def render_page_title
-    site_name = "SOLife"
-    title = @page_title ? "#{site_name} | #{@page_title}" : "#{site_name} | Segment Of Life." rescue site_name
-    tag(:title, content: title)
+    site_name, title = "SOLife", "title"
+    begin
+      title = @page_title ? "#{site_name} | #{@page_title}" : "#{site_name} | Segment Of Life." 
+    rescue => e
+     title = e.message
+    end
+    "<title>%s</title>" % title
   end
 end

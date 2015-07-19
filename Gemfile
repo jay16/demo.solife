@@ -22,6 +22,8 @@ gem "actionmailer", "~>4.1.9"
 gem "warden", "~>1.2.3"
 gem "sinatra_more", "~>0.3.43"
 
+gem "lazy_high_charts"
+
 #db
 gem "dm-core", "~>1.2.1"
 gem "dm-migrations", "~>1.2.0"

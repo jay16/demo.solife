@@ -1,1 +1,26 @@
-= @nxscae_models.count
+%script{type:"text/javascript",src:"http://code.highcharts.com/highcharts.js"}
+- groups_name = %w(小铜章 小银章 大银章)
+%table.table.table-strip.table-condensed.table-bordered
+  %thead
+    %th 藏品简称
+    %th 最新价格
+    %th 涨跌幅
+    %th 成交量
+    %th 成交金额
+    %th 最高价
+    %th 最低价
+
+  %tbody
+    - @nxscae_models.each do |nxscae|
+      - dayinfo = nxscae.latest_info
+      %tr
+        %td= dayinfo.fullname
+        %td= dayinfo.cur_price
+        %td= dayinfo.current_gains
+        %td= dayinfo.total_amount
+        %td= dayinfo.total_money
+        %td= dayinfo.high_price
+        %td= dayinfo.low_price
+
+%pre
+  = high_chart("my_id", highchart_generator)

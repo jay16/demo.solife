@@ -22,6 +22,10 @@ class NxscaeModel
 
     has n, :nxscae_dayinfos
 
+    def latest_info
+      self.nxscae_dayinfos.first(time: time)
+    end
+    
     # instance methods
     def human_name
       "nxscae产品"
