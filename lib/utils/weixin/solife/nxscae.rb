@@ -2,7 +2,9 @@
 require "json"
 require "rest-client"
 require "timeout"
-
+require "app/models/nxscae_model.rb"
+require "app/models/nxscae_dayinfo.rb"
+require "app/models/nxscae_cache.rb"
 # json structure:
 #
 # tables: [{
@@ -49,7 +51,7 @@ module Nxscae
       HEREDOC
     end
 
-    attr_accessor :nxscaes, :is_cache
+    attr_accessor :nxscaes
     def initialize(options={})
       @options  = options
       @nxscaes  = {}
@@ -60,38 +62,63 @@ module Nxscae
       @nxscaes["time"]
     end
 
-    def cache_file_path
-      "%s/tmp/nxscae-tables.json" % @options[:app_root]
-    end
-    
-    def clear_cache_file
-      `rm #{@options[:app_root]}/tmp/nxscae-tables.json`
-    end
-
     def read_tables_and_cached
       simulator_browser = ""
       response  = RestClient.post @options[:nxscae_stock_url], { user_agent: simulator_browser, :content_type => :json }
       @nxscaes  = JSON.parse(response.body)
+      NxscaeCache.create(content: response.body)
       cache_tables_when_read
+    end
+
+    def check_data_valid
+      @nxscaes["time"] && @nxscaes["tables"] && @nxscaes["tables"].is_a?(Array)
+    end
+    def cache_tables_when_read
+      unless check_data_valid
+        puts "Bug"*10
+      end
+
+      @nxscaes["tables"].each do |table|
+        nxscae_model = NxscaeModel.first(code: table["code"], fullname: table["fullname"])
+        latest_info = {
+            code: table["code"],
+            fullname: table["fullname"],
+            high_price: table["HighPrice"],
+            low_price: table["LowPrice"],
+            sum_num: @nxscaes["sumNum"],
+            sum_money: @nxscaes["sumMoney"],
+            time: @nxscaes["time"]
+            }
+        if nxscae_model
+          nxscae_model.update(latest_info)
+        else
+          nxscae_model = NxscaeModel.create(latest_info)
+        end
+
+        nxscae_dayinfo = nxscae_model.nxscae_dayinfos.first(time: @nxscaes["time"])
+        unless nxscae_dayinfo 
+          dayinfo = latest_info.merge({
+              yester_balance_price: table["YesterBalancePrice"],
+              open_price: table["OpenPrice"],
+              cur_price: table["CurPrice"],
+              current_gains: table["CurrentGains"],
+              total_amount: table["TotalAmount"],
+              total_money: table["TotalMoney"]
+          })
+          nxscae_model.nxscae_dayinfos.create(dayinfo)
+        end
+      end
     end
 
     def read_tables_with_timeout
       begin
         Timeout::timeout(3.5) do
           read_tables_and_cached
-          @is_cache = false
         end
       rescue => e
-        @nxscaes  = JSON.parse(IO.read(cache_file_path))
-        @is_cache = true
         puts e.message
       ensure
-        puts "read cache?: #{@is_cache}"
       end
-    end
-
-    def cache_tables_when_read
-      File.open(cache_file_path, "w:UTF-8") { |file| file.puts(@nxscaes.to_json) }
     end
 
     def search_tables(keywords)
