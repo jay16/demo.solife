@@ -8,6 +8,7 @@ task :default => [:environment]
 
 desc "set up environment for rake"
 task :environment => "Gemfile.lock" do
+  ENV["RACK_ENV"] ||= "production"
   require File.expand_path('../config/boot.rb', __FILE__)
   eval "Rack::Builder.new {( " + File.read(File.expand_path('../config.ru', __FILE__)) + "\n )}"
 end
