@@ -1,15 +1,19 @@
 ﻿#encoding: utf-8 
 class Account::CallbacksController < Account::ApplicationController
   set :views, ENV["VIEW_PATH"] + "/account/callbacks"
+  set :layout, :"../../layouts/layout"
 
   before do
     authenticate!
   end
 
   get "/" do
-    @callbacks = current_user.callbacks
+    @callbacks = current_user.callbacks(:order => :updated_at.desc)
 
-    haml :index, layout: :"../layouts/layout"
+    last_modified @callbacks.first.updated_at
+    etag  md5_key(@callbacks.first.updated_at.to_s)
+
+    haml :index, layout: settings.layout
   end
 
   # new
@@ -17,7 +21,7 @@ class Account::CallbacksController < Account::ApplicationController
     weixiner = current_user.weixiners.first(uid: params[:uid])
     @callback = weixiner.callbacks.new
 
-    haml :new, layout: :"../layouts/layout"
+    haml :new, layout: settings.layout
   end
 
   # copy
@@ -30,7 +34,7 @@ class Account::CallbacksController < Account::ApplicationController
     @callback.keyword     = callback.keyword
     @callback.desc        = callback.desc
 
-    haml :copy, layout: :"../layouts/layout"
+    haml :copy, layout: settings.layout
   end
 
   # create
@@ -45,14 +49,14 @@ class Account::CallbacksController < Account::ApplicationController
   get "/:id" do
     @callback = Callback.first(id: params[:id]) 
 
-    haml :show, layout: :"../layouts/layout"
+    haml :show, layout: settings.layout
   end
 
   # edit
   get "/:id/edit" do
     @callback = Callback.first(id: params[:id]) 
 
-    haml :edit, layout: :"../layouts/layout"
+    haml :edit, layout: settings.layout
   end
 
   # update

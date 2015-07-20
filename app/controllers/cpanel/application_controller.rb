@@ -5,7 +5,7 @@ module Cpanel
 
     before do
       authenticate!
-      redirect "/account" if not current_user.admin?
+      redirect to("/account") unless current_user.admin?
     end
   end
 end

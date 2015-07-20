@@ -9,6 +9,8 @@ class Demo::PdfJSController < Demo::ApplicationController
 
   # get /demo/pdfjs
   get "/" do
+    etag md5_key("/demo/pdfjs static control")
+
     haml :index, layout: settings.layout
   end
  

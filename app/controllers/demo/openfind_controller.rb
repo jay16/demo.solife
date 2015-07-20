@@ -1,7 +1,7 @@
 ﻿#encoding: utf-8 
-require "open-uri"
 require "csv"
 require "zip"
+require "open-uri"
 require "fileutils"
 class Demo::OpenfindController < Demo::ApplicationController
   set :views, File.join(ENV["VIEW_PATH"], "demo/openfind")
@@ -13,6 +13,8 @@ class Demo::OpenfindController < Demo::ApplicationController
 
   # Get /demo/openfind
   get "/" do
+    etag md5_key("/demo/openfind static control")
+
     haml :index, layout: settings.layout
   end
 

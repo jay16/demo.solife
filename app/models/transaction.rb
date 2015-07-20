@@ -1,5 +1,10 @@
-﻿class Transaction
+﻿#encoding: utf-8
+require "model-base"
+class Transaction
     include DataMapper::Resource
+    include Utils::DataMapper::Model
+    #extend  Utils::DataMapper::Model
+    include Utils::ActionLogger
 
     property :id, Serial 
     property :gmt_send_goods, String
@@ -34,6 +39,9 @@
     property :sign_type, String
     property :sign, String
     property :receive_address, String
-    property :created_at, DateTime
-    property :updated_at, DateTime
+
+    # instance methods
+    def human_name
+      "淘宝交易"
+    end
 end

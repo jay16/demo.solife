@@ -10,7 +10,9 @@ class Demo::NxscaeController < Demo::ApplicationController
 
   # get /demo/nxscae
   get "/" do
-    @nxscae_models = NxscaeModel.all(:fullname => ["虎首小铜章", "羊年小铜章","鸡首铜章"])
+    @nxscae_models = NxscaeModel.all(:fullname => ["虎首小铜章", "羊年小铜章","鸡首铜章"], :order => :time.desc)
+    last_modified @nxscae_models.first.time
+    etag  md5_key(@nxscae_models.first.time)
 
     haml :index, layout: settings.layout
   end

@@ -9,7 +9,10 @@ class Account::HomeController < Account::ApplicationController
   end
 
   get "/" do
-    @weixiners = current_user.weixiners
+    @weixiners = current_user.weixiners(:order => :updated_at.desc)
+
+    last_modified @weixiners.first.updated_at
+    etag  md5_key(@weixiners.first.updated_at.to_s)
     #WeixinUtils::Operation.generate_weixiner_info(Weixiner.all)
 
     haml :index, layout: settings.layout

@@ -5,7 +5,10 @@ class Cpanel::ChangeLogController < Cpanel::ApplicationController
 
   # Get /cpanel/change_log
   get "/" do
-    @change_logs = ChangeLog.all
+    @change_logs = ChangeLog.all(:order => :updated_at.desc)
+
+    last_modified @change_logs.first.updated_at
+    etag  md5_key(@change_logs.first.updated_at.to_s)
 
     haml :index, layout: settings.layout
   end

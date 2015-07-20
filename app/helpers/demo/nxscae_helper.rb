@@ -104,7 +104,7 @@ module Nxscae
     # custom methods
     def highchart_generator
       xAxis, columns1, column_names, columns2 = [], [], [], []
-      @nxscae_models.first.nxscae_dayinfos.first(15).each do |timeline|
+      @nxscae_models.first.nxscae_dayinfos(:order => [:time.asc]).first(15).each do |timeline|
           xAxis << timeline.time
           column_data1, column_data2 = [], []
           @nxscae_models.each do |nxscae|
@@ -118,7 +118,8 @@ module Nxscae
       end
       columns1 = columns1.transpose
       columns2 = columns2.transpose
-
+      puts "highchart_generator"
+      
       @chart = LazyHighCharts::HighChart.new('graph') do |f|
           f.title({ text: "趋势图表"})
           f.xAxis({:categories => xAxis})

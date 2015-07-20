@@ -1,5 +1,6 @@
-%script{type:"text/javascript",src:"http://code.highcharts.com/highcharts.js"}
 %h1 理财产品动态
+
+= javascript_include_tag "highcharts"
 %table.table.table-strip.table-condensed.table-bordered
   %thead
     %th 藏品简称
@@ -22,11 +23,10 @@
         %td= dayinfo.high_price
         %td= dayinfo.low_price
 
-    - dayinfo = @nxscae_models.first.latest_info;
     %tr
       %td 产品更新时间
-      %td{"colspan" => 2}= dayinfo.time
+      %td{"colspan" => 2}= NxscaeDayinfo.last.time
       %td 本地更新时间
-      %td{"colspan" => 3}= dayinfo.updated_at.strftime("%Y-%m-%d %H:%M:%S")
+      %td{"colspan" => 3}= NxscaeCache.last.updated_at.strftime("%Y-%m-%d %H:%M:%S") rescue "loading"
 %pre
-  = high_chart("my_id", highchart_generator)
+  = high_chart("highchart_id", highchart_generator)
