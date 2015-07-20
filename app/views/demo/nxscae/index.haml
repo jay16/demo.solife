@@ -27,6 +27,6 @@
       %td 产品更新时间
       %td{"colspan" => 2}= dayinfo.time
       %td 本地更新时间
-      %td{"colspan" => 3}= dayinfo.created_at.strftime("%Y-%m-%d %H:%M:%S")
+      %td{"colspan" => 3}= dayinfo.updated_at.strftime("%Y-%m-%d %H:%M:%S")
 %pre
   = high_chart("my_id", highchart_generator)
