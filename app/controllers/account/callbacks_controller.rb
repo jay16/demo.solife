@@ -10,8 +10,10 @@ class Account::CallbacksController < Account::ApplicationController
   get "/" do
     @callbacks = current_user.callbacks(:order => :updated_at.desc)
 
-    last_modified @callbacks.first.updated_at
-    etag  md5_key(@callbacks.first.updated_at.to_s)
+    if @callbacks.count > 0
+      last_modified @callbacks.first.updated_at
+      etag  md5_key(@callbacks.first.updated_at.to_s)
+    end
 
     haml :index, layout: settings.layout
   end

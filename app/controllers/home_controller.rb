@@ -4,7 +4,7 @@ class HomeController < ApplicationController
 
   # root page
   get "/" do
-    redirect "/cpanel" if current_user
+    redirect to("/cpanel") if current_user
 
     @users     = User.all
     @messages  = Message.all

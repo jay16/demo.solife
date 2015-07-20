@@ -9,9 +9,11 @@ class Account::CallbackDatasController < Account::ApplicationController
 
   get "/" do
     @callback_datas = current_user.callback_datas(:order => :updated_at.desc)
-
-    last_modified @callback_datas.first.updated_at
-    etag  md5_key(@callback_datas.first.updated_at.to_s)
+    
+    if @callback_datas.count > 0
+      last_modified @callback_datas.first.updated_at
+      etag  md5_key(@callback_datas.first.updated_at.to_s)
+    end
 
     haml :index, layout: settings.layout
   end

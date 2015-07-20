@@ -9,8 +9,10 @@ class Cpanel::HomeController < Cpanel::ApplicationController
     @weixiners = Weixiner.all(:order => :updated_at.desc)
     @messages  = Message.all(:order => :updated_at.desc)
 
-    last_modified @messages.first.updated_at
-    etag  md5_key(@messages.first.updated_at.to_s)
+    if @messages.count > 0
+      last_modified @messages.first.updated_at
+      etag  md5_key(@messages.first.updated_at.to_s)
+    end
 
     haml :index, layout: settings.layout
   end

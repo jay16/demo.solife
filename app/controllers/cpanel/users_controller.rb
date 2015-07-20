@@ -7,9 +7,11 @@ class Cpanel::UsersController < Cpanel::ApplicationController
   get "/" do
     @users = User.all(:order => :updated_at.desc)
 
-    last_modified @users.first.updated_at
-    etag  md5_key(@users.first.updated_at.to_s)
-
+    if @users.count > 0
+      last_modified @users.first.updated_at
+      etag  md5_key(@users.first.updated_at.to_s)
+    end
+    
     haml :index, layout: settings.layout
   end
 end

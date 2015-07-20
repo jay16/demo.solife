@@ -47,9 +47,12 @@ describe "UsersController" do
     #  <i class="glyphicon glyphicon-wrench"></i>
     #  后台管理
     #</a>
+    #puts page.html
+    #page.save_page("account.html")
     page.click_link("后台管理", :exact => false)
     expect(page.current_path).to eq("/cpanel")
 
+    #page.save_page("account2.html")
     page.click_link("返回前台", :exact => false)
     expect(page.current_path).to eq("/account")
   end

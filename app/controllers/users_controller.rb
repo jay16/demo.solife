@@ -5,12 +5,17 @@ class UsersController < ApplicationController
 
   # Get /users
   get "/" do
-    redirect "/users/login" unless current_user
-    redirect "/cpanel" if current_user and current_user.admin?
+    redirect to("/users/login") unless current_user
+    redirect to("/cpanel") if current_user and current_user.admin?
 
     @weixiners = Weixiner.all
     @messages  = Message.all
     @phantoms  = Phantom.all
+
+    if @messages.count > 0
+      last_modified @messages.first.updated_at
+      etag  md5_key(@messages.first.updated_at.to_s)
+    end   
 
     haml :index, layout: settings.layout
   end
