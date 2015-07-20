@@ -59,9 +59,9 @@ case "$1" in
         test -d public/change_logs || mkdir -p public/change_logs
 
         echo "## start unicorn"
-        echo -e "\t port: ${PORT} \n\t environment: ${ENVIRONMENT}"
+        echo -e "\t# port: ${PORT} \n\t environment: ${ENVIRONMENT}"
         $bundle_command exec ${UNICORN} -c ${CONFIG_FILE} -p ${PORT} -E ${ENVIRONMENT} -D > /dev/null 2>&1
-        echo -e "\t unicorn start $(test $? -eq 0 && echo "successfully" || echo "failed")."
+        echo -e "\t# unicorn start $(test $? -eq 0 && echo "successfully" || echo "failed")."
 
         echo "## start nohup"
         /bin/sh nohup.sh start
@@ -77,7 +77,7 @@ case "$1" in
     restart|force-reload)  
         #kill -USR2 `cat tmp/pids/unicorn.pid`  
         sh unicorn.sh stop
-        echo -e "\n\n-----------command sparate line----------\n\n"
+        echo -e "\n\n#-----------command sparate line----------\n\n"
         sh unicorn.sh start
         ;;  
     deploy)

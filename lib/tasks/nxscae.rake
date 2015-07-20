@@ -8,16 +8,11 @@ namespace :nxscae do
   task :update => :environment do
     options = {nxscae_stock_url: Settings.nxscae.stock_url }
     output = ::Nxscae::Tables.search([], options)
-    puts output
   end
 
   task :cache_to_dayinfo => :environment do 
     options = {nxscae_stock_url: Settings.nxscae.stock_url }
     NxscaeCache.all.each do |cache|
-      puts cache.content
-      puts "=-"*20
-      puts "=-"*20
-      puts "=-"*20
       ::Nxscae::Tables.read_from_local(cache.content, options)
     end
   end

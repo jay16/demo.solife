@@ -24,7 +24,7 @@ class NxscaeModel
     has n, :nxscae_dayinfos
 
     def latest_info
-      self.nxscae_dayinfos.first(time: time)
+      self.nxscae_dayinfos.last
     end
     
     # instance methods

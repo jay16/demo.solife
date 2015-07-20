@@ -60,7 +60,6 @@ module Nxscae
     def initialize(options={})
       @options  = options
       @nxscaes  = {}
-      @is_cache = false
     end
 
     def stock_time
@@ -68,7 +67,7 @@ module Nxscae
     end
 
     def read_tables_and_cached
-      simulator_browser = ""
+      simulator_browser = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.132 Safari/537.36"
       response  = RestClient.post @options[:nxscae_stock_url], { user_agent: simulator_browser, :content_type => :json }
       @nxscaes  = JSON.parse(response.body)
       NxscaeCache.create(content: response.body)
@@ -90,34 +89,37 @@ module Nxscae
 
       time_info = { time: @nxscaes["time"] }
       @nxscaes["tables"].each do |table|
-        nxscae_model = NxscaeModel.first(code: table["code"], fullname: table["fullname"])
         latest_info = {
-            code: table["code"],
-            fullname: table["fullname"],
-            high_price: table["HighPrice"],
-            low_price: table["LowPrice"],
-            sum_num: @nxscaes["sumNum"],
-            sum_money: @nxscaes["sumMoney"],
-            }
-        if nxscae_model
-          nxscae_model.update(latest_info.merge(time_info))
-        else
-          nxscae_model = NxscaeModel.create(latest_info)
+          code: table["code"],
+          fullname: table["fullname"],
+          high_price: table["HighPrice"],
+          low_price: table["LowPrice"],
+          sum_num: @nxscaes["sumNum"],
+          sum_money: @nxscaes["sumMoney"],
+        }
+
+        unless nxscae_model = NxscaeModel.first(latest_info)
+          nxscae_model = NxscaeModel.create(latest_info.merge(time_info))
+
+        #   puts "create model %s" % table["fullname"]
+        # else 
+        #   puts "nothing model %s" % table["fullname"]
         end
 
-        dayinfo = latest_info.merge({
-            yester_balance_price: table["YesterBalancePrice"],
-            open_price: table["OpenPrice"],
-            cur_price: table["CurPrice"],
-            current_gains: table["CurrentGains"],
-            total_amount: table["TotalAmount"],
-            total_money: table["TotalMoney"]
+        day_info = latest_info.merge({
+          yester_balance_price: table["YesterBalancePrice"],
+          open_price: table["OpenPrice"],
+          cur_price: table["CurPrice"],
+          current_gains: table["CurrentGains"],
+          total_amount: table["TotalAmount"],
+          total_money: table["TotalMoney"]
         })
-        puts dayinfo
-        unless nxscae_model.nxscae_dayinfos.first(dayinfo)
-          puts "not exist"
-          nxscae_model.nxscae_dayinfos.create(dayinfo.merge(time_info))
-          break
+        unless nxscae_model.nxscae_dayinfos.first(day_info)
+          nxscae_model.nxscae_dayinfos.new(day_info.merge(time_info)).save
+        
+        #   puts "create dayinfo %s" % table["fullname"]
+        # else 
+        #   puts "nothing dayinfo %s" % table["fullname"]
         end
       end
     end

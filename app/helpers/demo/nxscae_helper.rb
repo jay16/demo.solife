@@ -104,8 +104,8 @@ module Nxscae
     # custom methods
     def highchart_generator
       xAxis, columns1, column_names, columns2 = [], [], [], []
-      @nxscae_models.first.nxscae_dayinfos.each do |timeline|
-          xAxis << timeline.created_at.strftime("%m/%d")
+      @nxscae_models.first.nxscae_dayinfos.first(15).each do |timeline|
+          xAxis << timeline.time
           column_data1, column_data2 = [], []
           @nxscae_models.each do |nxscae|
             column_names << nxscae.fullname
