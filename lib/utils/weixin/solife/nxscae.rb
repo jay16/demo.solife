@@ -76,7 +76,7 @@ module Nxscae
     end
 
     def read_from_local(content)
-      @nxscaes  = JSON.parse(response.body)
+      @nxscaes  = JSON.parse(content)
       cache_tables_when_read
     end
 
