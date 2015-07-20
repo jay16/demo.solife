@@ -10,4 +10,11 @@ namespace :nxscae do
     output = ::Nxscae::Tables.search([], options)
     puts output
   end
+
+  task :cache_to_dayinfo => :environment do 
+    options = {nxscae_stock_url: Settings.nxscae.stock_url }
+    NxscaeCache.all do |cache|
+      ::Nxscae::Tables.read_from_local(cache.content, options)
+    end
+  end
 end

@@ -25,7 +25,7 @@ class NxscaeDayinfo
     #成交量
     property :total_amount, Integer  
     #成交金额
-    property :total_money, Integer  
+    property :total_money, Float  
     #总成交量
     property :sum_num, Integer 
     #总成交金额

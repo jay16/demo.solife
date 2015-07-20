@@ -51,6 +51,11 @@ module Nxscae
       HEREDOC
     end
 
+    def self.read_from_local(cache_content, options={})
+      nxscae = new(options)
+      nxscae.read_from_local(cache_content)
+    end
+
     attr_accessor :nxscaes
     def initialize(options={})
       @options  = options
@@ -70,6 +75,11 @@ module Nxscae
       cache_tables_when_read
     end
 
+    def read_from_local(content)
+      @nxscaes  = JSON.parse(response.body)
+      cache_tables_when_read
+    end
+
     def check_data_valid
       @nxscaes["time"] && @nxscaes["tables"] && @nxscaes["tables"].is_a?(Array)
     end
@@ -78,6 +88,7 @@ module Nxscae
         puts "Bug"*10
       end
 
+      time_info = { time: @nxscaes["time"] }
       @nxscaes["tables"].each do |table|
         nxscae_model = NxscaeModel.first(code: table["code"], fullname: table["fullname"])
         latest_info = {
@@ -87,25 +98,26 @@ module Nxscae
             low_price: table["LowPrice"],
             sum_num: @nxscaes["sumNum"],
             sum_money: @nxscaes["sumMoney"],
-            time: @nxscaes["time"]
             }
         if nxscae_model
-          nxscae_model.update(latest_info)
+          nxscae_model.update(latest_info.merge(time_info))
         else
           nxscae_model = NxscaeModel.create(latest_info)
         end
 
-        nxscae_dayinfo = nxscae_model.nxscae_dayinfos.first(time: @nxscaes["time"])
-        unless nxscae_dayinfo 
-          dayinfo = latest_info.merge({
-              yester_balance_price: table["YesterBalancePrice"],
-              open_price: table["OpenPrice"],
-              cur_price: table["CurPrice"],
-              current_gains: table["CurrentGains"],
-              total_amount: table["TotalAmount"],
-              total_money: table["TotalMoney"]
-          })
-          nxscae_model.nxscae_dayinfos.create(dayinfo)
+        dayinfo = latest_info.merge({
+            yester_balance_price: table["YesterBalancePrice"],
+            open_price: table["OpenPrice"],
+            cur_price: table["CurPrice"],
+            current_gains: table["CurrentGains"],
+            total_amount: table["TotalAmount"],
+            total_money: table["TotalMoney"]
+        })
+        puts dayinfo
+        unless nxscae_model.nxscae_dayinfos.first(dayinfo)
+          puts "not exist"
+          nxscae_model.nxscae_dayinfos.create(dayinfo.merge(time_info))
+          break
         end
       end
     end
