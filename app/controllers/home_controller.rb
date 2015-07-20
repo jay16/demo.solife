@@ -9,27 +9,32 @@ class HomeController < ApplicationController
     @users     = User.all
     @messages  = Message.all
     @weixiners = Weixiner.all
+
+    if @messages.count > 0
+      last_modified @messages.first.updated_at
+      etag  md5_key(@messages.first.updated_at.to_s)
+    end
+
     haml :index, layout: :"../layouts/layout"
   end
 
   get "/about" do
+    etag  md5_key("/about static control")
 
     haml :about, layout: :"../layouts/layout"
   end
 
   # redirect to cpanel
   get "/admin" do
-    redirect "/cpanel"
+    redirect to("/cpanel")
   end
 
-
-  # redirect
   # login
   get "/login" do
-    redirect "/user/login"
+    redirect to("/user/login")
   end
   # register
   get "/register" do
-    redirect "/user/register"
+    redirect to("/user/register")
   end
 end
