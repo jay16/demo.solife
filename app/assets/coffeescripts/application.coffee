@@ -139,3 +139,7 @@ $ ->
   NProgress.set(0.8)
   App.initBootstrapNavbarLi()
   NProgress.done(true)
+
+  currentDate = new Date();
+  copyInfo = "&copy; " + currentDate.getFullYear() + " " + window.location.host;
+  $("#footer .footer").html(copyInfo);

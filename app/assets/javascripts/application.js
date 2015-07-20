@@ -144,6 +144,7 @@
   });
 
   $(function() {
+    var copyInfo, currentDate;
     NProgress.start();
     App.resizeWindow();
     NProgress.set(0.2);
@@ -152,7 +153,10 @@
     App.initBootstrapTooltip();
     NProgress.set(0.8);
     App.initBootstrapNavbarLi();
-    return NProgress.done(true);
+    NProgress.done(true);
+    currentDate = new Date();
+    copyInfo = "&copy; " + currentDate.getFullYear() + " " + window.location.host;
+    return $("#footer .footer").html(copyInfo);
   });
 
 }).call(this);
