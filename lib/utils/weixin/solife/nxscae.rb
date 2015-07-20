@@ -89,21 +89,21 @@ module Nxscae
 
       time_info = { time: @nxscaes["time"] }
       @nxscaes["tables"].each do |table|
+       identify_info = { code: table["code"], fullname: table["fullname"]}
         latest_info = {
-          code: table["code"],
-          fullname: table["fullname"],
           high_price: table["HighPrice"],
           low_price: table["LowPrice"],
           sum_num: @nxscaes["sumNum"],
           sum_money: @nxscaes["sumMoney"],
         }
 
-        unless nxscae_model = NxscaeModel.first(latest_info)
-          nxscae_model = NxscaeModel.create(latest_info.merge(time_info))
-
-        #   puts "create model %s" % table["fullname"]
-        # else 
-        #   puts "nothing model %s" % table["fullname"]
+        unless nxscae_model = NxscaeModel.first(identify_info)
+          nxscae_model_params = identify_info.merge(latest_info).merge(time_info)
+          nxscae_model = NxscaeModel.create(nxscae_model_params)
+          puts "create model %s" % table["fullname"]
+        else 
+          nxscae_model.update(latest_info.merge(time_info))
+          puts "update model %s" % table["fullname"]
         end
 
         day_info = latest_info.merge({
@@ -114,12 +114,13 @@ module Nxscae
           total_amount: table["TotalAmount"],
           total_money: table["TotalMoney"]
         })
-        unless nxscae_model.nxscae_dayinfos.first(day_info)
-          nxscae_model.nxscae_dayinfos.new(day_info.merge(time_info)).save
+        unless nxscae_model.nxscae_dayinfos.first(identify_info.merge(day_info))
+          nxscae_dayinfo_params = identify_info.merge(day_info).merge(time_info)
+          nxscae_model.nxscae_dayinfos.new(nxscae_dayinfo_params).save
         
-        #   puts "create dayinfo %s" % table["fullname"]
-        # else 
-        #   puts "nothing dayinfo %s" % table["fullname"]
+          puts "create dayinfo %s" % table["fullname"]
+        else 
+          puts "nothing dayinfo %s" % table["fullname"]
         end
       end
     end
