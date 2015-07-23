@@ -89,7 +89,7 @@ module Nxscae
 
       time_info = { time: @nxscaes["time"] }
       @nxscaes["tables"].each do |table|
-       identify_info = { code: table["code"], fullname: table["fullname"]}
+        identify_info = { code: table["code"], fullname: table["fullname"]}
         latest_info = {
           high_price: table["HighPrice"],
           low_price: table["LowPrice"],

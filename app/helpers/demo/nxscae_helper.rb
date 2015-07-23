@@ -105,7 +105,7 @@ module Nxscae
     def highchart_generator
       xAxis, columns1, column_names, columns2 = [], [], [], []
       @nxscae_models.first.nxscae_dayinfos(:order => [:time.asc]).first(15).each do |timeline|
-          xAxis << timeline.time
+          xAxis << timeline.time[5..-4] rescue "bad time" # 2015-07-24 01:02:03 => 07-24 01:02
           column_data1, column_data2 = [], []
           @nxscae_models.each do |nxscae|
             column_names << nxscae.fullname
@@ -121,7 +121,7 @@ module Nxscae
       puts "highchart_generator"
       
       @chart = LazyHighCharts::HighChart.new('graph') do |f|
-          f.title({ text: "趋势图表"})
+          f.title({text: "趋势图表"})
           f.xAxis({:categories => xAxis})
           f.labels(:items=>
             [:html=>"", 
@@ -131,7 +131,7 @@ module Nxscae
             {:title => {:text => "涨跌幅"}, :opposite => true},
           ]
           columns1.each_with_index do |column_data,index|
-            f.series(:type=> 'column',:yAxis => 0,:name=> column_names[index],:data=> column_data)
+            f.series(:type=> 'spline',:yAxis => 0,:name=> column_names[index],:data=> column_data)
           end
           # columns2.each_with_index do |column_data,index|
           #   f.series(:type=> 'spline',:yAxis => 1,:name=> column_names[index],:data=> column_data)
