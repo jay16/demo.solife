@@ -91,6 +91,9 @@ case "$1" in
     nxscae_update)
         $bundle_command exec rake nxscae:update
         ;;
+    download_db)
+        scp jay@solife.us:/home/work/solife-weixin/db/*.db db/
+        ;;
     *)  
         echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload|deploy}" >&2  
         exit 3  
