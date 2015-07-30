@@ -104,32 +104,35 @@ module Nxscae
     # custom methods
     def highchart_generator
       xAxis, columns1, column_names, columns2 = [], [], [], []
-      @nxscae_models.first.nxscae_dayinfos.all(:cur_price.gt => 0, :limit => 15, :order => :id.desc).reverse.each do |timeline|
+      @nxscae_models.first.nxscae_dayinfos.all(:cur_price.gt => 0, :limit => 100, :order => :id.desc).reverse.each do |timeline|
           xAxis << timeline.time[5..-4] rescue "bad time" # 2015-07-24 01:02:03 => 07-24 01:02
           column_data1, column_data2 = [], []
           @nxscae_models.each do |nxscae|
             column_names << nxscae.fullname
             dayinfo = nxscae.nxscae_dayinfos.first(time: timeline.time)
-            column_data1 << (dayinfo ? dayinfo.cur_price : 0)
-            column_data2 << (dayinfo ? dayinfo.current_gains : 0)
+            cur_price = (dayinfo ? dayinfo.cur_price : 1)
+            column_data1 << (cur_price >= 100 ? cur_price : 100)
+            #current_gains = (dayinfo ? dayinfo.current_gains : 1)
+            #column_data2 << current_gains
           end
           columns1 << column_data1
-          columns2 << column_data2
+          #columns2 << column_data2
       end
       columns1 = columns1.transpose
-      columns2 = columns2.transpose
+      #columns2 = columns2.transpose
       puts "highchart_generator"
       
       @chart = LazyHighCharts::HighChart.new('graph') do |f|
           f.title({text: "趋势图表"})
           f.xAxis({:categories => xAxis})
+          f.legend({layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0})
           f.labels(:items=>
             [:html=>"", 
-             :style=>{:left=>"40px", :top=>"8px", :color=>"black"} ])
-          f.yAxis [
-            {:title => {:text => "最新价格", :margin => 70} },
-            {:title => {:text => "涨跌幅"}, :opposite => true},
-          ]
+             :style=>{:left=>"20px", :top=>"8px", :color=>"black"} ])
+          #f.yAxis [
+          #  {:title => {:text => "最新价格", :margin => 20} },
+          #  {:title => {:text => "涨跌幅"}, :opposite => true},
+          #]
           columns1.each_with_index do |column_data,index|
             f.series(:type=> 'spline',:yAxis => 0,:name=> column_names[index],:data=> column_data)
           end

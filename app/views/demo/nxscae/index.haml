@@ -1,6 +1,9 @@
 %h1 理财产品动态
 
 = javascript_include_tag "highcharts"
+
+= high_chart("highchart_id", highchart_generator)
+
 %table.table.table-strip.table-condensed.table-bordered
   %thead
     %th 藏品简称
@@ -28,5 +31,3 @@
       %td{"colspan" => 2}= NxscaeDayinfo.last.time
       %td 本地更新时间
       %td{"colspan" => 3}= @local_latest_update
-%pre
-  = high_chart("highchart_id", highchart_generator)
