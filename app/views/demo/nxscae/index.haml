@@ -27,6 +27,6 @@
       %td 产品更新时间
       %td{"colspan" => 2}= NxscaeDayinfo.last.time
       %td 本地更新时间
-      %td{"colspan" => 3}= NxscaeCache.last.updated_at.strftime("%Y-%m-%d %H:%M:%S") rescue "loading"
+      %td{"colspan" => 3}= @local_latest_update
 %pre
   = high_chart("highchart_id", highchart_generator)

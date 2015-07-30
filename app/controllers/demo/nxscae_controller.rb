@@ -10,9 +10,10 @@ class Demo::NxscaeController < Demo::ApplicationController
 
   # get /demo/nxscae
   get "/" do
+    @local_latest_update = NxscaeCache.last.updated_at.strftime("%Y/%m/%d %H:%M:%S")
+    last_modified @local_latest_update
+    etag  md5_key(@local_latest_update)
     @nxscae_models = NxscaeModel.all(:fullname => ["虎首小铜章", "羊年小铜章","鸡首铜章"], :order => :time.desc)
-    last_modified @nxscae_models.first.time
-    etag  md5_key(@nxscae_models.first.time)
 
     haml :index, layout: settings.layout
   end

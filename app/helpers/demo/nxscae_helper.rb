@@ -104,7 +104,7 @@ module Nxscae
     # custom methods
     def highchart_generator
       xAxis, columns1, column_names, columns2 = [], [], [], []
-      @nxscae_models.first.nxscae_dayinfos(:order => [:time.asc]).first(15).each do |timeline|
+      @nxscae_models.first.nxscae_dayinfos(:cur_price.gt => 0, :order => [:time.asc]).first(15).each do |timeline|
           xAxis << timeline.time[5..-4] rescue "bad time" # 2015-07-24 01:02:03 => 07-24 01:02
           column_data1, column_data2 = [], []
           @nxscae_models.each do |nxscae|
