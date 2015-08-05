@@ -11,6 +11,27 @@ window.App =
     $(".loading").addClass("hidden")
     $(".loading").html("loading...")
 
+  params: (type) ->
+    obj = {}
+    keys = []
+    values = []
+    pairs = window.location.search.substring(1).split("&")
+    for i of pairs
+      continue  if pairs[i] is ""
+      pair = pairs[i].split("=")
+      key = decodeURIComponent(pair[0])
+      value = decodeURIComponent(pair[1])
+      keys.push(key)
+      values.push(value)
+      obj[key] = value
+
+    if(type == "key")
+      return keys
+    else if(type == "value")
+      return values
+    else 
+      return obj
+
   removeGlyphicon: ->
     $(".dropdown-menu i.glyphicon").remove()
     $(".dropdown-menu a").each ->

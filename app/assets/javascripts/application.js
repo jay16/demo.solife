@@ -11,6 +11,31 @@
       $(".loading").addClass("hidden");
       return $(".loading").html("loading...");
     },
+    params: function(type) {
+      var i, key, keys, obj, pair, pairs, value, values;
+      obj = {};
+      keys = [];
+      values = [];
+      pairs = window.location.search.substring(1).split("&");
+      for (i in pairs) {
+        if (pairs[i] === "") {
+          continue;
+        }
+        pair = pairs[i].split("=");
+        key = decodeURIComponent(pair[0]);
+        value = decodeURIComponent(pair[1]);
+        keys.push(key);
+        values.push(value);
+        obj[key] = value;
+      }
+      if (type === "key") {
+        return keys;
+      } else if (type === "value") {
+        return values;
+      } else {
+        return obj;
+      }
+    },
     removeGlyphicon: function() {
       $(".dropdown-menu i.glyphicon").remove();
       return $(".dropdown-menu a").each(function() {

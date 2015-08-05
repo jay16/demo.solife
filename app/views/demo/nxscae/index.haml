@@ -1,11 +1,17 @@
+= javascript_include_tag_with_cdn "highcharts.js"
+= javascript_include_tag_with_cdn "angular.min.js"
+= javascript_include_tag "nxscae.js"
+
 %h1 理财产品动态
 
-= javascript_include_tag "highcharts"
+%div.alert.alert-warning.alert-dismissible{role: "alert"}
+  产品更新时间: #{NxscaeDayinfo.last.time}, 本地更新时间: #{@local_latest_update}
 
-= high_chart("highchart_id", highchart_generator)
+%div#highchart_id
 
-%table.table.table-strip.table-condensed.table-bordered
+%table.table.table-strip.table-condensed.table-bordered{"ng-controller" => "NxscaeCtrl"}
   %thead
+    %th 序号
     %th 藏品简称
     %th 最新价格
     %th 涨跌幅
@@ -14,20 +20,13 @@
     %th 最高价
     %th 最低价
 
-  %tbody
-    - @nxscae_models.each do |nxscae|
-      - dayinfo = nxscae.latest_info
-      %tr
-        %td= dayinfo.fullname
-        %td= dayinfo.cur_price
-        %td= dayinfo.current_gains
-        %td= dayinfo.total_amount
-        %td= dayinfo.total_money
-        %td= dayinfo.high_price
-        %td= dayinfo.low_price
-
-    %tr
-      %td 产品更新时间
-      %td{"colspan" => 2}= NxscaeDayinfo.last.time
-      %td 本地更新时间
-      %td{"colspan" => 3}= @local_latest_update
+  %tbody{"ng-repeat" => "product in products | orderBy:cur_prict"}
+    %tr{ "ng-dblclick" => "trendChart(product.code)" }
+      %td {{ $index }}
+      %td.fullname {{ product.fullname }}
+      %td {{ product.cur_price }}
+      %td {{ product.current_gains }}
+      %td {{ product.total_amount }}
+      %td {{ product.total_money }}
+      %td {{ product.high_price }}
+      %td {{ product.low_price }}
