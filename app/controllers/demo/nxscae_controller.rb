@@ -114,7 +114,7 @@ class Demo::NxscaeController < Demo::ApplicationController
     end
 
     File.open(filepath, "w+") do |file|
-      file.puts(array.join(","))
+      file.puts(array.uniq.join(","))
     end
 
     "[%s] [%s] successfully." % [params[:operation], params[:fullname]]

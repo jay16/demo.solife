@@ -1,15 +1,15 @@
 = javascript_include_tag_with_cdn "highcharts.js"
 = javascript_include_tag_with_cdn "angular.min.js"
-= javascript_include_tag "nxscae.js"
+= javascript_include_tag "demo_nxscae_controller.js"
 
-%h1 理财产品动态
+%h1 理财产品
 
 %div.alert.alert-warning.alert-dismissible{role: "alert"}
   产品更新时间: #{NxscaeDayinfo.last.time}, 本地更新时间: #{@local_latest_update}
 
 %div#highchart_id
 
-%table.table.table-strip.table-condensed.table-bordered{"ng-controller" => "NxscaeCtrl"}
+%table.table.table-strip.table-condensed.table-bordered{"ng-controller" => "DemoNxscaeController"}
   %thead
     %th 序号
     %th 藏品简称
@@ -20,9 +20,11 @@
     %th 最高价
     %th 最低价
 
-  %tbody{"ng-repeat" => "product in products | orderBy:cur_prict"}
-    %tr{ "ng-dblclick" => "trendChart(product.code)" }
-      %td {{ $index }}
+  %tbody{"ng-repeat" => "product in products | orderBy:cur_price"}
+    %tr
+      %td 
+        %a{"ng-click" => "trendChart(product.code)" } 
+          {{ $index }}
       %td.fullname {{ product.fullname }}
       %td {{ product.cur_price }}
       %td {{ product.current_gains }}
