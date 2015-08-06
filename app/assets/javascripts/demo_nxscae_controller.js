@@ -11,6 +11,7 @@
     }
     $http.get('/demo/nxscae/list?list=' + listType).success(function(result) {
       $scope.products = result.array;
+      $scope.orderCurPrice = "cur_price";
       return $http.get('/demo/nxscae/focus').success(function(result) {
         var focus;
         focus = result.array;

@@ -5,6 +5,7 @@ app.controller 'DemoNxscaeController', ($scope, $http) ->
 
   $http.get('/demo/nxscae/list?list=' + listType).success (result) ->
     $scope.products = result.array
+    $scope.orderCurPrice = "cur_price"
 
     $http.get('/demo/nxscae/focus').success (result) ->
       focus = result.array

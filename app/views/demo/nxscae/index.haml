@@ -13,14 +13,18 @@
   %thead
     %th 序号
     %th 藏品简称
-    %th 最新价格
+    %th{width:"15%"}
+      最新价格
+      %select{"ng-model" => "orderCurPrice"}
+        %option{value:"cur_price"} 升
+        %option{value:"-cur_price"} 降
     %th 涨跌幅
     %th 成交量
     %th 成交金额
     %th 最高价
     %th 最低价
 
-  %tbody{"ng-repeat" => "product in products | orderBy:cur_price"}
+  %tbody{"ng-repeat" => "product in products | orderBy:orderCurPrice"}
     %tr
       %td 
         %a{"ng-click" => "trendChart(product.code)" } 
