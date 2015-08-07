@@ -86,7 +86,6 @@ class Demo::NxscaeController < Demo::ApplicationController
 
   get "/focus" do
     filepath, array = File.join(ENV["APP_ROOT_PATH"], "tmp/nxscae.focus"), []
-
     if File.exist?(filepath)
       array = IO.read(filepath).split(",")
     else 
@@ -99,24 +98,25 @@ class Demo::NxscaeController < Demo::ApplicationController
 
   get "/focus/:operation/:fullname" do
     filepath, array = File.join(ENV["APP_ROOT_PATH"], "tmp/nxscae.focus"), []
-
     if File.exist?(filepath)
       array = IO.read(filepath).split
     end
 
-    if params[:operation] == "add"
-      array.push(params[:fullname])
-    elsif params[:operation] == "remove"
-      array.delete(params[:fullname])
-    elsif params[:operation] == "default"
-      array.delete(params[:fullname])
-      array.unshift(params[:fullname])
+    operation = params[:operation] || "other"
+    fullname = (params[:fullname] || "null").strip
+    if operation == "add"
+      array.push(fullname)
+    elsif operation == "remove"
+      array.delete(fullname)
+    elsif operation == "default"
+      array.delete(fullname)
+      array.unshift(fullname)
     end
 
     File.open(filepath, "w+") do |file|
       file.puts(array.uniq.join(","))
     end
 
-    "[%s] [%s] successfully." % [params[:operation], params[:fullname]]
+    "[%s] [%s] successfully." % [operation, fullname]
   end
 end

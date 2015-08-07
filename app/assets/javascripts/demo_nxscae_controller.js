@@ -14,16 +14,18 @@
       $scope.orderCurPrice = "cur_price";
       return $http.get('/demo/nxscae/focus').success(function(result) {
         var focus;
-        focus = result.array;
+        focus = result.array.reverse();
+        console.log("[" + focus.join("],[") + "]");
         return $('.fullname').each(function() {
-          var index;
-          if (!focus.length) {
-            return;
-          }
-          index = $.inArray($(this).html(), focus);
+          var $firstTR, $tr, index;
+          index = $.inArray($.trim($(this).html()), focus);
           if (index >= 0) {
-            $(this).parent('tr').addClass('success');
-            return focus.slice(index, 1);
+            $tr = $(this).parent('tr');
+            $tr.addClass('success');
+            $firstTR = $("tbody tr:first");
+            return $tr.insertBefore($firstTR);
+          } else {
+            return console.log("[" + $(this).html() + "]");
           }
         });
       });

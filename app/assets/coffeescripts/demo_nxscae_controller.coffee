@@ -8,16 +8,18 @@ app.controller 'DemoNxscaeController', ($scope, $http) ->
     $scope.orderCurPrice = "cur_price"
 
     $http.get('/demo/nxscae/focus').success (result) ->
-      focus = result.array
-
+      focus = result.array.reverse()
+      console.log("[" + focus.join("],[") + "]")
+      
       $('.fullname').each ->
-        if !focus.length
-          return
-
-        index = $.inArray($(this).html(), focus)
+        index = $.inArray($.trim($(this).html()), focus)
         if index >= 0
-          $(this).parent('tr').addClass 'success'
-          focus.slice index, 1
+          $tr = $(this).parent('tr')
+          $tr.addClass 'success'
+          $firstTR = $("tbody tr:first")
+          $tr.insertBefore($firstTR)
+        else
+          console.log("[" + $(this).html() + "]")
 
 
   $scope.trendChart = (code) ->

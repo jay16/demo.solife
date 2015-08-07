@@ -144,7 +144,7 @@ class ApplicationController < Sinatra::Base
   end
 
   def respond_with_json hash, code = nil
-    content_type "application/json"
+    content_type "application/json;charset=utf-8"
     body   hash.to_json
     status code || 200
   end
