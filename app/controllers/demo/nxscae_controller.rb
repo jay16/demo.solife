@@ -22,6 +22,10 @@ class Demo::NxscaeController < Demo::ApplicationController
     haml :index, layout: settings.layout
   end
 
+  get "/latest" do
+    NxscaeCache.last.content
+  end
+
   get "/list" do
     list_type = params[:list] == "simple" ? "simple" : "all"
 

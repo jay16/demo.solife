@@ -10,7 +10,7 @@ app.controller 'DemoNxscaeController', ($scope, $http) ->
     $http.get('/demo/nxscae/focus').success (result) ->
       focus = result.array.reverse()
       console.log("[" + focus.join("],[") + "]")
-      
+
       $('.fullname').each ->
         index = $.inArray($.trim($(this).html()), focus)
         if index >= 0
@@ -20,7 +20,6 @@ app.controller 'DemoNxscaeController', ($scope, $http) ->
           $tr.insertBefore($firstTR)
         else
           console.log("[" + $(this).html() + "]")
-
 
   $scope.trendChart = (code) ->
     $http.get('/demo/nxscae/' + code + '/data').success((result) ->
