@@ -9,7 +9,6 @@ app.controller 'DemoNxscaeController', ($scope, $http) ->
 
     $http.get('/demo/nxscae/focus').success (result) ->
       focus = result.array.reverse()
-      console.log("[" + focus.join("],[") + "]")
 
       $('.fullname').each ->
         index = $.inArray($.trim($(this).html()), focus)
@@ -18,8 +17,6 @@ app.controller 'DemoNxscaeController', ($scope, $http) ->
           $tr.addClass 'success'
           $firstTR = $("tbody tr:first")
           $tr.insertBefore($firstTR)
-        else
-          console.log("[" + $(this).html() + "]")
 
   $scope.trendChart = (code) ->
     $http.get('/demo/nxscae/' + code + '/data').success((result) ->

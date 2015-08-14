@@ -23,11 +23,9 @@
     %th 最高价
     %th 最低价
 
-  %tbody{"ng-repeat" => "product in products | orderBy:orderCurPrice"}
-    %tr
-      %td 
-        %a{"ng-click" => "trendChart(product.code)" } 
-          {{ $index }}
+  %tbody
+    %tr{"ng-repeat" => "product in products | orderBy:orderCurPrice"}
+      %td{"ng-click" => "trendChart(product.code)"}  {{ $index }}
       %td.fullname {{ product.fullname }}
       %td {{ product.cur_price }}
       %td {{ product.current_gains }}

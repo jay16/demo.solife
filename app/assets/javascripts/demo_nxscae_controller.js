@@ -15,7 +15,6 @@
       return $http.get('/demo/nxscae/focus').success(function(result) {
         var focus;
         focus = result.array.reverse();
-        console.log("[" + focus.join("],[") + "]");
         return $('.fullname').each(function() {
           var $firstTR, $tr, index;
           index = $.inArray($.trim($(this).html()), focus);
@@ -24,8 +23,6 @@
             $tr.addClass('success');
             $firstTR = $("tbody tr:first");
             return $tr.insertBefore($firstTR);
-          } else {
-            return console.log("[" + $(this).html() + "]");
           }
         });
       });

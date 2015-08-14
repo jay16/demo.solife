@@ -32,8 +32,8 @@ class Demo::NxscaeController < Demo::ApplicationController
     local_latest_update = NxscaeCache.last.updated_at.strftime("%Y/%m/%d %H:%M:%S")
     local_latest_update = "%s-%s" % [list_type, local_latest_update]
 
-    last_modified local_latest_update
-    etag  md5_key(local_latest_update)
+    #last_modified local_latest_update
+    #etag  md5_key(local_latest_update)
     puts local_latest_update
 
     if list_type == "simple"
@@ -76,15 +76,15 @@ class Demo::NxscaeController < Demo::ApplicationController
     fullname, xAxis, yAxis1, yAxis2 = "unkown", [], [], []
     if nxscae_model = NxscaeModel.first(code: params[:code])
       fullname = nxscae_model.fullname
-      nxscae_model.nxscae_dayinfos.all(:cur_price.gt => 0, :order => :id.desc, :limit => 150)
-      .reverse.each do |dayinfo|
+      nxscae_model.nxscae_dayinfos.all(:cur_price.gt => 0, :order => [:created_at.desc], :limit => 30)
+      .each do |dayinfo|
         xAxis << dayinfo.time[5..-7]
         yAxis1 << dayinfo.cur_price
         yAxis2 << dayinfo.current_gains
       end
     end
 
-    hash = {fullname: fullname, xAxis: xAxis, yAxis1: yAxis1, yAxis2: yAxis2}
+    hash = {fullname: fullname, xAxis: xAxis.reverse, yAxis1: yAxis1.reverse, yAxis2: yAxis2.reverse}
     respond_with_json hash
   end
 
