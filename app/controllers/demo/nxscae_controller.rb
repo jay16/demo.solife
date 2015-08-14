@@ -76,7 +76,7 @@ class Demo::NxscaeController < Demo::ApplicationController
     fullname, xAxis, yAxis1, yAxis2 = "unkown", [], [], []
     if nxscae_model = NxscaeModel.first(code: params[:code])
       fullname = nxscae_model.fullname
-      nxscae_model.nxscae_dayinfos.all(:cur_price.gt => 0, :limit => 100, :order => :id.desc)
+      nxscae_model.nxscae_dayinfos.all(:cur_price.gt => 0, :order => :id.desc, :limit => 150)
       .reverse.each do |dayinfo|
         xAxis << dayinfo.time[5..-7]
         yAxis1 << dayinfo.cur_price
