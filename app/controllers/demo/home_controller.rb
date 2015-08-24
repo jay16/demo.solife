@@ -11,4 +11,37 @@ class Demo::HomeController < Demo::ApplicationController
   get "/" do
     haml :index, layout: settings.layout
   end
+
+  get "/upload" do
+    haml :upload, layout: settings.layout
+  end
+
+  post "/upload" do
+    # puts params
+    # respond_with_json params
+    begin
+      puts params
+      unless params[:file] &&  
+           (tempfile = params[:file][:tempfile]) &&  
+           (filename = params[:file][:filename]) 
+        
+        hash = { "error" => "参数不足" }
+        respond_with_json hash
+        return
+      end  
+
+      filepath = File.join(ENV["APP_ROOT_PATH"], "tmp", filename)
+      File.open(filepath, 'wb') {|f| f.write tempfile.read }  
+
+      if File.exist?(filepath)
+        hash = { "status" => "上传成功", "FileSize" => File.size(filepath).to_s }
+      else 
+        hash = { "error" => "上传失败" } 
+      end
+      hash.merge!(params)
+      respond_with_json hash
+    rescue => e
+      puts e.message
+    end
+  end
 end

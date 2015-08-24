@@ -1,0 +1,8 @@
+%form{enctype:"multipart/form-data", action:"/demo/upload", method:"POST"} 
+    %input{name:"file", type:"file"} 
+    %br UserId:
+    %input{name:"UserId", type:"text"}
+    %br FileType:
+    %input{name:"FileType", type:"text"}
+    %br
+    %input{type:"submit",name:"action",value:"UploadFile"}
