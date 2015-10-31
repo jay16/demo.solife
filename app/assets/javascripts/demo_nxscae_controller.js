@@ -5,6 +5,7 @@
 
   app.controller('DemoNxscaeController', function($scope, $http) {
     var listType;
+    App.showLoading("加载中...");
     listType = "all";
     if ($.inArray('simple', App.params('key')) >= 0) {
       listType = "simple";
@@ -22,8 +23,9 @@
             $tr = $(this).parent('tr');
             $tr.addClass('success');
             $firstTR = $("tbody tr:first");
-            return $tr.insertBefore($firstTR);
+            $tr.insertBefore($firstTR);
           }
+          return App.hideLoading();
         });
       });
     });

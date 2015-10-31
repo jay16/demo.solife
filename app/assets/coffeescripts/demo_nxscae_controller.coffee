@@ -1,5 +1,7 @@
 app = angular.module('solife', [])
 app.controller 'DemoNxscaeController', ($scope, $http) ->
+  App.showLoading("加载中...")
+
   listType = "all"
   listType = "simple" if $.inArray('simple', App.params('key')) >= 0
 
@@ -17,6 +19,8 @@ app.controller 'DemoNxscaeController', ($scope, $http) ->
           $tr.addClass 'success'
           $firstTR = $("tbody tr:first")
           $tr.insertBefore($firstTR)
+
+        App.hideLoading()
 
   $scope.trendChart = (code) ->
     $http.get('/demo/nxscae/' + code + '/data').success((result) ->

@@ -4,7 +4,7 @@
 
 %h1 nxscae理财产品
 
-%div.alert.alert-warning.alert-dismissible{role: "alert"}
+.alert.alert-warning.alert-dismissible{role: "alert"}
   产品更新时间: #{NxscaeDayinfo.last.time}, 本地更新时间: #{@local_latest_update}
 
 %div#highchart_id
@@ -31,4 +31,13 @@
       %td {{ product.high_price }}
       %td {{ product.low_price }}
       %td{style: "text-align: center", "ng-click" => "trendChart(product.code)"}
-        %span.glyphicon.glyphicon-arrow-up
+        %span.glyphicon{"ng-class" => "{true:'glyphicon-arrow-up', false:'glyphicon-arrow-down' }[product.current_gains > 0]"}
+
+
+.alert.alert-success{role: "alert"}
+  本页面数据来自
+  = link_to "nxscae", "http://nxscae.com/"
+  ,图表使用
+  = link_to "highchart", "http://www.highcharts.com"
+  ,数据处理使用
+  = link_to "angularJS", "http://angularjs.org"
