@@ -1,6 +1,6 @@
 #encoding: utf-8
 if `uname -s`.strip.eql?("Darwin")
-  source "http://ruby.taobao.org"
+  source "https://ruby.taobao.org"
 else
   source "https://rubygems.org"
 end

@@ -9,7 +9,11 @@ class Demo::HomeController < Demo::ApplicationController
 
   # /demo
   get "/" do
-    haml :index, layout: settings.layout
+    json_path = File.join(ENV["APP_ROOT_PATH"], "config/demo-index.json")
+
+    @demo_items = JSON.parse(IO.read(json_path))
+
+    haml :index#, layout: settings.layout
   end
 
   get "/upload" do

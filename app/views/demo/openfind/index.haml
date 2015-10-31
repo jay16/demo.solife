@@ -1,13 +1,14 @@
 = javascript_include_tag "openfind.js"
 
+%input{name: "url", type: "hidden", value: "#{Settings.openfind.url}"}/
 .row
-  .jumbotron
+  .jumbotron{style:"color:white; background: #6f5499;"}
     %h1 Openfind
     %h2 名单/模板下载
 
-
-%input{name: "url", type: "hidden", value: "#{Settings.openfind.url}"}/
-
+.row 
+  .alert.alert-warning
+    注意!  本页面中功能，仅为Openfind公司上海区同事提供使用.
 .row
   #warn.alert.alert-warning.hidden
 
