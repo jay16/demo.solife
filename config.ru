@@ -20,7 +20,6 @@ require "./config/boot.rb"
   "/demo"                   => "Demo::HomeController",
   "/demo/alipay"            => "Demo::TransactionsController",
   "/demo/openfind"          => "Demo::OpenfindController",
-  "/demo/sql"               => "Demo::SqlController",
   "/demo/pdfjs"             => "Demo::PdfJSController",
   "/demo/nxscae"            => "Demo::NxscaeController"
 }.each_pair do |path, mod|
