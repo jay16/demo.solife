@@ -11,27 +11,32 @@
     %meta{name: "keywords", content: "#{@meta_keywords}"}
     %meta{name: "description", content: "#{@meta_description}"}
 
-    = stylesheet_link_tag_with_cdn "bootstrap.320.min.css"
+    = stylesheet_link_tag_with_cdn "http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"
     = stylesheet_link_tag "http://v3.bootcss.com/assets/css/docs.min.css"
     = stylesheet_link_tag "demo-home"
+
     :css
       .link-no-hover:hover {text-decoration: none;}
 
+    :javascript
+      function imgLoaded(img) {
+          var imgWrapper = img.parentNode;
+          imgWrapper.className += imgWrapper.className? ' loaded' : 'loaded';
+      };
+
   %body
-    .header{:style => "background-image: url(http://static.bootcss.com/expo/img/d/dd/2de797545de56274f03a5920eb3a1.jpg)"}
+    .header{:style => "background-image: url(/images/iterm2-cmatrix.png);"}
       .container
         .row
           .col-xs-12
             .logotxt
               %h1
-                %a.link-no-hover{:href => "http://demo.solife.us"} SegmentOfLife
+                %a.link-no-hover{:href => "http://demo.solife.us"} 实验室
             %h2.site-name.text-center
-              个人实验室
+              Segment of life
               %span demo.solife.us
 
-        .row
-          .col-xs-offset-5.col-xs-2
-            %span{class:"bs-docs-booticon bs-docs-booticon-lg bs-docs-booticon-outline",style: "background:purple;position:absolute; width:100px;height:100px;font-size:80px;line-height:100px;"}Y
+        %span{class:"bs-docs-booticon bs-docs-booticon-lg bs-docs-booticon-outline",style: "color:white;background:#062E39; margin:0 auto 30px;width:100px;height:100px;font-size:80px;line-height:100px;"} Y
 
     %main.main{:role => "main"}
       .container
@@ -42,11 +47,8 @@
                 %h2.post-title
                   %a.link-no-hover.post-href{:href => item["href"], style:"color:purple;", :target => "_self"}= item["text"]
                 .post-featured-image
-                  %a.post-href.thumbnail.loaded{:href => item["href"], :target => "_self"}
+                  %a.post-href.thumbnail{:href => item["href"], :target => "_self"}
                     %img{:alt => item["text"], :height => "600", :onload => "imgLoaded(this)", :src => "images/#{item['thumbnail']}", :width => "800"}/
-
-
-
 
     .submit-site
       .container
@@ -86,11 +88,10 @@
                 %a{:href => "", :title => "私房钱"} 不可言说
 
     = javascript_include_tag_with_cdn "jquery-2.1.1.min.js"
-    = javascript_include_tag_with_cdn "bootstrap.320.min.js"
     :javascript
       $(function(){
         var pathname = window.location.pathname;
         $(".post-href").each(function(){
           $(this).attr("href", (pathname + $(this).attr('href')).replace("//", "/"));
-        })
+        });
       })

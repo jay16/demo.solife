@@ -53,9 +53,10 @@
   end
 
   def javascript_include_tag_with_cdn(filename)
-    if ENV["RACK_ENV"].eql?("production")
+    if ENV["RACK_ENV"].eql?("production") && !filename.start_with?("http://", "https://")
       filename = "http://7qnc6j.com1.z0.glb.clouddn.com/#{filename}"
     end
+
     javascript_include_tag(filename)
   end
   def stylesheet_link_tag_with_cdn(filename)
