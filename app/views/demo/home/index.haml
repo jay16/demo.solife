@@ -12,7 +12,7 @@
     %meta{name: "description", content: "#{@meta_description}"}
 
     = stylesheet_link_tag_with_cdn "http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"
-    = stylesheet_link_tag "http://v3.bootcss.com/assets/css/docs.min.css"
+    = stylesheet_link_tag_with_cdn "http://v3.bootcss.com/assets/css/docs.min.css"
     = stylesheet_link_tag "demo-home"
 
     :css
@@ -45,7 +45,7 @@
             .col-xs-12.col-md-6
               %article.post.tag-ad
                 %h2.post-title
-                  %a.link-no-hover.post-href{:href => item["href"], style:"color:purple;", :target => "_self"}= item["text"]
+                  %a.link-no-hover.post-href{:href => item["href"], :target => "_self"}= item["text"]
                 .post-featured-image
                   %a.post-href.thumbnail{:href => item["href"], :target => "_self"}
                     %img{:alt => item["text"], :height => "600", :onload => "imgLoaded(this)", :src => "images/#{item['thumbnail']}", :width => "800"}/
@@ -54,9 +54,8 @@
       .container
         .submit
           %p.text-center
-            该界面拷贝自
+            声明!该页面UI拷贝
             %a{:href => "http://expo.bootcss.com/", :target => "_blank"} Bootstrap 优站精选
-            ，未作商业用途，敬请谅解！
           %p.text-center
             联系方式
             %a{:href => "mailto:jay_li@solife.us"} jay_li@solife.us
@@ -68,9 +67,11 @@
             .widget
               %h4.title 友情链接
               .content.friend-links
-                %a{:href => "http://www.bootcss.com/", :target => "_blank", :title => "Bootstrap中文网"} Bootstrap 中文网
+                = link_to "小六语记", "http://xiao6say.com", target: "_blank"
                 %pangu
-                %a{:href => "https://ruby-china.org/", :target => "_blank", :title => "RubyChina"} RubyChina
+                = link_to "Bootstrap 中文网", "http://www.bootcss.com/", target: "_blank"
+                %pangu
+                = link_to "RubyChina", "https://ruby-china.org/", target:"_blank"
           .col-sm-4
             .widget
               %h4.title 使用到的技术
