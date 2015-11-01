@@ -1,4 +1,4 @@
 [
-  {"href": "/openfind", "thumbnail": "demo-openfind.png", "alt":"Openfind 电子报小助手", "text":"Openfind 电子报小助手"},
-  {"href": "/nxscae", "thumbnail": "demo-nxscae.png", "alt":"nxscae 理财", "text":"nxscae 理财产品"}
+  { "href": "/openfind", "thumbnail": "demo-openfind.png", "alt":"Openfind 电子报小助手", "text":"Openfind 电子报小助手" },
+  { "href": "/nxscae", "thumbnail": "demo-nxscae.png", "alt":"nxscae 理财", "text":"nxscae 理财产品" }
 ]
