@@ -15,6 +15,10 @@ checkTemplate = (element) ->
         else
           @btn_disabled = true
           @warning_text = "输入链接的域名不正确..."
+      showLoading: (e) ->
+        App.showLoading "处理中..."
+        @input_url = ""
+        @btn_disabled = true
   )
 
 Vue.directive "disable", (value) ->

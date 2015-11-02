@@ -15,7 +15,7 @@
       - field_set_tag do 
         = hidden_field_tag "", "v-model" => "official_url", value: Settings.openfind.url
         .col-sm-10
-          = text_field_tag :"members[url]", "v-model" => "input_url", "v-on:keyup" => "checkUrl", placeholder: "名单链接", class: "form-control"
+          = text_field_tag :"members[url]", "v-model" => "input_url", "v-on:change" => "checkUrl", "v-on:keyup" => "checkUrl", placeholder: "名单链接", class: "form-control"
         .col-sm-2
           = submit_tag "名单下载", "v-disable" => "btn_disabled", class: "btn btn-default"
 
@@ -34,7 +34,7 @@
       - field_set_tag do
         = hidden_field_tag "", "v-model" => "official_url", value: Settings.openfind.url
         .col-sm-10
-          = text_field_tag :"template[url]","v-model" => "input_url", "v-on:keyup" => "checkUrl",placeholder: "电子报链接", class: "form-control"
+          = text_field_tag :"template[url]","v-model" => "input_url", "v-on:change" => "checkUrl", "v-on:keyup" => "checkUrl",placeholder: "电子报链接", class: "form-control"
         .col-sm-2
           = submit_tag "模板下载", "v-disable" => "btn_disabled", class: "btn btn-default"
 

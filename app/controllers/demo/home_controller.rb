@@ -9,7 +9,7 @@ class Demo::HomeController < Demo::ApplicationController
 
   # /demo
   get "/" do
-    json_path = File.join(ENV["APP_ROOT_PATH"], "config/demo-index.json")
+    json_path = File.join(ENV["APP_ROOT_PATH"], "config/demo-home.json")
 
     mtime = File.mtime(json_path)
     last_modified mtime.to_s

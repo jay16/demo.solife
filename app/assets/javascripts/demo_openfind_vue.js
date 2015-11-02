@@ -22,6 +22,11 @@
             this.btn_disabled = true;
             return this.warning_text = "输入链接的域名不正确...";
           }
+        },
+        showLoading: function(e) {
+          App.showLoading("处理中...");
+          this.input_url = "";
+          return this.btn_disabled = true;
         }
       }
     });

@@ -26,7 +26,7 @@ class Demo::OpenfindController < Demo::ApplicationController
       puts e.backtrace[0..10]
       flash[:danger] = "请确保链接在浏览器可以正常打开:#{params[:members][:url]}"
 
-      redirect "/demo/openfind"
+      redirect to("/demo/openfind")
     end
   end
 
@@ -40,7 +40,7 @@ class Demo::OpenfindController < Demo::ApplicationController
       puts e.backtrace[0..10]
       flash[:danger] = "请确保链接在浏览器可以正常打开:#{params[:template][:url]}"
 
-      redirect "/demo/openfind"
+      redirect to("/demo/openfind")
     end
   end
 
