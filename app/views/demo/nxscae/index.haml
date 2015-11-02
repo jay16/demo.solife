@@ -36,10 +36,10 @@
         %span.glyphicon{"ng-class" => "{true:'glyphicon-arrow-up', false:'glyphicon-arrow-down' }[product.current_gains > 0]"}
 
 
-.alert.alert-success{role: "alert"}
+%p.text-muted
   本页面数据来自
-  = link_to "nxscae", "http://nxscae.com/"
+  = link_to "nxscae", "http://nxscae.com/", target: "_blank"
   ,图表使用
-  = link_to "HighChart", "http://www.highcharts.com"
+  = link_to "HighChart", "http://www.highcharts.com", target: "_blank"
   ,数据处理使用
-  = link_to "AngularJS", "http://angularjs.org"
+  = link_to "AngularJS", "http://angularjs.org", target: "_blank"

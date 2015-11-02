@@ -55,10 +55,10 @@
         .submit
           %p.text-center
             声明!该页面UI拷贝
-            %a{:href => "http://expo.bootcss.com/", :target => "_blank"} Bootstrap 优站精选
+            = link_to "Bootstrap 优站精选", "http://expo.bootcss.com/", target: "_blank"
           %p.text-center
             联系方式
-            %a{:href => "mailto:jay_li@solife.us"} jay_li@solife.us
+            = mail_to "jay_li@solife.us"
 
     %footer.main-footer
       .container

@@ -1,50 +1,57 @@
-= javascript_include_tag "openfind.js"
+= javascript_include_tag "vue.min.js"
 
-%input{name: "url", type: "hidden", value: "#{Settings.openfind.url}"}/
 .row
   .jumbotron{style:"color:white; background: #6f5499;"}
     %h1 Openfind
     %h2 名单/模板下载
 
 .row 
+  .alert.alert-danger
+    声明!  本页面中功能，仅为Openfind公司上海办公室同事提供使用.
+
+.row
+  .bs-example#membersForm
+    - form_tag "/demo/openfind/members", class:"row", method: "post"  do
+      - field_set_tag do 
+        = hidden_field_tag "", "v-model" => "official_url", value: Settings.openfind.url
+        .col-sm-10
+          = text_field_tag :"members[url]", "v-model" => "input_url", "v-on:keyup" => "checkUrl", placeholder: "名单链接", class: "form-control"
+        .col-sm-2
+          = submit_tag "名单下载", "v-disable" => "btn_disabled", class: "btn btn-default"
+
+    %p.text-danger{ "v-bind:class" => " { 'hidden': !warning_text }" }
+      {{ warning_text }}
+
+.row
   .alert.alert-warning
-    注意!  本页面中功能，仅为Openfind公司上海区同事提供使用.
-.row
-  #warn.alert.alert-warning.hidden
-
-.row
-  .bs-example{style:"height:100px;"}
-    %form#membersForm.form-inline.col-sm-12{"accept-charset" => "UTF-8", action: "/demo/openfind/members", method: "post", role: "form"}
-      %div{style: "margin:0;padding:0;display:inline"}
-        %input{name: "utf8", type: "hidden", value: "✓"}/
-        %input{name: "authenticity_token", type: "hidden", value: "Ars8u2IK2o9rbtiQbBiQyIUE2abBAkjlwxQKAUp0T+Y="}/
-      .form-group.col-sm-8
-        %input.form-control{name: "members[url]", placeholder: "名单链接", type: "text", style: "width: 100%;"}/
-      .form-group
-        %input#membersSubmit.btn.btn-default{type: "submit", value: "名单下载", disabled: "disabled"}/
-
-.row
-  .alert.alert-success
     注意事项：<br>
     1. 以记事本打开下载文件，[另存为]设置编码格式为UTF-8<br>
     2. 使用office打开后，另存为.xls文件<br>
 
 .row
-  .bs-example{style:"height:100px;"}
-    %form#templateForm.form-inline.col-sm-12{"accept-charset" => "UTF-8", action: "/demo/openfind/template", method: "post", role: "form"}
-      %div{style: "margin:0;padding:0;display:inline"}
-        %input{name: "utf8", type: "hidden", value: "✓"}/
-        %input{name: "authenticity_token", type: "hidden", value: "Ars8u2IK2o9rbtiQbBiQyIUE2abBAkjlwxQKAUp0T+Y="}/
-      .form-group.col-sm-8
-        %input.form-control{name: "template[url]", placeholder: "电子报链接", type: "text", style: "width: 100%;"}/
-      .form-group
-        %input#templateSubmit.btn.btn-default{type: "submit", value: "模板下载", disabled: "disabled"}/
+  .bs-example#templateForm
+    - form_tag "/demo/openfind/template", class:"row", method: "post" do
+      - field_set_tag do
+        = hidden_field_tag "", "v-model" => "official_url", value: Settings.openfind.url
+        .col-sm-10
+          = text_field_tag :"template[url]","v-model" => "input_url", "v-on:keyup" => "checkUrl",placeholder: "电子报链接", class: "form-control"
+        .col-sm-2
+          = submit_tag "模板下载", "v-disable" => "btn_disabled", class: "btn btn-default"
+
+    %p.text-danger{ "v-bind:class" => " { 'hidden': !warning_text }" }
+      {{ warning_text }}
 
 .row
-  .alert.alert-success
+  .alert.alert-warning
     注意事项：<br>所下载的zip模板不符合FocusMail,需要手工修改以下几点：<br>
     1. 解压zip文件至当前文件夹中，<br>
     &nbsp;&nbsp;&nbsp;&nbsp;查看index.html编码是否为UTF-8(或直接[另存为]过程中设置编码格式为UTF-8)<br>
     2. 通过浏览器打开index.html查看图片是否完整（确定图片都已下载到images文件中）<br>
     3. 选中index.html与images文件夹右键选择添加至压缩文件，选择格式为zip<br>
     4. 在FocusMail中新建模板预览查看。<br>
+
+= javascript_include_tag "demo_openfind_vue.js"
+
+%p.text-muted
+  本页面表单操作使用
+  = link_to "Vue.js", "http://vuejs.org/", target: "_blank"

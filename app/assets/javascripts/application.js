@@ -97,12 +97,12 @@
       }
     },
     initBootstrapNavbarLi: function() {
-      var $_li, _a_href, _a_val, _second_path, _second_val, is_match, navbar_lis, navbar_right_lis, pathname;
+      var is_match, navbar_lis, navbar_right_lis, pathname;
       pathname = window.location.pathname;
       navbar_right_lis = $("#navbar_right_lis").val() || 1;
       navbar_lis = $(".navbar-nav:first li, .navbar-right li:lt(" + navbar_right_lis + ")");
       is_match = false;
-      navbar_lis.each(function() {
+      return navbar_lis.each(function() {
         var href;
         href = $(this).children("a:first").attr("href");
         if (pathname === href) {
@@ -112,43 +112,6 @@
           return $(this).removeClass("active");
         }
       });
-      if (!is_match) {
-        _a_href = "";
-        _a_val = "";
-        $_li = $("a:first");
-        navbar_lis.each(function() {
-          var $a_first, href;
-          $a_first = $(this).children("a:first");
-          href = $a_first.attr("href");
-          if (pathname.startsWith(href) && _a_href.length < href.length) {
-            _a_href = href;
-            _a_val = $a_first.text();
-            return $_li = $(this);
-          }
-        });
-        $_li.addClass("active");
-        $("#breadcrumb").removeClass("hidden");
-        $(".first-level a").attr("href", _a_href);
-        _second_path = pathname.replace(_a_href, "");
-        if ($.trim(_a_val).length) {
-          _a_val = _a_val.replace("我的", "");
-        } else if (_a_href === "/account/renewal") {
-          _a_val = "续期";
-        }
-        $(".first-level a").html(_a_val);
-        if (_second_path.match(/^\/\d+$/)) {
-          _second_val = _a_val + "[明细]";
-        } else if (_second_path.match(/^\/new$/)) {
-          _second_val = "[新建]" + _a_val;
-        } else if (_second_path.match(/^\/\d+\/edit$/)) {
-          _second_val = "[编辑]" + _a_val;
-        } else if (_second_path.match(/^\/\w+\/order$/)) {
-          _second_val = "订单";
-        } else if (_second_path.match(/^\/\w+\/order_item$/)) {
-          _second_val = "商品";
-        }
-        return $(".second-level").html(_second_val);
-      }
     },
     initBootstrapPopover: function() {
       return $("body").popover({

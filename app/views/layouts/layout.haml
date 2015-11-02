@@ -14,6 +14,11 @@
     = stylesheet_link_tag_with_cdn "bootstrap.320.min.css"
     = stylesheet_link_tag_with_cdn "nprogress.css"
     = stylesheet_link_tag "application.css"
+    = javascript_include_tag_with_cdn "jquery-2.1.1.min.js"
+    = javascript_include_tag_with_cdn "bootstrap.320.min.js"
+    = javascript_include_tag_with_cdn "nprogress.js"
+    = javascript_include_tag "application.js"
+
     - is_mobile = mobile?
     - if is_mobile
       %meta{:content => "no", :name => "apple-mobile-web-app-capable"}
@@ -40,10 +45,3 @@
     .container#footer
       .row.center
         .footer &copy; loading
-
-    = javascript_include_tag_with_cdn "jquery-2.1.1.min.js"
-    = javascript_include_tag_with_cdn "bootstrap.320.min.js"
-    = javascript_include_tag_with_cdn "nprogress.js"
-    = javascript_include_tag "js_utils.js"
-    = javascript_include_tag "application.js"
-    = javascript_include_tag "jquery_sinatra"
