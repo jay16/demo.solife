@@ -1,1 +1,60 @@
-hello world
+.row
+  .jumbotron{style:"color:white; background: #6f5499;"}
+    %h1 IOS 报表测试
+    %h2 OC & Highcharts
+
+
+
+.row
+  = link_to "Highcharts 官网", "http://www.highcharts.com/", target: "_blank"
+  %br
+  = link_to "Highcharts Demo下载", "https://www.highcharts.com/download", target: "_blank"
+  %br
+  =link_to "Highcharts Github", "https://github.com/highslide-software/highcharts.com", target: "_blank"
+
+.row
+  %pre
+    :preserve
+        google="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"
+        localfile="../../js/jquery-2.1.1.min.js"
+    
+        ## step 1
+        #  replace google cdn file with local file
+    
+        # step 1.1
+        # grep -rl "${google}" --include="*.htm" $(pwd) | xargs sed -i .bak.html "s?${google}?${localfile}?g"
+    
+        # step 1.2.1
+        # 如出意外，则还原回来
+        # for filepath in $(find $(pwd) -type f -name "*.bak.html")
+        # do
+        #     mv ${filepath} ${filepath%.bak.html}
+        # done
+    
+        # step 1.2.2
+        # 如无意外，删除备份
+        # find $(pwd) -type f -name "*.bak.html" -exec rm {} \;
+    
+        ## step 2
+        #  tranverse folders to flatten files
+    
+        examples_path=$(pwd)/examples
+        target_dir=$(pwd)/flatten_files
+        test -d ${target_dir} || mkdir -p ${target_dir}
+    
+        for filepath in $(find ${examples_path} -type f -name "*.htm")
+        do
+          # echo ${filepath}
+          # Users/lijunjie/Downloads/Highcharts-4.1.9/examples/waterfall/index.htm
+    
+          relative_file_path=${filepath#*examples/}
+          # echo ${relative_file_path}
+          # waterfall/index.htm
+    
+          flatten_file_name=${relative_file_path//\//_}
+          # echo ${flatten_file_name}
+          # waterfall_index.htm
+    
+    
+          cp ${filepath} ${target_dir}/${flatten_file_name}
+        done

@@ -67,12 +67,16 @@ namespace :qiniu do
       assets_path = File.join(ENV["APP_ROOT_PATH"], "app/assets")
       raise "assets path not exist:#{assets_path}" unless File.exist?(assets_path)
 
+      today = Time.now.strftime("%Y%m%d")
       Dir.glob(assets_path + "/*/*").each do |asset_file_path|
         if File.file?(asset_file_path)
-          upload_file_2_qiniu(asset_file_path)
+          if File.mtime(asset_file_path).strftime("%Y%m%d").eql?(today)
+            upload_file_2_qiniu(asset_file_path)
+          else
+            puts "NOT Upload For NOT Modified Today: #{asset_file_path}"
+          end
         else
-          puts "not file: #{asset_file_path}"
-          next
+          puts "NOT File: #{asset_file_path}"
         end
       end
     end
