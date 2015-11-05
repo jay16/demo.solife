@@ -44,6 +44,8 @@ gem "rake", "~>10.3.2"
 gem "settingslogic", "~>2.0.9"
 gem "httparty", "~>0.13.3"
 
+gem 'rack-mini-profiler', "~>0.9.3"
+
 # demo
 gem "nokogiri", "~>1.6.2.1"
 gem "spreadsheet", "~>0.9.0"

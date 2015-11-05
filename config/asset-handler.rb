@@ -11,12 +11,23 @@ class SassHandler < Sinatra::Base
     end
 end
  
-class CoffeeHandler < Sinatra::Base
+class JSHandler < Sinatra::Base
     set :views, ENV["APP_ROOT_PATH"] +  "/app/assets/javascripts"
     
-    get "/javascripts/*.coffee" do
-        filename = params[:splat].first
-        coffee filename.to_sym
+    # get "/javascripts/*.coffee" do
+    #     filename = params[:splat].first
+    #     coffee filename.to_sym
+    # end
+
+    get "/js/*.js" do
+        filename = params[:splat].join.gsub("/","_") + ".js"
+        filepath = File.join(settings.views, filename)
+        
+        if File.exist?(filepath)
+            send_file(filepath, type: "text/javascript", disposition: "inline") 
+        else
+            "#{params[:splat].join}.js not fount"
+        end
     end
 end
 

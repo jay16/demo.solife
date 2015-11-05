@@ -21,7 +21,8 @@ require "./config/boot.rb"
   "/demo/alipay"            => "Demo::TransactionsController",
   "/demo/openfind"          => "Demo::OpenfindController",
   "/demo/pdfjs"             => "Demo::PdfJSController",
-  "/demo/nxscae"            => "Demo::NxscaeController"
+  "/demo/nxscae"            => "Demo::NxscaeController",
+  "/demo/highcharts"        => "Demo::HighchartsController"
 }.each_pair do |path, mod|
   clazz = mod.split("::").inject(Object) { |obj,c| obj.const_get(c) }
   map(path) { run clazz }

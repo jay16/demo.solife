@@ -4,7 +4,13 @@ require 'digest/md5'
 require "sinatra/decompile"
 require 'sinatra/advanced_routes'
 require "sinatra/multi_route"
+require 'rack-mini-profiler'
 class ApplicationController < Sinatra::Base
+  use Rack::MiniProfiler
+  Rack::MiniProfiler.config.position = 'right'
+  Rack::MiniProfiler.config.start_hidden = false
+
+
   register Sinatra::Reloader if development? or test?
   register Sinatra::Flash
   register Sinatra::Decompile
@@ -21,7 +27,7 @@ class ApplicationController < Sinatra::Base
   # css/js/view配置文档
   use ImageHandler
   use SassHandler
-  use CoffeeHandler
+  use JSHandler
   use AssetHandler
 
   set :root, ENV["APP_ROOT_PATH"]
@@ -59,19 +65,10 @@ class ApplicationController < Sinatra::Base
     (('a'..'z').to_a + ('A'..'Z').to_a).sample(3).join
   end
 
-  def regexp_ppc_order
-    @regexp_ppc_order ||= Regexp.new(Settings.regexp.order)
-  end
-
-  def regexp_ppc_order_item
-    @regexp_ppc_order_item ||= Regexp.new(Settings.regexp.order_item)
-  end
-
   def current_user
     @current_user ||= User.first(email: request.cookies["cookie_user_login_state"] || "")
   end
-  # action_logger
-  # current_user
+
   include Utils::ActionLogger
 
   # filter

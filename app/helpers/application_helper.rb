@@ -52,17 +52,23 @@
     "<title>%s</title>" % title
   end
 
-  def javascript_include_tag_with_cdn(filename)
-    if ENV["RACK_ENV"].eql?("production") && !filename.start_with?("http://", "https://")
-      filename = "http://7qnc6j.com1.z0.glb.clouddn.com/#{filename}"
+  def javascript_include_tag_with_cdn(file_name)
+    tag_with_cdn(:javascript_include_tag, file_name)
+  end
+  def stylesheet_link_tag_with_cdn(file_name) 
+    tag_with_cdn(:stylesheet_link_tag, file_name)
+  end
+  def image_tag_with_cdn(file_name)
+    tag_with_cdn(:image_tag, file_name)
+  end
+
+  def tag_with_cdn(method_name, file_name)
+    if ENV["RACK_ENV"].eql?("production") and 
+      !file_name.start_with?("http://", "https://")
+      
+      file_name = "#{Settings.cdn.qiniu.out_link}/#{File.basename(file_name)}"
     end
 
-    javascript_include_tag(filename)
-  end
-  def stylesheet_link_tag_with_cdn(filename) 
-    if ENV["RACK_ENV"].eql?("production") && !filename.start_with?("http://", "https://")
-      filename = "http://7qnc6j.com1.z0.glb.clouddn.com/#{filename}"
-    end
-    stylesheet_link_tag(filename)
+    send(method_name, file_name)
   end
 end

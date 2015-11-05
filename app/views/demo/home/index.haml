@@ -13,7 +13,7 @@
 
     = stylesheet_link_tag_with_cdn "http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"
     = stylesheet_link_tag_with_cdn "http://v3.bootcss.com/assets/css/docs.min.css"
-    = stylesheet_link_tag "demo-home"
+    = stylesheet_link_tag_with_cdn "demo-home.css"
 
     :css
       .link-no-hover:hover {text-decoration: none;}
@@ -31,7 +31,7 @@
           .col-xs-12
             .logotxt
               %h1
-                %a.link-no-hover{:href => "http://demo.solife.us"} 实验室
+                = link_to "实验室", "http://demo.solife.us", class: "link-no-hover"
             %h2.site-name.text-center
               Segment of life
               %span demo.solife.us

@@ -12,6 +12,6 @@ height_percent=$(echo "${expect_height}*100/${height}+1" | bc)
 resize_percent=$((width_percent > height_percent ? width_percent : height_percent))
 echo "${width_percent},${height_percent},${resize_percent}"
 
-convert -sample ${resize_percent}%x${resize_percent}%  ${image_path} ${image_path}@resize.png
+convert -sample ${resize_percent}%x${resize_percent}% -quality 100 ${image_path} ${image_path}@resize.png
 convert ${image_path}@resize.png -crop ${expect_width}x${expect_height}+0+0 ${image_path}@crop.png
 
