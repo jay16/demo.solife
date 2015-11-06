@@ -1,0 +1,271 @@
+!!! Strict
+%html
+  %head
+    %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}/
+    %link{href: "#{asset_link_with_cdn(Settings.website.favicon)}", rel: "shortcut icon"}
+    %title Highcharts Examples
+    = javascript_include_tag_with_cdn "jquery-2.1.1.min.js"
+    = javascript_include_tag_with_cdn "bootstrap.320.min.js"
+    = stylesheet_link_tag_with_cdn "bootstrap.320.min.css"
+    :css
+      a:hover { text-decoration: none; }
+      a:link { text-decoration: none; }
+  %body
+    .container
+      .row
+        .col-sm-10.col-sm-offset-1
+          .page-header
+            %h1 Highcharts Examples
+
+          #accordion.panel-group{"aria-multiselectable" => "true", :role => "tablist"}
+            .panel.panel-default
+              #headingOne.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a{"aria-controls" => "collapseOne", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOne", :role => "button"}
+                    Line charts 
+              #collapseOne.panel-collapse.collapse.in{"aria-labelledby" => "headingOne", :role => "tabpanel"}
+                .panel-body
+                  %ol
+                    %li
+                      %a{:href => "examples/line-basic/index.htm"} Basic line
+                    %li
+                      %a{:href => "examples/line-ajax/index.htm"} Ajax loaded data, clickable points
+                    %li
+                      %a{:href => "examples/line-labels/index.htm"} With data labels
+                    %li
+                      %a{:href => "examples/line-time-series/index.htm"} Time series, zoomable
+                    %li
+                      %a{:href => "examples/spline-inverted/index.htm"} Spline with inverted axes
+                    %li
+                      %a{:href => "examples/spline-symbols/index.htm"} Spline with symbols
+                    %li
+                      %a{:href => "examples/spline-plot-bands/index.htm"} Spline with plot bands
+                    %li
+                      %a{:href => "examples/spline-irregular-time/index.htm"} Time data with irregular intervals
+                    %li
+                      %a{:href => "examples/line-log-axis/index.htm"} Logarithmic axis
+            .panel.panel-default
+              #headingTwo.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a.collapsed{"aria-controls" => "collapseTwo", "aria-expanded" => "false", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseTwo", :role => "button"}
+                    Area charts
+              #collapseTwo.panel-collapse.collapse{"aria-labelledby" => "headingTwo", :role => "tabpanel"}
+                .panel-body
+                  %ul
+                    %li
+                      %a{:href => "examples/area-basic/index.htm"} Basic area
+                    %li
+                      %a{:href => "examples/area-negative/index.htm"} Area with negative values
+                    %li
+                      %a{:href => "examples/area-stacked/index.htm"} Stacked area
+                    %li
+                      %a{:href => "examples/area-stacked-percent/index.htm"} Percentage area
+                    %li
+                      %a{:href => "examples/area-missing/index.htm"} Area with missing points
+                    %li
+                      %a{:href => "examples/area-inverted/index.htm"} Inverted axes
+                    %li
+                      %a{:href => "examples/areaspline/index.htm"} Area-spline
+                    %li
+                      %a{:href => "examples/arearange/index.htm"} Area range
+                    %li
+                      %a{:href => "examples/arearange-line/index.htm"} Area range and line
+                    %li
+                      %a{:href => "examples/sparkline/index.htm"} Sparkline charts
+            .panel.panel-default
+              #headingThree.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a.collapsed{"aria-controls" => "collapseThree", "aria-expanded" => "false", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseThree", :role => "button"}
+                    Column and bar charts
+              #collapseThree.panel-collapse.collapse{"aria-labelledby" => "headingThree", :role => "tabpanel"}
+                .panel-body
+                  %ol
+                    %li
+                      %a{:href => "examples/bar-basic/index.htm"} Basic bar
+                    %li
+                      %a{:href => "examples/bar-stacked/index.htm"} Stacked bar
+                    %li
+                      %a{:href => "examples/bar-negative-stack/index.htm"} Bar with negative stack
+                    %li
+                      %a{:href => "examples/column-basic/index.htm"} Basic column
+                    %li
+                      %a{:href => "examples/column-negative/index.htm"} Column with negative values
+                    %li
+                      %a{:href => "examples/column-stacked/index.htm"} Stacked column
+                    %li
+                      %a{:href => "examples/column-stacked-and-grouped/index.htm"} Stacked and grouped column
+                    %li
+                      %a{:href => "examples/column-stacked-percent/index.htm"} Stacked percentage column
+                    %li
+                      %a{:href => "examples/column-rotated-labels/index.htm"} Column with rotated labels
+                    %li
+                      %a{:href => "examples/column-drilldown/index.htm"} Column with drilldown
+                    %li
+                      %a{:href => "examples/column-placement/index.htm"} Fixed placement columns
+                    %li
+                      %a{:href => "examples/column-parsed/index.htm"} Data defined in a HTML table
+                    %li
+                      %a{:href => "examples/columnrange/index.htm"} Column range
+
+            .panel.panel-default
+              #headingFour.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a.collapsed{"aria-controls" => "collapseFour", "aria-expanded" => "false", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseFour", :role => "button"}
+                    Pie charts
+              #collapseFour.panel-collapse.collapse{"aria-labelledby" => "headingFour", :role => "tabpanel"}
+                .panel-body
+                  %ol
+                    %li
+                      %a{:href => "examples/pie-basic/index.htm"} Pie chart
+                    %li
+                      %a{:href => "examples/pie-legend/index.htm"} Pie with legend
+                    %li
+                      %a{:href => "examples/pie-donut/index.htm"} Donut chart
+                    %li
+                      %a{:href => "examples/pie-semi-circle/index.htm"} Semi circle donut
+                    %li
+                      %a{:href => "examples/pie-drilldown/index.htm"} Pie with drilldown
+                    %li
+                      %a{:href => "examples/pie-gradient/index.htm"} Pie with gradient fill
+                    %li
+                      %a{:href => "examples/pie-monochrome/index.htm"} Pie with monochrome fill
+
+            .panel.panel-default
+              #headingFive.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a.collapsed{"aria-controls" => "collapseFive", "aria-expanded" => "false", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseFive", :role => "button"}
+                    Scatter and bubble charts
+              #collapseFive.panel-collapse.collapse{"aria-labelledby" => "headingFive", :role => "tabpanel"}
+                .panel-body
+                  %ol
+                    %li
+                      %a{:href => "examples/scatter/index.htm"} Scatter plot
+                    %li
+                      %a{:href => "examples/bubble/index.htm"} Bubble chart
+                    %li
+                      %a{:href => "examples/bubble-3d/index.htm"} 3D bubbles
+
+            .panel.panel-default
+              #headingSix.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a.collapsed{"aria-controls" => "collapseSix", "aria-expanded" => "false", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseSix", :role => "button"}
+                    Combinations
+              #collapseSix.panel-collapse.collapse{"aria-labelledby" => "headingSix", :role => "tabpanel"}
+                .panel-body   
+                  %ol
+                    %li
+                      %a{:href => "examples/synchronized-charts/index.htm"} Synchronized charts
+                    %li
+                      %a{:href => "examples/combo/index.htm"} Column, line and pie
+                    %li
+                      %a{:href => "examples/combo-dual-axes/index.htm"} Dual axes, line and column
+                    %li
+                      %a{:href => "examples/combo-multi-axes/index.htm"} Multiple axes
+                    %li
+                      %a{:href => "examples/combo-regression/index.htm"} Scatter with regression line
+                    %li
+                      %a{:href => "examples/combo-meteogram/index.htm"} Meteogram
+                    %li
+                      %a{:href => "examples/combo-timeline/index.htm"} Advanced timeline
+
+            .panel.panel-default
+              #headingSeven.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a.collapsed{"aria-controls" => "collapseSeven", "aria-expanded" => "false", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseSeven", :role => "button"}
+                    Dynamic charts
+              #collapseSeven.panel-collapse.collapse{"aria-labelledby" => "headingSeven", :role => "tabpanel"}
+                .panel-body   
+                  %ol
+                    %li
+                      %a{:href => "examples/dynamic-update/index.htm"} Spline updating each second
+                    %li
+                      %a{:href => "examples/dynamic-click-to-add/index.htm"} Click to add a point
+                    %li
+                      %a{:href => "examples/dynamic-master-detail/index.htm"} Master-detail chart
+            .panel.panel-default
+              #headingEight.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a.collapsed{"aria-controls" => "collapseEight", "aria-expanded" => "false", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseEight", :role => "button"}
+                    3D charts
+              #collapseEight.panel-collapse.collapse{"aria-labelledby" => "headingEight", :role => "tabpanel"}
+                .panel-body  
+                  %ol
+                    %li
+                      %a{:href => "examples/3d-column-interactive/index.htm"} 3D column
+                    %li
+                      %a{:href => "examples/3d-column-null-values/index.htm"} 3D column with null and 0 values
+                    %li
+                      %a{:href => "examples/3d-column-stacking-grouping/index.htm"} 3D column with stacking and grouping
+                    %li
+                      %a{:href => "examples/3d-pie/index.htm"} 3D pie
+                    %li
+                      %a{:href => "examples/3d-pie-donut/index.htm"} 3D donut
+                    %li
+                      %a{:href => "examples/3d-scatter-draggable/index.htm"} 3D scatter chart
+
+            .panel.panel-default
+              #headingNine.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a.collapsed{"aria-controls" => "collapseNine", "aria-expanded" => "false", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseNine", :role => "button"}
+                    Gauges
+              #collapseNine.panel-collapse.collapse{"aria-labelledby" => "headingNine", :role => "tabpanel"}
+                .panel-body  
+                  %ol
+                    %li
+                      %a{:href => "examples/gauge-speedometer/index.htm"} Angular gauge
+                    %li
+                      %a{:href => "examples/gauge-solid/index.htm"} Solid gauge
+                    %li
+                      %a{:href => "examples/gauge-clock/index.htm"} Clock
+                    %li
+                      %a{:href => "examples/gauge-dual/index.htm"} Gauge with dual axes
+                    %li
+                      %a{:href => "examples/gauge-vu-meter/index.htm"} VU meter
+
+            .panel.panel-default
+              #headingTen.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a.collapsed{"aria-controls" => "collapseTen", "aria-expanded" => "false", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseTen", :role => "button"}
+                    Heat and tree maps
+              #collapseTen.panel-collapse.collapse{"aria-labelledby" => "headingTen", :role => "tabpanel"}
+                .panel-body  
+                  %ol
+                    %li
+                      %a{:href => "examples/heatmap/index.htm"} Heat map
+                    %li
+                      %a{:href => "examples/heatmap-canvas/index.htm"} Large heat map
+                    %li
+                      %a{:href => "examples/treemap-coloraxis/index.htm"} Tree map with color axis
+                    %li
+                      %a{:href => "examples/treemap-with-levels/index.htm"} Tree map with levels
+                    %li
+                      %a{:href => "examples/treemap-large-dataset/index.htm"} Large tree map
+
+            .panel.panel-default
+              #headingEleven.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a.collapsed{"aria-controls" => "collapseEvelen", "aria-expanded" => "false", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseEvelen", :role => "button"}
+                    More chart types
+              #collapseEvelen.panel-collapse.collapse{"aria-labelledby" => "headingEleven", :role => "tabpanel"}
+                .panel-body  
+                  %ol
+                    %li
+                      %a{:href => "examples/polar/index.htm"} Polar chart
+                    %li
+                      %a{:href => "examples/polar-spider/index.htm"} Spiderweb
+                    %li
+                      %a{:href => "examples/polar-wind-rose/index.htm"} Wind rose
+                    %li
+                      %a{:href => "examples/box-plot/index.htm"} Box plot
+                    %li
+                      %a{:href => "examples/error-bar/index.htm"} Error bar
+                    %li
+                      %a{:href => "examples/waterfall/index.htm"} Waterfall
+                    %li
+                      %a{:href => "examples/funnel/index.htm"} Funnel chart
+                    %li
+                      %a{:href => "examples/pyramid/index.htm"} Pyramid chart
+                    %li
+                      %a{:href => "examples/polygon/index.htm"} Polygon series
+                    %li
+                      %a{:href => "examples/renderer/index.htm"} General drawing

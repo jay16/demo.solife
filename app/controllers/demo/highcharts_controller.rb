@@ -9,10 +9,12 @@ class Demo::HighchartsController < Demo::ApplicationController
   end
 
   get "/examples" do
-    render_url_with_cache("index.htm")
+    haml :examples
   end
+
   get "/examples/*" do
     filename = params[:splat].join.gsub("/","_")
+    
     render_url_with_cache(filename)
   end
 
