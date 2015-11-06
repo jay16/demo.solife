@@ -7,7 +7,7 @@
     %meta{name: "renderer", content:"webkit"}
     %meta{"http-equiv" => "X-UA-Compatible", content: "IE=edge"}
     %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
-    %link{href: "/images/favicon-demo.ico", rel: "shortcut icon"}
+    %link{href: "#{asset_link_with_cdn('/images/favicon-demo.ico')}", rel: "shortcut icon"}
     %meta{name: "keywords", content: "#{@meta_keywords}"}
     %meta{name: "description", content: "#{@meta_description}"}
 
@@ -25,7 +25,7 @@
       };
 
   %body
-    .header{:style => "background-image: url(/images/iterm2-cmatrix.png);"}
+    .header{:style => "background-image: url(#{asset_link_with_cdn('/images/iterm2-cmatrix.png')});"}
       .container
         .row
           .col-xs-12
@@ -45,10 +45,10 @@
             .col-xs-12.col-md-6
               %article.post.tag-ad
                 %h2.post-title
-                  %a.link-no-hover.post-href{:href => item["href"], :target => "_self"}= item["text"]
+                  %a.link-no-hover.post-href{href: item["href"], target: "_self"}= item["text"]
                 .post-featured-image
-                  %a.post-href.thumbnail{:href => item["href"], :target => item["target"]}
-                    %img{:alt => item["text"], :height => "600", :onload => "imgLoaded(this)", :src => "images/#{item['thumbnail']}", :width => "800"}/
+                  %a.post-href.thumbnail{href: item["href"], target: item["target"]}
+                    %img{src: "#{asset_link_with_cdn('images/'+item['thumbnail'])}", alt: item["text"], height: "600", width: "800", onload: "imgLoaded(this)"}/
 
     .submit-site
       .container
@@ -87,7 +87,7 @@
             .widget
               %h4.title 赞助商
               .content.friend-links
-                %a{:href => "", :title => "私房钱"} 不可言说
+                %a{href: "", title: "私房钱"} 不可言说
 
     = javascript_include_tag_with_cdn "jquery-2.1.1.min.js"
     :javascript

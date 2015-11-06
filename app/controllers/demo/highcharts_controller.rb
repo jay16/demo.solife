@@ -9,17 +9,26 @@ class Demo::HighchartsController < Demo::ApplicationController
   end
 
   get "/examples" do
-    render_url_as_template("index.htm")
+    render_url_with_cache("index.htm")
   end
   get "/examples/*" do
     filename = params[:splat].join.gsub("/","_")
-    render_url_as_template(filename)
+    render_url_with_cache(filename)
   end
 
-  def render_url_as_template(filename)
-    qiniu_url = File.join(Settings.cdn.qiniu.out_link, filename)
+  def render_url_with_cache(filename)
+    filepath = File.join(ENV["APP_ROOT_PATH"], "tmp", filename)
 
-    response = HTTParty.get(qiniu_url)
-    response.body
+    unless File.exist?(filepath)
+      qiniu_url = File.join(Settings.cdn.qiniu.out_link, filename)
+      response = HTTParty.get(qiniu_url)
+      
+      File.open(filepath, "w:utf-8") { |file| 
+        file.puts(response.body.force_encoding("UTF-8"))
+      }
+      response.body
+    end
+
+    IO.read(filepath)
   end
 end

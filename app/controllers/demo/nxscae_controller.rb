@@ -10,7 +10,7 @@ class Demo::NxscaeController < Demo::ApplicationController
 
   # get /demo/nxscae
   get "/" do
-    @local_latest_update = NxscaeCache.last.updated_at.strftime("%Y/%m/%d %H:%M:%S")
+    @local_latest_update = (NxscaeCache.last.updated_at rescue Time.now).strftime("%Y/%m/%d %H:%M:%S")
     #last_modified @local_latest_update
     #etag  md5_key(@local_latest_update)
     #@nxscae_models = NxscaeModel.all(:high_price.lt => 2000, :order => :cur_price.desc) #:fullname => ["虎首小铜章", "羊年小铜章","鸡首铜章"], 

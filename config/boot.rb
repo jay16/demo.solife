@@ -6,6 +6,7 @@ root_path = File.dirname(File.dirname(__FILE__))
 ENV["APP_NAME"]  ||= "solife-demo"
 ENV["RACK_ENV"]  ||= "development"
 ENV["ASSET_CDN"] ||= "false"
+ENV["STARTUP"]       = Time.now.to_s
 ENV["VIEW_PATH"]     = "%s/app/views" % root_path
 ENV["APP_ROOT_PATH"] = root_path
 

@@ -51,24 +51,33 @@
     end
     "<title>%s</title>" % title
   end
-
-  def javascript_include_tag_with_cdn(file_name)
-    tag_with_cdn(:javascript_include_tag, file_name)
-  end
-  def stylesheet_link_tag_with_cdn(file_name) 
-    tag_with_cdn(:stylesheet_link_tag, file_name)
-  end
-  def image_tag_with_cdn(file_name)
-    tag_with_cdn(:image_tag, file_name)
-  end
-
-  def tag_with_cdn(method_name, file_name)
+ 
+  def asset_link_with_cdn(filepath)
     if ENV["RACK_ENV"].eql?("production") and 
-      !file_name.start_with?("http://", "https://")
+      !filepath.start_with?("http://", "https://")
       
-      file_name = "#{Settings.cdn.qiniu.out_link}/#{File.basename(file_name)}"
+      filepath = "#{Settings.cdn.qiniu.out_link}/#{File.basename(filepath)}"
+    end
+    filepath
+  end
+
+  def javascript_include_tag_with_cdn(filepath)
+    tag_with_cdn(:javascript_include_tag, filepath)
+  end
+  def stylesheet_link_tag_with_cdn(filepath) 
+    tag_with_cdn(:stylesheet_link_tag, filepath)
+  end
+  def image_tag_with_cdn(filepath)
+    tag_with_cdn(:image_tag, filepath)
+  end
+
+  def tag_with_cdn(method_name, filepath)
+    if ENV["RACK_ENV"].eql?("production") and 
+      !filepath.start_with?("http://", "https://")
+      
+      filepath = "#{Settings.cdn.qiniu.out_link}/#{File.basename(filepath)}"
     end
 
-    send(method_name, file_name)
+    send(method_name, filepath)
   end
 end

@@ -11,9 +11,10 @@ class Demo::HomeController < Demo::ApplicationController
   get "/" do
     json_path = File.join(ENV["APP_ROOT_PATH"], "config/demo-home.json")
 
-    mtime = File.mtime(json_path)
-    last_modified mtime.to_s
-    etag md5_key(mtime.to_s)
+    mtime = File.mtime(json_path).to_s
+    mtime = ENV["STARTUP"] > mtime ? ENV["STARTUP"] : mtime;
+    last_modified mtime
+    etag md5_key(mtime)
     
     @demo_items = JSON.parse(IO.read(json_path))
 

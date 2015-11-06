@@ -154,6 +154,6 @@ class ApplicationController < Sinatra::Base
 
   # 404 page
   not_found do
-    haml :"shared/not_found", layout: :"layouts/layout", views: ENV["VIEW_PATH"]
+    haml :"shared/not_found", views: ENV["VIEW_PATH"]#, layout: :"layouts/layout"
   end
 end

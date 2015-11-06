@@ -70,11 +70,7 @@ namespace :qiniu do
       today = Time.now.strftime("%Y%m%d")
       Dir.glob(assets_path + "/*/*").each do |asset_file_path|
         if File.file?(asset_file_path)
-          if File.mtime(asset_file_path).strftime("%Y%m%d").eql?(today)
             upload_file_2_qiniu(asset_file_path)
-          else
-            puts "NOT Upload For NOT Modified Today: #{asset_file_path}"
-          end
         else
           puts "NOT File: #{asset_file_path}"
         end

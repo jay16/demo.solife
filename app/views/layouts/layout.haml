@@ -7,7 +7,7 @@
     %meta{name: "renderer", content:"webkit"}
     %meta{"http-equiv" => "X-UA-Compatible", content: "IE=edge"}
     %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
-    %link{href: "#{Settings.website.favicon}", rel: "shortcut icon"}
+    %link{href: "#{asset_link_with_cdn(Settings.website.favicon)}", rel: "shortcut icon"}
     %meta{name: "keywords", content: "#{@meta_keywords}"}
     %meta{name: "description", content: "#{@meta_description}"}
 
@@ -34,12 +34,12 @@
     = render_page_header
     .container#main
       .row
-        %div.thin-padding{class: "#{is_mobile ? 'col-sm-12' : 'col-sm-9 col-sm-offset-1'}", style: "text-align:center;"}
+        %div.thin-padding{class: "col-sm-10 col-sm-offset-1", style: "text-align:center;"}
           .loading.hidden 加载中...
           .row
             = flash_message
       .row
-        %div.thin-padding{class: "#{is_mobile ? 'col-sm-12' : 'col-sm-9 col-sm-offset-1'}"}
+        %div.thin-padding{class: "col-sm-10 col-sm-offset-1"}
           = yield
 
     .container#footer

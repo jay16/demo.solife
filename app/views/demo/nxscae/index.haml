@@ -1,13 +1,13 @@
 = javascript_include_tag_with_cdn "highcharts.js"
 = javascript_include_tag_with_cdn "angular.min.js"
-= javascript_include_tag "demo_nxscae_controller.js"
+= javascript_include_tag_with_cdn "demo_nxscae_controller.js"
 :css
-  @import url("/stylesheets/bootstrap-glyphicons.css")
+  @import url(/stylesheets/bootstrap-glyphicons.css)
 
 %h1 nxscae理财产品
 
 .alert.alert-warning.alert-dismissible{role: "alert"}
-  产品更新时间: #{NxscaeDayinfo.last.time}, 本地更新时间: #{@local_latest_update}
+  产品更新时间: #{NxscaeDayinfo.last.time rescue '-'}, 本地更新时间: #{@local_latest_update}
 
 %div#highchart_id
 
