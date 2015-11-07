@@ -3,18 +3,27 @@
     %h1 IOS 报表测试
     %h2 OC & Highcharts
 
-
+.row
+  %p.text-primary
+    测试Highchart作为移动端(IOS)报表，交互效果如何。
 
 .row
-  = link_to "Highcharts 官网", "http://www.highcharts.com/", target: "_blank"
-  %br
-  = link_to "Highcharts Demo下载", "https://www.highcharts.com/download", target: "_blank"
-  %br
-  =link_to "Highcharts Github", "https://github.com/highslide-software/highcharts.com", target: "_blank"
+  %h2 相关链接
+  .list-group
+
+    = link_to "APP 安装", "http://www.pgyer.com/hChart", target: "_blank", class: "list-group-item"
+    = link_to "Demo 站内演示", "highcharts/examples", class: "list-group-item"
+    = link_to "Highcharts 官网", "http://www.highcharts.com/", target: "_blank", class: "list-group-item"
+    = link_to "Highcharts Demo下载", "https://www.highcharts.com/download", target: "_blank", class: "list-group-item"
+    =link_to "Highcharts Github", "https://github.com/highslide-software/highcharts.com", target: "_blank", class: "list-group-item"
 
 .row
+  %h2 零碎笔记
+  %p.text-muted
+    Highcharts Demo中jquery使用google的cdn链接，甚为不便，批量替换为本地引用，打开速度轻盈许多。
   %pre
     :preserve
+        #!/bin/bash
         google="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"
         localfile="../../js/jquery-2.1.1.min.js"
     
@@ -35,6 +44,14 @@
         # 如无意外，删除备份
         # find $(pwd) -type f -name "*.bak.html" -exec rm {} \;
     
+  %p.text-muted
+    实例过多，添加到本站代码中，感觉太啰嗦。
+  %p.text-muted
+    使用cdn方式加载，七牛（免费用户）不支持多层文件夹引用，只好再写脚本，<code>/</code>替换为<code>_</code>,文件路径就成为文件名的一部分.
+    遗憾的是，引用的<code>js</code>文件添加到站点代码中了...
+  %pre
+    :preserve
+        #!/bin/bash
         ## step 2
         #  tranverse folders to flatten files
     
