@@ -31,9 +31,6 @@ namespace :remote do
         puts "\n"
       end
 
-      command = "cd %s && rm -fr tmp/" % remote_root_path
-      execute!(ssh, command)
-
       command = "cd %s && /bin/sh unicorn.sh restart" % remote_root_path
       execute!(ssh, command)
 

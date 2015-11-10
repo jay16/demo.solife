@@ -57,6 +57,7 @@ case "$1" in
         test -d tmp || mkdir -p tmp/pids
         test -d public/callbacks || mkdir -p public/callbacks
         test -d public/change_logs || mkdir -p public/change_logs
+        rm tmp/*.{htm,html,zip} > /dev/null 2>&1
 
         echo "## start unicorn"
         echo -e "\t# port: ${PORT} \n\t environment: ${ENVIRONMENT}"
