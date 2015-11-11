@@ -13,6 +13,8 @@ class Demo::OpenfindController < Demo::ApplicationController
 
   # Get /demo/openfind
   get "/" do
+    cache_with_mtime("index")
+    
     haml :index, layout: settings.layout
   end
 
@@ -142,5 +144,10 @@ class Demo::OpenfindController < Demo::ApplicationController
 
     book.write xls_report
     xls_report.string
+  end
+
+
+  def cache_with_mtime(pagename)
+    cache_with_custom_defined(File.join(settings.views, "#{pagename}.haml"))
   end
 end

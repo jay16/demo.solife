@@ -4,12 +4,11 @@ require 'digest/md5'
 require "sinatra/decompile"
 require 'sinatra/advanced_routes'
 require "sinatra/multi_route"
-require 'rack-mini-profiler'
+# require 'rack-mini-profiler'
 class ApplicationController < Sinatra::Base
-  use Rack::MiniProfiler
-  Rack::MiniProfiler.config.position = 'right'
-  Rack::MiniProfiler.config.start_hidden = false
-
+  # use Rack::MiniProfiler
+  # Rack::MiniProfiler.config.position = 'right'
+  # Rack::MiniProfiler.config.start_hidden = false
 
   register Sinatra::Reloader if development? or test?
   register Sinatra::Flash
@@ -31,7 +30,12 @@ class ApplicationController < Sinatra::Base
   use AssetHandler
 
   set :root, ENV["APP_ROOT_PATH"]
-  enable :sessions, :logging, :dump_errors, :raise_errors, :static, :method_override
+  set :startup_time, Time.now
+  enable :sessions, :logging, :static, :method_override
+
+  if !ENV["RACK_ENV"].eql?("production")
+    enable :dump_errors, :raise_errors, :show_exceptions
+  end
 
   before do
     @request_body = request_body
@@ -82,37 +86,16 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-  # format gem#dm-validations errors info
-  def format_dv_errors(model)
-    errors = []
-    model.errors.each_pair do |key, value|
-      errors.push({ key => value })
-    end
-    return errors
-  end
-
   def print_format_logger
     request_info = @request_body.empty? ? %Q{Request:\n #{@request_body }} : ""
-    log_info = (<<-EOF).gsub(/^ {6}/, '')
+    log_info = <<-EOF.strip_heredoc
       #{request.request_method} #{request.path} for #{request.ip} at #{Time.now.to_s}
-      Parameters:\n #{@params.to_s}
+      Parameters:
+        #{@params.to_s}
       #{request_info}
     EOF
     puts log_info
     logger.info log_info
-  end
-
-  # 遍历params寻找二级hash
-  def grep_params_model(hash)
-    models  = %w[user package order track campaign]
-    model = hash.inject([]) do |sum, _hash|
-      key, value = _hash
-      sum.push(key) if key and value.is_a?(Hash)
-      sum
-    end.uniq.first
-    if model and models.include?(model)
-      return model
-    end
   end
 
   def request_body(body = request.body)
@@ -136,10 +119,6 @@ class ApplicationController < Sinatra::Base
     e.message
   end
 
-  def print_query_sql(collection)
-    #logger.info %Q(\nSQL:\n %s\n) % DataMapper.repository.adapter.send(:select_statement,collection.query).join(" ")
-  end
-
   def respond_with_json hash, code = nil
     content_type "application/json;charset=utf-8"
     body   hash.to_json
@@ -147,9 +126,23 @@ class ApplicationController < Sinatra::Base
   end
 
   def set_seo_meta(title = '',meta_keywords = '', meta_description = '')
-    @page_title = title
-    @meta_keywords = meta_keywords
+    @page_title       = title
+    @meta_keywords    = meta_keywords
     @meta_description = meta_description
+  end
+
+  def app_root_join(path)
+    File.join(settings.root, path)
+  end
+
+  def cache_with_custom_defined(filepath)
+    if File.exist?(filepath) and ENV["RACK_ENV"].eql?("production")
+      mtime = File.mtime(filepath)
+      mtime = settings.startup_time > mtime ? settings.startup_time : mtime;
+
+      last_modified mtime
+      etag md5_key(mtime.to_s)
+    end
   end
 
   # 404 page

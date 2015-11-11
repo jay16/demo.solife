@@ -2,7 +2,7 @@
 module StringMethods
   def self.included(base)
     base.class_eval do
-      [:process_pattern,:process_consume, :cn_convert_num].each do |method_name|
+      [:strip_heredoc, :process_pattern,:process_consume, :cn_convert_num].each do |method_name|
         next unless method_defined?(method_name)
         location = self.method(method_name).source_location rescue next
         next if location[0] == __FILE__
@@ -11,6 +11,28 @@ module StringMethods
         remove_method method_name
       end
     end
+  end
+
+  # Strips indentation in heredocs.
+  #
+  # For example in
+  #
+  #   if options[:usage]
+  #     puts <<-USAGE.strip_heredoc
+  #       This command does such and such.
+  #
+  #       Supported options are:
+  #         -h         This message
+  #         ...
+  #     USAGE
+  #   end
+  #
+  # the user would see the usage message aligned against the left margin.
+  #
+  # Technically, it looks for the least indented non-empty line
+  # in the whole string, and removes that amount of leading whitespace.
+  def strip_heredoc
+    gsub(/^#{scan(/^[ \t]*(?=\S)/).min}/, ''.freeze)
   end
 
   def process_pattern

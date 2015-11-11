@@ -9,13 +9,18 @@ class Demo::PdfJSController < Demo::ApplicationController
 
   # get /demo/pdfjs
   get "/" do
-    etag md5_key("/demo/pdfjs static control")
+    cache_with_mtime("index")
 
     haml :index, layout: settings.layout
   end
  
   # for pdfJS
   get "/:file.pdf" do
-    send_file File.join(ENV["APP_ROOT_PATH"], "app/views/demo/pdf_js/iSearch.pdf")
+    send_file File.join(settings.views, "iSearch.pdf")
+  end
+
+
+  def cache_with_mtime(pagename)
+    cache_with_custom_defined(File.join(settings.views, "#{pagename}.haml"))
   end
 end

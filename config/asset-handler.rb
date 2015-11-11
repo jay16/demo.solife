@@ -49,7 +49,6 @@ class AssetHandler < Sinatra::Base
 
   configure do
     enable :logging, :static, :sessions 
-    enable :dump_errors, :raise_errors, :show_exceptions
     enable :method_override
     enable :coffeescript
 
@@ -57,7 +56,6 @@ class AssetHandler < Sinatra::Base
     #logger_file = File.join(ENV["APP_ROOT_PATH"], "log/#{ENV["RACK_ENV"]}.log")
     #logger = ::Logger.new(::File.new(logger_file, "a+"))
     #use Rack::CommonLogger, logger
-
 
     set :root,  ENV["APP_ROOT_PATH"]
     set :views, ENV["VIEW_PATH"]
@@ -68,8 +66,8 @@ class AssetHandler < Sinatra::Base
     #set :erb, :layout_engine => :erb, :layout => :layout
     set :haml, :layout_engine => :haml, :layout => :"/app/views/layouts/layout"
     set :cssengine, "css"
-  
   end 
+  
   # 加载数据库及model
   require "database.rb"
 end

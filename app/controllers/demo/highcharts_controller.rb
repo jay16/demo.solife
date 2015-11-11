@@ -5,15 +5,19 @@ class Demo::HighchartsController < Demo::ApplicationController
 
   # get /demo/highcharts
   get "/" do
-     haml :index, layout: settings.layout
+    cache_with_mtime("index")
+
+    haml :index, layout: settings.layout
   end
 
   get "/examples" do
+    cache_with_mtime("examples")
+
     haml :examples
   end
 
   get "/examples/local_demos" do
-    json_path = File.join(ENV["APP_ROOT_PATH"], "config/demo-highcharts.json")
+    json_path = app_root_join("config/demo-highcharts.json")
     hash = JSON.parse(IO.read(json_path))
 
     respond_with_json hash, 200
@@ -27,7 +31,7 @@ class Demo::HighchartsController < Demo::ApplicationController
 
 
   def render_url_with_cache(filename)
-    filepath = File.join(ENV["APP_ROOT_PATH"], "tmp", filename)
+    filepath = app_root_join("tmp/" + filename)
 
     unless File.exist?(filepath)
       qiniu_url = File.join(Settings.cdn.qiniu.out_link, filename)
@@ -51,5 +55,9 @@ class Demo::HighchartsController < Demo::ApplicationController
     end
 
     IO.read(filepath)
+  end
+
+  def cache_with_mtime(pagename)
+    cache_with_custom_defined(File.join(settings.views, "#{pagename}.haml"))
   end
 end

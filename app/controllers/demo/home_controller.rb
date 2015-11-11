@@ -9,13 +9,9 @@ class Demo::HomeController < Demo::ApplicationController
 
   # /demo
   get "/" do
-    json_path = File.join(ENV["APP_ROOT_PATH"], "config/demo-home.json")
+    json_path = app_root_join("config/demo-home.json")
 
-    mtime = File.mtime(json_path).to_s
-    mtime = ENV["STARTUP"] > mtime ? ENV["STARTUP"] : mtime;
-    last_modified mtime
-    etag md5_key(mtime)
-    
+    cache_with_custom_defined(json_path)
     @demo_items = JSON.parse(IO.read(json_path))
 
     haml :index
@@ -39,7 +35,7 @@ class Demo::HomeController < Demo::ApplicationController
         return
       end  
 
-      filepath = File.join(ENV["APP_ROOT_PATH"], "tmp", filename)
+      filepath = app_root_join("tmp/" + filename)
       File.open(filepath, 'wb') {|f| f.write tempfile.read }  
 
       if File.exist?(filepath)
