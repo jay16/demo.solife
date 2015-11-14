@@ -1,0 +1,60 @@
+!!! Strict
+%html
+  %head
+    %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}/
+    %link{href: "#{asset_link_with_cdn(Settings.website.favicon)}", rel: "shortcut icon"}
+    %title Highcharts Examples
+    = javascript_include_tag_with_cdn "jquery.min.js"
+    = javascript_include_tag_with_cdn "bootstrap.min.js"
+    = stylesheet_link_tag_with_cdn "bootstrap.min.css"
+    :css
+      a:hover { text-decoration: none; }
+      a:link { text-decoration: none; }
+      .string { color: green; }
+      .number { color: darkorange; }
+      .boolean { color: blue; }
+      .null { color: magenta; }
+      .key { color: red; }
+  %body
+    %nav.navbar.navbar-default#pageSetting
+      .container
+        .navbar-header
+          %a.navbar-brand Setting
+        .collapse.navbar-collapse
+          %ul.nav.navbar-nav
+            %li#navBtnRefresh
+          %ul.nav.navbar-nav.navbar-right
+            %li
+              = link_to "Back", "/demo/highcharts/examples"
+           
+    .container
+      .row
+        .col-sm-10.col-sm-offset-1
+          #accordion.panel-group{"aria-multiselectable" => "true", :role => "tablist"}
+            .panel.panel-default
+              #headingOne.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a{"aria-controls" => "collapseOne", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOne", :role => "button"}
+                    Cached Domains 
+              #collapseOne.panel-collapse.collapse.in{"aria-labelledby" => "headingOne", :role => "tabpanel"}
+                .panel-body
+                  %table.table.table-condensed.table-strip
+                    %thead
+                      %tr
+                        %td{width:"55%"} filename
+                        %td{width:"15%"} size
+                        %td{width:"15%"} action
+                        %td{width:"15%"} view
+                    %tbody#demoList
+
+            .panel.panel-default
+              #headingLog.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a{"aria-controls" => "collapseLog", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseLog", :role => "button"}
+                    TestLog 
+              #collapseLog.panel-collapse.collapse.in{"aria-labelledby" => "headingLog", :role => "tabpanel"}
+                .panel-body#log
+                 
+
+
+    = javascript_include_tag_with_cdn "demo_highcharts_ios.js"

@@ -25,8 +25,11 @@ class Demo::HighchartsController < Demo::ApplicationController
 
   get "/examples/*" do
     filename = params[:splat].join.gsub("/","_")
-    
-    render_url_with_cache(filename)
+    if filename.eql?("setting")
+      haml filename.to_sym
+    else
+      render_url_with_cache(filename)
+    end
   end
 
 

@@ -15,6 +15,7 @@ gem "sinatra-contrib", "~>1.4.2"
 gem "sinatra-flash", "~>0.3.0"
 gem "sinatra-advanced-routes", :require => "sinatra/advanced_routes"
 gem "sinatra-logger", "~>0.1.1"
+gem "sinatra-synchrony", "~>0.4.1"
 # This project is now part of sinatra-contrib.
 # gem "sinatra-reloader" 
 
@@ -60,6 +61,8 @@ group :development do
   gem "qiniu", "~>6.3.2"
   gem "net-ssh", "~>2.7.0"
   gem "net-scp", "~>1.2.1"
+  # gem "rack-livereload"
+  gem 'guard-livereload', '~> 2.4', require: false
 end
 group :test do
   gem 'hashie', '~>2.0'

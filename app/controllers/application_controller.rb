@@ -4,11 +4,13 @@ require 'digest/md5'
 require "sinatra/decompile"
 require 'sinatra/advanced_routes'
 require "sinatra/multi_route"
+# require 'rack-livereload'
 # require 'rack-mini-profiler'
 class ApplicationController < Sinatra::Base
   # use Rack::MiniProfiler
   # Rack::MiniProfiler.config.position = 'right'
   # Rack::MiniProfiler.config.start_hidden = false
+  # use Rack::LiveReload, :min_delay => 500
 
   register Sinatra::Reloader if development? or test?
   register Sinatra::Flash

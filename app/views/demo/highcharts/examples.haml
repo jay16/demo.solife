@@ -6,11 +6,20 @@
     %title Highcharts Examples
     = javascript_include_tag_with_cdn "jquery.min.js"
     = javascript_include_tag_with_cdn "bootstrap.min.js"
-    = stylesheet_link_tag_with_cdn "bootstrap.320.min.css"
+    = stylesheet_link_tag_with_cdn "bootstrap.min.css"
     :css
       a:hover { text-decoration: none; }
       a:link { text-decoration: none; }
   %body
+    %nav.navbar.navbar-default#pageHome
+      .container
+        .collapse.navbar-collapse
+          %ul.nav.navbar-nav
+            %li#navBtnRefresh
+          %ul.nav.navbar-nav.navbar-right
+            %li
+              = link_to "Setting", "/demo/highcharts/examples/setting"
+           
     .container
       .row
         .col-sm-10.col-sm-offset-1
@@ -18,6 +27,14 @@
             %h1 Highcharts Examples
 
           #accordion.panel-group{"aria-multiselectable" => "true", :role => "tablist"}
+            .panel.panel-default
+              #headingLog.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a{"aria-controls" => "collapseLog", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseLog", :role => "button"}
+                    TestLog 
+              #collapseLog.panel-collapse.collapse.in{"aria-labelledby" => "headingLog", :role => "tabpanel"}
+                .panel-body#log
+
             .panel.panel-default
               #headingOne.panel-heading{:role => "tab"}
                 %h4.panel-title
@@ -269,3 +286,6 @@
                       %a{:href => "examples/polygon/index.htm"} Polygon series
                     %li
                       %a{:href => "examples/renderer/index.htm"} General drawing
+
+
+    = javascript_include_tag_with_cdn "demo_highcharts_ios.js"
