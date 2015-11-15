@@ -29,7 +29,7 @@ window.IOSBridge = {
     var log = document.getElementById('log')
     var el = document.createElement('div')
     el.className = 'logLine'
-    el.innerHTML = message + ':<br/><pre>' + Pretty.syntaxHighlight(JSON.stringify(data, undefined, 4)) + '</pre>';
+    el.innerHTML = new Date().toTimeString() + " - " + message + ':<br/><pre>' + Pretty.syntaxHighlight(JSON.stringify(data, undefined, 4)) + '</pre>';
     if (log.children.length) { 
       log.insertBefore(el, log.children[0]) 
     }
@@ -55,7 +55,7 @@ window.IOSBridge = {
         
         for(var i = 0; i < response.datalist.length; i++) {
           var data = response.datalist[i]
-          IOSBridge.log("response item", data)
+          IOSBridge.log("response", data)
           var tr = document.createElement("tr")
           if(data.isLocal === "1") {
             tr.innerHTML = "<td>" + data.filename + "</td><td>"+data.filesize+"</td><td><a class='btn btn-xs btn-danger' onclick='IOSBridge.removeDemo(\"" + data.filename+"\",\"" + data.filepath + "\",\"" + data.filesize+"\");'>remove<a></td><td><a class='btn btn-xs btn-info' onclick='IOSBridge.viewDemo(\""+data.filepath+"\");'>view</a></td>"
@@ -110,20 +110,18 @@ IOSBridge.connectWebViewJavascriptBridge(function(bridge) {
     responseCallback(responseData)
   })
 
-  var pageHome = document.getElementById('pageHome');
-  if(pageHome !== null) {
-    var button = document.getElementById('navBtnRefresh');
-    if(button !== null) {
-        var link = document.createElement('a');
-        button.appendChild(link);
-        link.innerHTML = 'Refresh'
-        link.onclick = function(e) {
-          e.preventDefault()
-          bridge.callHandler('iosCallback', {'action': 'refresh'}, function(response) {
-            IOSBridge.log('JS got response', response)
-          })
-        }
-    }
+
+  var button = document.getElementById('navBtnRefresh');
+  if(button !== null) {
+      var link = document.createElement('a');
+      button.appendChild(link);
+      link.innerHTML = 'Refresh'
+      link.onclick = function(e) {
+        e.preventDefault()
+        bridge.callHandler('iosCallback', {'action': 'refresh'}, function(response) {
+          IOSBridge.log('JS got response', response)
+        })
+      }
   }
 
   var pageSetting = document.getElementById('pageSetting');
