@@ -16,7 +16,10 @@
     = stylesheet_link_tag_with_cdn "demo-home.css"
 
     :css
-      .link-no-hover:hover {text-decoration: none;}
+      .link-no-hover:hover,
+      .link-no-hover:visited,
+      .link-no-hover:link,
+      .link-no-hover:active {text-decoration: none;}
 
     :javascript
       function imgLoaded(img) {
@@ -31,12 +34,12 @@
           .col-xs-12
             .logotxt
               %h1
-                = link_to "实验室", "http://demo.solife.us", class: "link-no-hover"
-            %h2.site-name.text-center
-              Segment of life
+                = link_to "Segment of life", "javascript:void(0);", class: "link-no-hover"
+            %h2.site-name.text-center.typed-quotes
+              熟悉的地方没有风景
               %span demo.solife.us
 
-        %span{class:"bs-docs-booticon bs-docs-booticon-lg bs-docs-booticon-outline",style: "color:white;background:#062E39; margin:0 auto 30px;width:100px;height:100px;font-size:80px;line-height:100px;margin-bottom:-100px;"} Y
+        %span{class:"bs-docs-booticon bs-docs-booticon-lg bs-docs-booticon-outline",style: "color:white;background:#062E39; margin:0 auto 30px;width:100px;height:100px;font-size:80px;line-height:100px;margin-bottom:-100px;", onclick: "DemoHome.toggleSkeleton();"} Y
 
     %main.main{:role => "main"}
       .container
@@ -90,13 +93,8 @@
                 %a{href: "", title: "私房钱"} 不可言说
 
     = javascript_include_tag_with_cdn "jquery.min.js"
-    :javascript
-      $(function(){
-        var pathname = window.location.pathname;
-        $(".post-href").each(function(){
-          var href = $(this).attr('href');
-          if(!/^http:\/\/|^https:\/\//.test(href)) {
-            $(this).attr("href", (pathname +href).replace("//", "/"));
-          }
-        });
-      })
+    = javascript_include_tag_with_cdn "typed.js"
+    = javascript_include_tag_with_cdn "demo_home.js"
+
+
+

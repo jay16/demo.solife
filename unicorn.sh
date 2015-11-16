@@ -12,10 +12,11 @@ shell_used=${SHELL##*/}
 if [[ "${shell_used}" == "sh" ]]; 
 then 
 	shell_used="bash"; 
+    [ -f ~/.${shell_used}_profile ] && source ~/.${shell_used}_profile &> /dev/null
 fi
 echo "## shell used: ${shell_used}"
-[ -f ~/.${shell_used}_profile ] && source ~/.${shell_used}_profile &> /dev/null
 [ -f ~/.${shell_used}rc ] && source ~/.${shell_used}rc &> /dev/null
+
 export LANG=zh_CN.UTF-8
 
 # put below config lines added to ~/.bashrc to make 
