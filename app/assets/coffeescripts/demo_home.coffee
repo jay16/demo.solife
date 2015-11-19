@@ -7,10 +7,10 @@ window.DemoHome =
       a.style.outline = (if width > 0 then (width + "px solid #" + (~~(Math.random() * (1 << 24))).toString(16)) else "none")
 
   toggleSkeleton: () ->
-    if typeof ($.timerShowSkeleton) is "undefined" or $.timerShowSkeleton is null
-      $.timerShowSkeleton = self.setInterval("DemoHome.showSkeleton(1)", 500)
+    if typeof (DemoHome.timerShowSkeleton) is "undefined" or DemoHome.timerShowSkeleton is null
+      DemoHome.timerShowSkeleton = self.setInterval("DemoHome.showSkeleton(1)", 500)
     else
-      $.timerShowSkeleton = window.clearInterval($.timerShowSkeleton)
+      DemoHome.timerShowSkeleton = window.clearInterval(DemoHome.timerShowSkeleton)
       DemoHome.showSkeleton 0
 
 

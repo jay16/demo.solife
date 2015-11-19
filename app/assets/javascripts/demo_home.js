@@ -7,10 +7,10 @@
       });
     },
     toggleSkeleton: function() {
-      if (typeof $.timerShowSkeleton === "undefined" || $.timerShowSkeleton === null) {
-        return $.timerShowSkeleton = self.setInterval("DemoHome.showSkeleton(1)", 500);
+      if (typeof DemoHome.timerShowSkeleton === "undefined" || DemoHome.timerShowSkeleton === null) {
+        return DemoHome.timerShowSkeleton = self.setInterval("DemoHome.showSkeleton(1)", 500);
       } else {
-        $.timerShowSkeleton = window.clearInterval($.timerShowSkeleton);
+        DemoHome.timerShowSkeleton = window.clearInterval(DemoHome.timerShowSkeleton);
         return DemoHome.showSkeleton(0);
       }
     }
