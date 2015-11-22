@@ -21,9 +21,9 @@
         .navbar-header
           %a.navbar-brand SOLife
         .collapse.navbar-collapse
-          %ul.nav.navbar-nav
           %ul.nav.navbar-nav.navbar-right
-            %li#navBtnRefresh
+            %li
+              %a#refresh Refresh
            
     .container
       .row
@@ -53,6 +53,7 @@
                 %h4.panel-title
                   %a{"aria-controls" => "collapseLog", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseLog", :role => "button"}
                     IOS Log 
+                  %a{style:"float:right;", onclick: "IOSBridge.cleanLog();"} clean
               #collapseLog.panel-collapse.collapse.in{"aria-labelledby" => "headingLog", :role => "tabpanel"}
                 .panel-body#log
                  

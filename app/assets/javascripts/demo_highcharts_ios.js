@@ -55,7 +55,6 @@ window.IOSBridge = {
         
         for(var i = 0; i < response.datalist.length; i++) {
           var data = response.datalist[i]
-          IOSBridge.log("response", data)
           var tr = document.createElement("tr")
           if(data.isLocal === "1") {
             tr.innerHTML = "<td>" + data.filename + "</td><td>"+data.filesize+"</td><td><a class='btn btn-xs btn-danger' onclick='IOSBridge.removeDemo(\"" + data.filename+"\",\"" + data.filepath + "\",\"" + data.filesize+"\");'>remove<a></td><td><a class='btn btn-xs btn-info' onclick='IOSBridge.viewDemo(\""+data.filepath+"\");'>view</a></td>"
@@ -64,6 +63,16 @@ window.IOSBridge = {
             tr.innerHTML = "<td>" + data.filename + "</td><td>"+data.filesize+"</td><td><a class='btn btn-xs btn-primary' onclick='IOSBridge.downloadDemo(\"" + data.filepath+"\");'>download<a></td><td>-</td>"
           }
           tbody.insertBefore(tr, tbody.appendChild[0])
+        }
+    })
+    bridge.callHandler('iosCallback', {'action': 'local-logs'}, function(response) {
+        var log = document.getElementById('log')
+        while (log.hasChildNodes()) {
+            log.removeChild(log.lastChild);
+        }
+        for(var i = 0; i < response.logs.length; i++) {
+          var log = response.logs[i]
+          IOSBridge.log("", log)
         }
     })
   },
@@ -90,6 +99,12 @@ window.IOSBridge = {
       bridge.callHandler('iosCallback', {'action': 'view-demo', 'filepath': filepath}, function(response) {
       })
     })
+  },
+  cleanLog: function() {
+      var log = document.getElementById('log')
+      while (log.hasChildNodes()) {
+          log.removeChild(log.lastChild);
+      }
   }
 }
 
@@ -111,17 +126,12 @@ IOSBridge.connectWebViewJavascriptBridge(function(bridge) {
   })
 
 
-  var button = document.getElementById('navBtnRefresh');
-  if(button !== null) {
-      var link = document.createElement('a');
-      button.appendChild(link);
-      link.innerHTML = 'Refresh'
-      link.onclick = function(e) {
-        e.preventDefault()
-        bridge.callHandler('iosCallback', {'action': 'refresh'}, function(response) {
-          IOSBridge.log('JS got response', response)
-        })
-      }
+  var refreshBtn = document.getElementById('refresh');
+  refreshBtn.onclick = function(e) {
+    e.preventDefault();
+    bridge.callHandler('iosCallback', {'action': 'refresh'}, function(response) {
+      IOSBridge.log('JS got response', response);
+    });
   }
 
   var pageSetting = document.getElementById('pageSetting');
