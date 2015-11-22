@@ -15,6 +15,7 @@
       .boolean { color: blue; }
       .null { color: magenta; }
       .key { color: red; }
+      table tr td { text-align: center; }
   %body
     %nav.navbar.navbar-default#pageSetting
       .container
@@ -47,6 +48,27 @@
                         %td{width:"15%"} action
                         %td{width:"15%"} view
                     %tbody#demoList
+
+          #accordion.panel-group{"aria-multiselectable" => "true", :role => "tablist"}
+            .panel.panel-default
+              #headingTwo.panel-heading{:role => "tab"}
+                %h4.panel-title
+                  %a{"aria-controls" => "collapseTwo", "aria-expanded" => "true", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseTwo", :role => "button"}
+                    Setting 
+              #collapseTwo.panel-collapse.collapse.in{"aria-labelledby" => "headingTwo", :role => "tabpanel"}
+                .panel-body
+                  %table.table.table-condensed.table-strip
+                    %tbody
+                      %tr
+                        %td 
+                          %a{onclick: "IOSBridge.refreshPage();"} Refresh this page
+                      %tr
+                        %td 
+                          Demo's home page should `index.html`.
+                      %tr
+                        %td
+                          Demo's inner link `not ignore case`.
+
 
             .panel.panel-default
               #headingLog.panel-heading{:role => "tab"}

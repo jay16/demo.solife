@@ -105,6 +105,13 @@ window.IOSBridge = {
       while (log.hasChildNodes()) {
           log.removeChild(log.lastChild);
       }
+  },
+  refreshPage: function() {
+    IOSBridge.connectWebViewJavascriptBridge(function(bridge) {
+      bridge.callHandler('iosCallback', {'action': 'refresh'}, function(response) {
+        IOSBridge.log('refresh page', response);
+      });
+    })
   }
 }
 
@@ -124,15 +131,6 @@ IOSBridge.connectWebViewJavascriptBridge(function(bridge) {
     IOSBridge.log('JS responding with', responseData)
     responseCallback(responseData)
   })
-
-
-  var refreshBtn = document.getElementById('refresh');
-  refreshBtn.onclick = function(e) {
-    e.preventDefault();
-    bridge.callHandler('iosCallback', {'action': 'refresh'}, function(response) {
-      IOSBridge.log('JS got response', response);
-    });
-  }
 
   var pageSetting = document.getElementById('pageSetting');
   if(pageSetting !== null) {
