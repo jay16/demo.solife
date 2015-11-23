@@ -49,14 +49,15 @@ class Demo::HighchartsController < Demo::ApplicationController
         File.open(filepath, 'wb') {|f| f.write tempfile.read }  
 
         if File.exist?(filepath)
-          filesize = File.size(filepath).to_s
+          filesize = human_filesize(filepath)
+          foldername = filename[0..-5]
 
           json_path = app_root_join("tmp/demo-highcharts.json")
           data_list = File.exist?(json_path) ? JSON.parse(IO.read(json_path)) : []
-          hash = data_list.find { |demo| demo["name"] == filename }
+          hash = data_list.find { |demo| demo["name"] == foldername }
           is_new = hash == nil
           hash ||= {}
-          hash["name"] = filename[0..-5]
+          hash["name"] = foldername
           hash["link"] =  "%s/demo/highcharts/%s/download" % [request.url.sub(request.path, ""), filename]
           hash["filesize"] = filesize
           hash["timestamp"] = Time.now.utc
@@ -64,7 +65,7 @@ class Demo::HighchartsController < Demo::ApplicationController
           data_list.push(hash) if is_new
           File.open(json_path, 'wb') {|f| f.write data_list.to_json }
 
-          notice = "%s, 文件大小: %s" % [notice, human_filesize(filepath)]
+          notice = "%s, 文件大小: %s" % [notice, filesize]
         else 
           notice = "上传失败"
         end
