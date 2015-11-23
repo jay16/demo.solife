@@ -146,7 +146,27 @@ class ApplicationController < Sinatra::Base
       etag md5_key(mtime.to_s)
     end
   end
+   
+  def human_filesize(filepath)
+    filesize = File.size?(filepath) 
+    filesize ||= 0
 
+    human_units, human_sizes = %w(K M G T P), []
+    puts filesize
+    while filesize > 1024
+      filesize = filesize / 1024
+      human_sizes.push(filesize % 1024)
+    puts filesize
+    end
+
+    human_group = []
+    puts human_sizes
+    human_sizes.each_with_index do |size, index|
+      human_group.push("%s%s" % [size, human_units[index]])
+    end
+
+    return human_group.reverse.join
+  end
   # 404 page
   not_found do
     haml :"shared/not_found", views: ENV["VIEW_PATH"]#, layout: :"layouts/layout"

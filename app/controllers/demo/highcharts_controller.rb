@@ -64,7 +64,7 @@ class Demo::HighchartsController < Demo::ApplicationController
           data_list.push(hash) if is_new
           File.open(json_path, 'wb') {|f| f.write data_list.to_json }
 
-          notice = "%s, 文件大小: %s" % [notice, File.size(filepath).to_s]
+          notice = "%s, 文件大小: %s" % [notice, human_filesize(filepath)]
         else 
           notice = "上传失败"
         end
