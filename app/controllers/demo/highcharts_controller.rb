@@ -56,7 +56,7 @@ class Demo::HighchartsController < Demo::ApplicationController
           hash = data_list.find { |demo| demo["name"] == filename }
           is_new = hash == nil
           hash ||= {}
-          hash["name"] = filename
+          hash["name"] = filename[0..-5]
           hash["link"] =  "%s/demo/highcharts/%s/download" % [request.url.sub(request.path, ""), filename]
           hash["filesize"] = filesize
           hash["timestamp"] = Time.now.utc

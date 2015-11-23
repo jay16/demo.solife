@@ -5,7 +5,7 @@
 
 .row
   %p.text-primary
-    测试Highchart作为移动端(IOS)报表，交互效果如何。
+    测试IOS Navtive 与 HTML JS交互。
 
 .row
   #accordion.panel-group{"aria-multiselectable" => "true", :role => "tablist"}
@@ -34,13 +34,14 @@
         .panel-body
           %ol.help-block
             %li 文件名无空格，后缀为.zip
+            %li 文件名大小10M以内
+            %li 原文件名与压缩后文件名一致
             %li 首页为index.html
             %li 内部链接不忽略字母大小写
-          %form{enctype:"multipart/form-data", action:"/demo/highcharts/upload", method:"POST"}
+          %form.form-inline{enctype:"multipart/form-data", action:"/demo/highcharts/upload", method:"POST"}
             .form-group
-              %label{:for => "exampleInputFile"} File input
-              %input#exampleInputFile{name:"file", type: "file", accept: "application/zip"}
-            %button.btn.btn-default{:type => "submit"} Submit
+              %input{name:"file", type: "file", accept: "application/zip"}
+            %button.btn.btn-default{:type => "submit"} 上传
 
     .panel.panel-default
       #heading_3.panel-heading{:role => "tab"}
