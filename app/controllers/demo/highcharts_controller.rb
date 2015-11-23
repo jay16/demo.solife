@@ -16,8 +16,14 @@ class Demo::HighchartsController < Demo::ApplicationController
     haml :examples
   end
 
+  get "/:filename/download" do
+    zip_path = app_root_join("tmp/#{params[:filename]}")
+
+    send_file(zip_path, filename: params[:filename])
+  end
+
   get "/examples/local_demos" do
-    json_path = app_root_join("config/demo-highcharts.json")
+    json_path = app_root_join("tmp/demo-highcharts.json")
     hash = JSON.parse(IO.read(json_path))
 
     respond_with_json hash, 200
@@ -30,6 +36,47 @@ class Demo::HighchartsController < Demo::ApplicationController
     else
       render_url_with_cache(filename)
     end
+  end
+
+  post "/upload" do
+    notice = "上传成功"
+    begin
+      if params[:file] &&  
+           (tempfile = params[:file][:tempfile]) &&  
+           (filename = params[:file][:filename]) 
+        
+        filepath = app_root_join("tmp/" + filename)
+        File.open(filepath, 'wb') {|f| f.write tempfile.read }  
+
+        if File.exist?(filepath)
+          filesize = File.size(filepath).to_s
+
+          json_path = app_root_join("tmp/demo-highcharts.json")
+          data_list = File.exist?(json_path) ? JSON.parse(IO.read(json_path)) : []
+          hash = data_list.find { |demo| demo["name"] == filename }
+          is_new = hash == nil
+          hash ||= {}
+          hash["name"] = filename
+          hash["link"] =  "%s/demo/highcharts/%s/download" % [request.url.sub(request.path, ""), filename]
+          hash["filesize"] = filesize
+          hash["timestamp"] = Time.now.utc
+
+          data_list.push(hash) if is_new
+          File.open(json_path, 'wb') {|f| f.write data_list.to_json }
+
+          notice = "%s, 文件大小: %s" % [notice, File.size(filepath).to_s]
+        else 
+          notice = "上传失败"
+        end
+      else
+          notice = "参数不足"
+      end  
+      flash[:success] = notice
+    rescue => e
+      flash[:danger] = e.message
+    end
+
+    redirect to("/")
   end
 
 
