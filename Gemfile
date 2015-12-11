@@ -48,8 +48,8 @@ gem "httparty", "~>0.13.3"
 gem 'rack-mini-profiler', "~>0.9.3"
 
 # demo
-gem "nokogiri", "~>1.6.2.1"
-gem "spreadsheet", "~>0.9.0"
+gem "nokogiri", "~>1.6.7"
+gem "spreadsheet", "=0.9.0"
 gem "rubyzip", '~> 1.1.4'
 gem 'zip-zip', "~>0.3"
 gem "alipay_dualfun", :github => "happypeter/alipay_dualfun"
