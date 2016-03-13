@@ -1,4 +1,4 @@
-#!/bin/bash  
+#!/usr/bin/env bash
 PORT=$(test -z "$2" && echo "4000" || echo "$2")
 ENVIRONMENT=$(test -z "$3" && echo "production" || echo "$3")
 
@@ -89,9 +89,6 @@ case "$1" in
         ;;
     weixin_group_message)
         $bundle_command exec rake weixin:send_group_message
-        ;;
-    nxscae_update)
-        $bundle_command exec rake nxscae:update
         ;;
     download_db)
         scp jay@solife.us:/home/work/solife-weixin/db/*.db db/
