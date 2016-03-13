@@ -12,7 +12,6 @@ class WeiXin::SOLifeController < WeiXin::ApplicationController
     set :weixin_name,  Settings.weixin.solife.name
     set :weixin_desc,  Settings.weixin.solife.desc
     set :root_path,    ENV["APP_ROOT_PATH"]
-    set :nxscae_stock_url,  Settings.nxscae.stock_url
   end
 
   # weixin authenticate
