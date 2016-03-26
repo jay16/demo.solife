@@ -2,9 +2,9 @@
 require "model-base"
 class Weixiner
     include DataMapper::Resource
-    include Utils::DataMapper::Model
-    extend  Utils::DataMapper::Model
-    include Utils::ActionLogger
+    # include Utils::DataMapper::Model
+    # extend  Utils::DataMapper::Model
+    # include Utils::ActionLogger
 
     property :id  , Serial 
     # 微信公众号名称

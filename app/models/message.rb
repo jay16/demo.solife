@@ -2,8 +2,8 @@
 require "model-base"
 class Message # 微信消息
     include DataMapper::Resource
-    include Utils::DataMapper::Model
-    extend  Utils::DataMapper::Model
+    # include Utils::DataMapper::Model
+    # extend  Utils::DataMapper::Model
 
     property :id             , Serial 
     property :msg_type       , String  , :required => true

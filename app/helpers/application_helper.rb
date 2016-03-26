@@ -43,13 +43,10 @@
   end
 
   def render_page_title
-    site_name, title = "SOLife", "title"
-    begin
-      title = @page_title ? "#{site_name} | #{@page_title}" : "#{site_name} | Segment Of Life." 
-    rescue => e
-     title = e.message
-    end
-    "<title>%s</title>" % title
+    web_title = Settings.website.title
+    web_title = %(#{@page_title} | #{web_title}) if @page_title
+
+    %(<title>#{web_title}</title>)
   end
  
   def asset_link_with_cdn(filepath)

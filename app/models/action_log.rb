@@ -2,8 +2,8 @@
 require "model-base"
 class ActionLog
     include DataMapper::Resource
-    include Utils::DataMapper::Model
-    extend  Utils::DataMapper::Model
+    # include Utils::DataMapper::Model
+    # extend  Utils::DataMapper::Model
 
     property :id        , Serial 
     property :panel     , String   , :required => true

@@ -16,33 +16,24 @@ gem 'emk-sinatra-url-for', '~> 0.2.1'
 # This project is now part of sinatra-contrib.
 # gem "sinatra-reloader"
 
-gem 'actionmailer', '~>4.1.9'
-gem 'warden', '~>1.2.3'
-gem 'sinatra_more', '~>0.3.43'
-
-gem 'lazy_high_charts'
-
 # db
-gem 'dm-core', '~>1.2.1'
-gem 'dm-migrations', '~>1.2.0'
-gem 'dm-validations', '~>1.2.0'
-gem 'dm-aggregates', '~>1.2.0'
-gem 'dm-timestamps', '~>1.2.0'
-gem 'dm-sqlite-adapter', '~>1.2.0'
+# gem 'dm-core', '~>1.2.1'
+# gem 'dm-migrations', '~>1.2.0'
+# gem 'dm-validations', '~>1.2.0'
+# gem 'dm-aggregates', '~>1.2.0'
+# gem 'dm-timestamps', '~>1.2.0'
+# gem 'dm-sqlite-adapter', '~>1.2.0'
 
 # assets
-gem 'json', '~>1.8.2'
-gem 'haml', '~>4.0.5'
-gem 'sass', '~>3.3.7'
-gem 'therubyracer', '~>0.12.1'
-gem 'coffee-script', '~>2.2.0'
+gem 'json', '~>1.8.3'
+gem 'haml', '~>4.0.7'
+gem 'therubyracer', '~>0.12.2'
 
-gem 'unicorn', '~>4.8.3'
-gem 'rake', '~>10.3.2'
+gem 'unicorn', '~>5.0.1'
+gem 'rake', '~>11.1.1'
 gem 'settingslogic', '~>2.0.9'
-gem 'httparty', '~>0.13.3'
-
-gem 'rack-mini-profiler', '~>0.9.3'
+gem 'httparty', '~>0.13.7'
+gem 'rack-mini-profiler', '~>0.9.9.2'
 
 # demo
 gem 'nokogiri', '~>1.6.7'

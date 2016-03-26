@@ -2,9 +2,9 @@
 require "model-base"
 class Callback
     include DataMapper::Resource
-    include Utils::DataMapper::Model
-    #extend  Utils::DataMapper::Model
-    include Utils::ActionLogger
+    # include Utils::DataMapper::Model
+    # #extend  Utils::DataMapper::Model
+    # include Utils::ActionLogger
 
     property :id        , Serial 
     property :outer_url , String  , :required => true

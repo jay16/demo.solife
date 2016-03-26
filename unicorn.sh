@@ -7,13 +7,18 @@ CONFIG_FILE=config/unicorn.rb
 APP_ROOT_PATH=$(pwd)
 
 # user bash environment for crontab job.
-shell_used=${SHELL##*/}
+# shell_used=${SHELL##*/}
+shell_used="bash"
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    shell_used="zsh"
+fi
+
 # crontab environment used *sh* on centos
-if [[ "${shell_used}" == "sh" ]]; 
-then 
-	shell_used="bash"; 
+if [[ "${shell_used}" == "sh" || "${shell_used}" == "bash" ]]; then 
+    shell_used="bash"
     [ -f ~/.${shell_used}_profile ] && source ~/.${shell_used}_profile &> /dev/null
 fi
+
 echo "## shell used: ${shell_used}"
 [ -f ~/.${shell_used}rc ] && source ~/.${shell_used}rc &> /dev/null
 
@@ -27,15 +32,22 @@ export LANG=zh_CN.UTF-8
 # 	if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 #
 # use the current .ruby-version's command
-bundle_command=$(rbenv which bundle)
-gem_command=$(rbenv which gem)
+is_rbenv_exist=$(type rbenv >/dev/null 2>&1 && echo "yes" || echo "no")
+
+if [[ "${is_rbenv_exist}" == "yes" ]]; then
+    bundle_command=$(rbenv which bundle)
+    gem_command=$(rbenv which gem)
+else
+    bundle_command=$(rvm which bundle)
+    gem_command=$(rvm which gem)
+fi
 
 # make sure command execute in app root path
-cd ${APP_ROOT_PATH}
+cd "${APP_ROOT_PATH}"
 case "$1" in      
     gem)
         shift 1
-        $gem_commnd $@
+        $gem_command "$@"
     ;;
     precompile)
         RAILS_ENV=production $bundle_command exec rake assets:clean
@@ -52,7 +64,7 @@ case "$1" in
         fi
     ;;
     start)  
-        /bin/sh unicorn.sh bundle
+        bash "$0" bundle
 
         test -d log || mkdir log
         test -d tmp || mkdir -p tmp/pids
@@ -77,7 +89,6 @@ case "$1" in
         /bin/sh nohup.sh stop
         ;;  
     restart|force-reload)  
-        #kill -USR2 `cat tmp/pids/unicorn.pid`  
         sh unicorn.sh stop
         echo -e "\n\n#-----------command sparate line----------\n\n"
         sh unicorn.sh start
