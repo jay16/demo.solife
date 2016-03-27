@@ -1,8 +1,8 @@
 ﻿# encoding: utf-8
 require 'json'
 require 'digest/md5'
+require 'sinatra/url_for'
 require 'sinatra/decompile'
-require 'sinatra/advanced_routes'
 require 'sinatra/multi_route'
 require 'lib/sinatra/markup_plugin'
 class ApplicationController < Sinatra::Base
@@ -17,12 +17,10 @@ class ApplicationController < Sinatra::Base
   register Sinatra::Logger
   register Sinatra::MarkupPlugin
   register Sinatra::MultiRoute
-  # register Sinatra::AdvancedRoutes
-  # register Sinatra::Auth
 
   # helpers
   helpers ApplicationHelper
-  helpers HomeHelper
+  helpers Sinatra::UrlForHelper
 
   # css/js/view配置文档
   use AssetHandler
@@ -38,13 +36,15 @@ class ApplicationController < Sinatra::Base
 
   before do
     set_seo_meta("点滴记录", "SOLife,个人实验室", "segment of jay's life!")
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    # response.headers['Access-Control-Allow-Methods'] = 'GET'
+
     @request_body = request_body
     begin
       request_hash = JSON.parse(@request_body)
     rescue
       request_hash = {}
     end
-
     @params = params.merge(request_hash)
     @params = @params.merge(ip: request.ip, browser: request.user_agent)
     @params.deep_symbolize_keys!
@@ -61,10 +61,10 @@ class ApplicationController < Sinatra::Base
   # global function
   def uuid(str)
     str += Time.now.to_f.to_s
-    md5_key(str)
+    md5(str)
   end
 
-  def md5_key(str)
+  def md5(str)
     Digest::MD5.hexdigest(str)
   end
 
@@ -72,15 +72,19 @@ class ApplicationController < Sinatra::Base
     (('a'..'z').to_a + ('A'..'Z').to_a).sample(3).join
   end
 
+  def json_parse(body)
+    JSON.parse(body).deep_symbolize_keys!
+  end
+
   def current_user
-    @current_user ||= User.first(email: request.cookies['cookie_user_login_state'] || '') if defined?(User)
+    @current_user ||= User.first(email: request.cookies['authen'] || '') if defined?(User)
   end
 
   # filter
   def authenticate!
-    if request.cookies['cookie_user_login_state'].to_s.strip.empty?
+    if request.cookies['authen'].to_s.strip.empty?
       # 记录登陆前的path，登陆成功后返回至此path
-      response.set_cookie 'cookie_before_login_path', value: request.url, path: '/', max_age: '2592000'
+      response.set_cookie 'before_path', value: request.url, path: '/', max_age: '2592000'
 
       flash[:notice] = "继续操作前请登录."
       redirect '/users/login', 302
@@ -93,7 +97,7 @@ class ApplicationController < Sinatra::Base
       Parameters:
         #{@params}
     EOF
-    logger.info log_info
+    logger.info(log_info)
   end
 
   def request_body(body = request.body)
@@ -126,6 +130,12 @@ class ApplicationController < Sinatra::Base
     status code
   end
 
+  def halt_with_json(hash = {}, code = 200)
+    hash[:code] ||= code
+    content_type :json
+    halt(code, { 'Content-Type' => 'application/json;charset=utf-8' }, hash.to_json)
+  end
+
   def set_seo_meta(title = '', meta_keywords = '', meta_description = '')
     @page_title       = title
     @meta_keywords    = meta_keywords
@@ -142,31 +152,10 @@ class ApplicationController < Sinatra::Base
       mtime = settings.startup_time > mtime ? settings.startup_time : mtime
 
       last_modified mtime
-      etag md5_key(mtime.to_s)
+      etag md5(mtime.to_s)
     end
   end
 
-  def human_filesize(filepath)
-    filesize = File.size?(filepath)
-    filesize ||= 0
-
-    human_units = %w(K M G T P)
-    human_sizes = []
-    puts filesize
-    while filesize > 1024
-      filesize /= 1024
-      human_sizes.push(filesize % 1024)
-      puts filesize
-    end
-
-    human_group = []
-    puts human_sizes
-    human_sizes.each_with_index do |size, index|
-      human_group.push('%s%s' % [size, human_units[index]])
-    end
-
-    human_group.reverse.join
-  end
 
   # 404 page
   not_found do

@@ -36,16 +36,9 @@ include Utils::Boot
 
 recursion_require('lib/utils/core_ext', /\.rb$/, root_path)
 
-# config文夹下为配置信息优先加载
-# modle信息已在asset-hanler中加载
-# asset-hanel嵌入在application_controller
 require 'asset_handler'
 
 # helper will include into controller
 # helper load before controller
 recursion_require('app/helpers', /_helper\.rb$/, root_path)
 recursion_require('app/controllers', /_controller\.rb$/, root_path, [/^application_/])
-
-# system("echo '%s' > %s" % [root_path, File.join(root_path, 'tmp/app_root_path')])
-# system("echo '%s' > %s" % [File.join(root_path, 'public/callbacks'), File.join(root_path, 'tmp/callbacks_path')])
-# system("echo '%s' > %s" % [File.join(root_path, 'public/change_logs'), File.join(root_path, 'tmp/change_logs_path')])

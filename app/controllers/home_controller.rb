@@ -10,7 +10,7 @@ class HomeController < ApplicationController
   end
 
   get "/about" do
-    etag  md5_key("/about static control")
+    etag  md5("/about static control")
 
     haml :about, layout: :"../layouts/layout"
   end
