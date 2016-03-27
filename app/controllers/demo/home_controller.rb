@@ -10,10 +10,9 @@ class Demo::HomeController < Demo::ApplicationController
   # /demo
   get '/' do
     json_path = app_root_join('config/demo_home.json')
+    cache_with_custom_defined([File.mtime(json_path)])
 
-    cache_with_custom_defined(json_path)
     @demo_items = JSON.parse(IO.read(json_path))
-
     haml :index
   end
 

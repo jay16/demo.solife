@@ -1,4 +1,5 @@
 # encoding: utf-8
+# 台球联赛
 class Demo::MoneyBallController < Demo::ApplicationController
   set :views, File.join(ENV['VIEW_PATH'], 'demo/money_ball')
   set :layout, :"../../layouts/layout"
@@ -13,15 +14,15 @@ class Demo::MoneyBallController < Demo::ApplicationController
 
   # Get /money_ball
   get '/' do
-    @results = parse_rank
+    cache_with_custom_defined([File.mtime(rank_json_path)])
 
+    @results = json_parse(File.read(rank_json_path))
     haml :index, layout: settings.layout
   end
 
   private
 
-  def parse_rank
-    json_path = app_root_join("config/money_ball/#{@current_season}/rank.json")
-    json_parse(File.read(json_path))
+  def rank_json_path
+    app_root_join("config/money_ball/#{@current_season}/rank.json")
   end
 end

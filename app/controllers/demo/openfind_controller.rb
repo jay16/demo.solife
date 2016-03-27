@@ -147,6 +147,7 @@ class Demo::OpenfindController < Demo::ApplicationController
   end
 
   def cache_with_mtime(pagename)
-    cache_with_custom_defined(File.join(settings.views, "#{pagename}.haml"))
+    haml_path = File.join(settings.views, "#{pagename}.haml")
+    cache_with_custom_defined([File.mtime(haml_path)])
   end
 end

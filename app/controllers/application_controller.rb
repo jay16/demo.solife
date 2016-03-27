@@ -66,7 +66,7 @@ class ApplicationController < Sinatra::Base
   end
 
   def md5(str)
-    Digest::MD5.hexdigest(str)
+    Digest::MD5.hexdigest(str.to_s)
   end
 
   def sample_3_alpha
@@ -75,9 +75,7 @@ class ApplicationController < Sinatra::Base
 
   def json_parse(body)
     json_body = JSON.parse(body)
-    if json_body.is_a?(Hash)
-      json_body.deep_symbolize_keys!
-    end
+    json_body.deep_symbolize_keys! if json_body.is_a?(Hash)
     json_body
   end
 
@@ -115,8 +113,8 @@ class ApplicationController < Sinatra::Base
       (defined?(PhusionPassenger) && PhusionPassenger::Utils::TeeInput),
       # gem#unicorn
       #     it also change the strtucture of REQUEST
-      (defined?(Unicorn) and Unicorn::TeeInput),
-      (defined?(Rack) and Rack::Lint::InputWrapper)
+      (defined?(Unicorn) && Unicorn::TeeInput),
+      (defined?(Rack) && Rack::Lint::InputWrapper)
 
       body.read if body.respond_to?(:read)
     else
@@ -126,8 +124,7 @@ class ApplicationController < Sinatra::Base
     e.message
   end
 
-  def respond_with_json(hash = {}, code = nil)
-    code ||= 200
+  def respond_with_json(hash = {}, code = 200)
     hash[:code] ||= code
     content_type 'application/json;charset=utf-8'
 
@@ -142,8 +139,8 @@ class ApplicationController < Sinatra::Base
   end
 
   def set_seo_meta(title = '', meta_keywords = '', meta_description = '')
-    @page_title       = title
-    @meta_keywords    = meta_keywords
+    @page_title = title
+    @meta_keywords = meta_keywords
     @meta_description = meta_description
   end
 
@@ -151,16 +148,15 @@ class ApplicationController < Sinatra::Base
     File.join(settings.root, path)
   end
 
-  def cache_with_custom_defined(filepath)
-    if File.exist?(filepath) && ENV['RACK_ENV'].eql?('production')
-      mtime = File.mtime(filepath)
-      mtime = settings.startup_time > mtime ? settings.startup_time : mtime
+  def cache_with_custom_defined(timestamps, etag_content = nil)
+    if ENV['RACK_ENV'].eql?('production') || ENV['RACK_ENV'].eql?('test')
+      timestamps.push(settings.startup_time) if timestamps.empty?
+      latest_timestamp = timestamps.delete_if(&:nil?).sort.last
 
-      last_modified mtime
-      etag md5(mtime.to_s)
+      last_modified latest_timestamp
+      etag md5(etag_content || latest_timestamp)
     end
   end
-
 
   # 404 page
   not_found do
