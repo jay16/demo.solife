@@ -1,0 +1,24 @@
+-# coding: UTF-8
+%nav.navbar.navbar-default{role: "navigation", style:"margin-bottom:0px;"}
+  .container
+    %div{class: "#{mobile? ? 'col-sm-12' : 'col-sm-9 col-sm-offset-1'}", style: "padding-left:0px;padding-right:0px;"}
+      / Brand and toggle get grouped for better mobile display
+      .navbar-header
+        %button.navbar-toggle{"data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+        = link_to Settings.website.title, "/", class: "navbar-brand"
+      / Collect the nav links, forms, and other content for toggling
+      .collapse.navbar-collapse{role: "navigation", id:"navbar-collapse"}
+        %ul.nav.navbar-nav
+          %li.active= link_to "首页", "/"
+          %li= link_to "关于", "/about"
+
+        %ul.nav.navbar-nav.navbar-right
+          - unless current_user
+            %li
+              = link_to "注册", "/users/register"
+            %li 
+              = link_to "登陆", "/users/login"

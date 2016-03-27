@@ -1,0 +1,55 @@
+default: &default
+  domain: "http://weixin.solife.us"
+  admins: "jay_li@intfocus.com;jay_li@solife.us"
+  weixin:
+    solife:
+      name: "SOLife"
+      desc: "TODO"
+      token: "weixin-token"
+      app_id: "app-id"
+      app_secret: "app-secret"
+    nba_report:
+      name: "SOLife"
+      desc: "TODO"
+      token: "weixin-token"
+      app_id: "app-id"
+      app_secret: "app-secret"
+  website:
+    title: "SOLife"
+    subtitle: "Carder"
+    slogan: "爱生活、爱记录"
+    favicon: "/images/favicon.ico"
+    footer: "weixin.solife.us"
+  alipay:
+    pid: 'alipay-pid' 
+    secret: 'alipay-secret'
+    seller_email: "jay_li@solife.us" 
+    return_url: "http://demo.solife.us/transactions/done"
+    notify_url: "http://demo.solife.us/transactions/notify"
+  openfind:
+    url:  "http://cndemo.openfind.com"
+  cdn:
+    qiniu:
+      bucket: "carder-cdn"
+      access_key: 'access-key'
+      secret_key: 'secret-key'
+      out_link: "http://bucket.qiniudn.com"
+  server:
+    app_root_path: "/home/work/solife-weixin"
+    host: "host.com"
+    user: "user"
+    password: "password"
+  consume:
+    api_url: "api-url"
+    token: "token"
+  nxscae:
+    stock_url: "stock-url"
+
+production:
+  <<: *default
+
+development:
+  <<: *default
+
+test:
+  <<: *default

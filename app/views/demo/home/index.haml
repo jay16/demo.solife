@@ -1,0 +1,100 @@
+-# coding: UTF-8
+!!!
+%html{"ng-app" => "solife"}
+  %head
+    = render_page_title
+    %meta{"http-equiv" => "content-type", content: "text/html", charset: "UTF-8"}
+    %meta{name: "renderer", content:"webkit"}
+    %meta{"http-equiv" => "X-UA-Compatible", content: "IE=edge"}
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
+    %link{href: "#{asset_link_with_cdn('/images/favicon-demo.ico')}", rel: "shortcut icon"}
+    %meta{name: "keywords", content: "#{@meta_keywords}"}
+    %meta{name: "description", content: "#{@meta_description}"}
+
+    = stylesheet_link_tag_with_cdn "http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"
+    = stylesheet_link_tag_with_cdn "http://v3.bootcss.com/assets/css/docs.min.css"
+    = stylesheet_link_tag_with_cdn "demo-home.css"
+
+    :css
+      .link-no-hover:hover,
+      .link-no-hover:visited,
+      .link-no-hover:link,
+      .link-no-hover:active {text-decoration: none;}
+
+    :javascript
+      function imgLoaded(img) {
+          var imgWrapper = img.parentNode;
+          imgWrapper.className += imgWrapper.className? ' loaded' : 'loaded';
+      };
+
+  %body
+    .header{:style => "background-image: url(#{asset_link_with_cdn('/images/iterm2-cmatrix.png')});"}
+      .container
+        .row
+          .col-xs-12
+            .logotxt
+              %h1
+                = link_to "Segment of life", "javascript:void(0);", class: "link-no-hover"
+            %h2.site-name.text-center.typed-quotes
+              熟悉的地方没有风景
+              %span demo.solife.us
+
+        %span{class:"bs-docs-booticon bs-docs-booticon-lg bs-docs-booticon-outline",style: "color:white;background:#062E39; margin:0 auto 30px;width:100px;height:100px;font-size:80px;line-height:100px;margin-bottom:-100px;", onclick: "DemoHome.toggleSkeleton();"} Y
+
+    %main.main{:role => "main"}
+      .container
+        #post-list.row
+          - @demo_items.each do |item|
+            .col-xs-12.col-md-6
+              %article.post.tag-ad
+                %h2.post-title
+                  %a.link-no-hover.post-href{href: item["href"], target: "_self"}= item["text"]
+                .post-featured-image
+                  %a.post-href.thumbnail{href: item["href"], target: item["target"]}
+                    %img{src: "#{asset_link_with_cdn('images/'+item['thumbnail'])}", alt: item["text"], height: "600", width: "800", onload: "imgLoaded(this)"}/
+
+    .submit-site
+      .container
+        .submit
+          %p.text-center
+            声明!该页面UI拷贝
+            = link_to "Bootstrap 优站精选", "http://expo.bootcss.com/", target: "_blank"
+          %p.text-center
+            联系方式
+            = mail_to "jay_li@solife.us"
+
+    %footer.main-footer
+      .container
+        .row
+          .col-sm-4
+            .widget
+              %h4.title 友情链接
+              .content.friend-links
+                = link_to "小6语记", "http://xiao6say.com", target: "_blank"
+                %pangu
+                = link_to "Bootstrap 中文网", "http://www.bootcss.com/", target: "_blank"
+                %pangu
+                = link_to "RubyChina", "https://ruby-china.org/", target:"_blank"
+          .col-sm-4
+            .widget
+              %h4.title 使用到的技术
+              .content.tag-cloud
+                = link_to "Bootstrap", "http://www.bootcss.com/", target: "_blank", title: "Bootstrap中文网"
+                = link_to "Sinatra", "http://www.sinatrarb.com/", target: "_blank", title: "Sinatra"
+                = link_to "HighChart", "http://www.highcharts.com", target: "_blank", title: "HighChart"
+                = link_to "BootCDN", "http://www.bootcdn.cn/", target: "_blank", title: "BootCDN"
+                = link_to "七牛", "http://www.qiniu.com/", target: "_blank", title: "七牛云存储"
+                = link_to "jQuery", "http://www.jquery123.com/", target: "_blank", title: "jQuery中文文档"
+                = link_to "AngularJS", "http://angularjs.org", target: "_blank", title: "AngularJS"
+          .col-sm-4
+            .widget
+              %h4.title 赞助商
+              .content.friend-links
+                %a{href: "", title: "私房钱"} 不可言说
+
+    = javascript_include_tag_with_cdn "jquery.min.js"
+    = javascript_include_tag_with_cdn "typed.js"
+    = javascript_include_tag_with_cdn "demo_home.js"
+
+
+

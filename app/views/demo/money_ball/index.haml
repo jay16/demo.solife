@@ -1,0 +1,17 @@
+%h3
+  = @page_header
+  %small= @current_stage
+%table.table.table-striped.table-condensed.table-bordered{style: 'table-layout: fixed;'}
+  %thead
+    %tr
+      %th 排名
+      %th 选手
+      %th 公司
+      %th 积分
+  %tbody
+    - @results.each_with_index do |result, index|
+      %tr
+        %td= result[1] >= 0 ? index + 1 : '-'
+        %td= result[0].capitalize
+        %td= result[2].capitalize
+        %td= result[1] >= 0 ? result[1] : '-'

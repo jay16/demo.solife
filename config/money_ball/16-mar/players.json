@@ -1,0 +1,42 @@
+[
+  {
+    "name": "albert",
+    "company": "intfocus",
+    "gender": "male"
+  },
+  {
+    "name": "herman",
+    "company": "openfind",
+    "gender": "male"
+  },
+  {
+    "name": "samuel",
+    "company": "openfind",
+    "gender": "male"
+  },
+  {
+    "name": "eric",
+    "company": "openfind",
+    "gender": "male"
+  },
+  {
+    "name": "arthur",
+    "company": "intfocus",
+    "gender": "male"
+  },
+  {
+    "name": "乔伟",
+    "company": "intfocus",
+    "gender": "male"
+  },
+  {
+    "name": "星亮",
+    "company": "intfocus",
+    "gender": "male"
+  },
+  {
+    "name": "jay",
+    "company": "intfocus",
+    "gender": "male"
+  }
+]
