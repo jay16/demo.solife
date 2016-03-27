@@ -23,6 +23,7 @@ gem 'rake', '~>11.1.1'
 gem 'settingslogic', '~>2.0.9'
 gem 'httparty', '~>0.13.7'
 gem 'rack-mini-profiler', '~>0.9.9.2'
+gem 'activesupport', '~>4.2.5'
 
 # demo
 gem 'nokogiri', '~>1.6.7'
