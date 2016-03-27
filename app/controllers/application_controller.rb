@@ -5,6 +5,7 @@ require 'sinatra/url_for'
 require 'sinatra/decompile'
 require 'sinatra/multi_route'
 require 'lib/sinatra/markup_plugin'
+require 'lib/utils/core_ext/hash_key'
 class ApplicationController < Sinatra::Base
   # use Rack::MiniProfiler
   # Rack::MiniProfiler.config.position = 'right'
@@ -73,7 +74,11 @@ class ApplicationController < Sinatra::Base
   end
 
   def json_parse(body)
-    JSON.parse(body).deep_symbolize_keys!
+    json_body = JSON.parse(body)
+    if json_body.is_a?(Hash)
+      json_body.deep_symbolize_keys!
+    end
+    json_body
   end
 
   def current_user

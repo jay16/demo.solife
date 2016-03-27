@@ -2,96 +2,80 @@
 require 'json'
 
 desc "乐课力台球八球赛事."
-namespace :money_ball do
-  def random_match_result(stage)
-    result = case stage
-             when '初赛'
-               [[2, 0], [2, 1]]
-             when '1/4决赛'
-               [[3, 0], [3, 1], [3, 2]]
-             when '1/2决赛'
-               [[5, 0], [5, 1], [5, 2], [5, 3], [5, 4]]
-             when '总决赛'
-               [[5, 0], [5, 1], [5, 2], [5, 3], [5, 4]]
-    end.sample
-    
-    result.reverse! if Random.rand(100) % 2  == 0
+namespace :mb do
 
-    result
+  def current_season
+    "16-mar"
   end
 
-  def init_players_score    
-    player_path = File.join(ENV['APP_ROOT_PATH'], 'app/views/demo/money_ball/2016-spring/players.json')
-    players = JSON.parse(IO.read(player_path))
-    players = players.map { |h| { h['name'] => -1 } }
-    File.open(player_path, "w:utf-8") { |f| f.puts(players.to_json) }
+  def app_root_join(path)
+    File.join(Dir.pwd, path)
   end
 
-  def generate_match(stage)
-    player_path = File.join(ENV['APP_ROOT_PATH'], 'app/views/demo/money_ball/2016-spring/players.json')
-    match_path = File.join(ENV['APP_ROOT_PATH'], 'app/views/demo/money_ball/2016-spring/matches.json')
-    players = JSON.parse(IO.read(player_path))
-    matches = JSON.parse(IO.read(match_path))
-    players = players.sort { |h| h['score'] }
-    num = case stage
-          when '初赛'
-            players.length
-          when '1/4决赛'
-            players.length / 2
-          when '1/2决赛'
-            players.length / 4
-          when '总决赛'
-            2
-        end
-    players = players.first(num)
+  def parse_players
+    json_path = app_root_join("config/money_ball/#{current_season}/players.json")
+    JSON.parse(File.read(json_path))
+  end
 
-    # 初赛
-    caculate_scores = Hash.new(0)
-    players.each do |h|
-      caculate_scores[h['name']] = h['score']
-    end
+  def parse_matches
+    json_path = app_root_join("config/money_ball/#{current_season}/matches.json")
+    JSON.parse(File.read(json_path))
+  end
 
-    i = 0
-    while i < players.length-1
-      j = i + 1
-
-      while j < players.length
-        match = {
-          players: [players[i]['name'], players[j]['name']],
-          scores: random_match_result(stage),
-          date: Time.now.strftime("%Y-%m-%d %H:%M"),
-          stage: stage
-        }
-        puts match.to_json
-
-        caculate_scores[match[:players][0]] += match[:scores][0]
-        caculate_scores[match[:players][1]] += match[:scores][1]
-
-        matches.push(match)
-        j += 1
+  desc '根据比赛成绩，生成排名'
+  task :rank do
+    results = Hash.new(0)
+    no_match_players = parse_players.map { |p| p['name'] }
+    parse_matches.each do |match|
+      if match['scores'][0] > match['scores'][1]
+        results[match['players'][0]] += 1
+        results[match['players'][1]] += 0
+      else
+        results[match['players'][0]] += 0
+        results[match['players'][1]] += 1
       end
-      i += 1
+
+      no_match_players -= match['players']
     end
 
-    File.open(match_path, "w:utf-8") { |f| f.puts(matches.to_json) }
-    players = JSON.parse(IO.read(player_path))
-    caculate_scores.each do |k, v|
-      puts [k, v].to_json
-      index = players.find_index { |h| h['name'] == k }
-      puts index
-      puts players[index]
-      players[index]['score'] = v 
+    no_match_players.each do |player|
+      results[player] = -1
     end
-    players = players.sort { |h| h['score'] }
-    File.open(player_path, "w:utf-8") { |f| f.puts(players.to_json) }
+
+    players = parse_players
+    array = results.map do |k, v|
+      player = players.select { |h| h['name'] == k }[0]
+      [k, v, player['company'], player['gender']] 
+    end.sort_by { |a| a[1] }.reverse
+    json_path = app_root_join("config/money_ball/#{current_season}/rank.json")
+    File.open(json_path, "w:utf-8") { |file| file.puts(array.to_json) }
   end
 
-  desc "生成模拟数据"
-  task seeds: :environment do
-    init_players_score
-    #generate_match('初赛')
-    # generate_match('1/4决赛')
-    # generate_match('1/2决赛')
-    # generate_match('总决赛')
+  desc '添加比赛结果'
+  task :add do
+    if ENV['MATCH'].nil? || ENV['MATCH'].split(",").length != 6
+      puts %(bundle exec rake mb:add MATCH='player0, score0, player1, score1, stage, date')
+      exit
+    end
+
+    player0, score0, player1, score1, stage, date = ENV['MATCH'].split(",").map(&:strip)
+
+    not_found_players = [player0, player1] - parse_players.map { |p| p['name'] }
+    unless not_found_players.empty?
+      puts "#{not_found_players.join(',')} not found in players.json"
+      exit
+    end
+
+    matches = parse_matches.push(
+      players: [player0, player1],
+      scores: [score0, score1],
+      stage: stage,
+      date: date
+    )
+
+    json_path = app_root_join("config/money_ball/#{current_season}/matches.json")
+    File.open(json_path, "w:utf-8") { |file| file.puts(matches.to_json) }
+    puts "now already done #{matches.length} matches."
   end
+
 end

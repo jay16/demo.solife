@@ -73,25 +73,23 @@ case "$1" in
         rm tmp/*.{htm,html,zip} > /dev/null 2>&1
 
         echo "## start unicorn"
-        echo -e "\t# port: ${PORT} \n\t environment: ${ENVIRONMENT}"
-        $bundle_command exec ${UNICORN} -c ${CONFIG_FILE} -p ${PORT} -E ${ENVIRONMENT} -D > /dev/null 2>&1
-        echo -e "\t# unicorn start $(test $? -eq 0 && echo "successfully" || echo "failed")."
-
-        echo "## start nohup"
-        /bin/sh nohup.sh start
+        echo -e "\t# port: ${PORT}, environment: ${ENVIRONMENT}"
+        command_text="$bundle_command exec ${UNICORN} -c ${CONFIG_FILE} -p ${PORT} -E ${ENVIRONMENT} -D"
+        echo -e "\t$ run ${command_text}"
+        run_result=$($command_text) #> /dev/null 2>&1
+        echo -e "\t# unicorn start $(test $? -eq 0 && echo "successfully" || echo "failed")(${run_result})."
         ;;  
     stop)  
         echo "## stop unicorn"
         kill -QUIT `cat tmp/pids/unicorn.pid`  
         echo -e "\t unicorn stop $(test $? -eq 0 && echo "successfully" || echo "failed")."
 
-        echo "## stop nohup"
-        /bin/sh nohup.sh stop
         ;;  
     restart|force-reload)  
-        sh unicorn.sh stop
+        bash "$0" stop
         echo -e "\n\n#-----------command sparate line----------\n\n"
-        sh unicorn.sh start
+        bash "$0" start
+        
         ;;  
     deploy)
         # ./unicorn.sh deploy | xargs -I cmd /bin/sh -c cmd

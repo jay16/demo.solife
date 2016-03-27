@@ -19,17 +19,13 @@ case "$1" in
         else
             echo -e "\t nohup start failed - process is already running."
         fi
+
         ;;
     stop)
-        watchdog_pid=$(cat ${watchdog_pid_file})
-        ps -p ${watchdog_pid} > /dev/null
-        if [[ $? -eq 0 ]];
-        then
-            kill -kill ${watchdog_pid}
-            echo -e "\t nohup stop $(test $? -eq 0 && echo "successfully" || echo "failed")."
-        else
-            echo -e "\t nohup stop failed - process not exist."
-        fi
+        echo "## stop unicorn"
+        kill -QUIT "$(cat tmp/pids/unicorn.pid)" 
+        echo -e "\t unicorn stop $(test $? -eq 0 && echo "successfully" || echo "failed")."
+
         ;;
     status)
         # ps result menu
@@ -40,6 +36,7 @@ case "$1" in
         ps -ef | grep "rake:agent:main" | grep -v "grep"
 
         test -f ${app_root_path}/tmp/crontab.wait && echo -e "\twait" || echo -e "\tactive"
+        
         ;;
     active)
         cd ${app_root_path} && rm tmp/crontab.wait

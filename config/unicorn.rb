@@ -1,62 +1,62 @@
-﻿#encoding: utf-8
+﻿# encoding: utf-8
 # config/unicorn.rb
-deploy_to  = File.expand_path("../../", __FILE__) 
-puts system("mkdir -p #{deploy_to}/tmp/pids")
+app_path = File.expand_path('../..', __FILE__)
 
-rails_root = "#{deploy_to}"
-pid_file   = "#{deploy_to}/tmp/pids/unicorn.pid"
-socket_file= "#{deploy_to}/tmp/unicorn.sock"
-log_file   = "#{rails_root}/log/unicorn.log"
-err_log    = "#{rails_root}/log/unicorn_error.log"
-old_pid    = pid_file + '.oldbin'
+socket_file = "#{app_path}/tmp/unicorn.sock"
+pid_file = "#{app_path}/tmp/pids/unicorn.pid"
+old_pid = "#{pid_file}.oldbin"
 
-timeout 30
-worker_processes 1 # increase or decrease
-listen socket_file, :backlog => 1024
+# Nuke workers after 30 seconds instead of 60 seconds (the default)
+timeout(30)
 
-pid pid_file
-stderr_path err_log
-stdout_path log_file
+worker_processes(5) # increase or decrease
 
-# make forks faster
+# Listen on fs socket for better performance
+listen(socket_file, backlog: 1024)
+
+# App PID
+pid(pid_file)
+
+# By default, the Unicorn logger will write to stderr.
+# Additionally, some applications/frameworks log to stderr or stdout,
+# so prevent them from going to /dev/null when daemonized here:
+stderr_path("#{app_path}/log/unicorn.log")
+stdout_path("#{app_path}/log/unicorn.log")
+
+# To save some memory and improve performance
 preload_app true
+GC.respond_to?(:copy_on_write_friendly=) &&
+  GC.copy_on_write_friendly = true
 
-# make sure that Bundler finds the Gemfile
-before_exec do |server|
+# Force the bundler gemfile environment variable to
+# reference the Сapistrano "current" symlink
+before_exec do |_|
   ENV['BUNDLE_GEMFILE'] = File.expand_path('../Gemfile', File.dirname(__FILE__))
 end
 
-before_fork do |server, worker|
-  if File.exists?(old_pid) && server.pid != old_pid  
-    begin  
-      Process.kill('QUIT', File.read(old_pid).to_i)  
-    rescue Errno::ENOENT, Errno::ESRCH  
-      puts "Send'QUIT'signal to unicorn error!"  
-    end  
-  end  
-  
-  DataObjects::Pooling.pools.each do |pool|
-    pool.dispose
+before_fork do |server, _|
+  # 参考 http://unicorn.bogomips.org/SIGNALS.html
+  # 使用 USR2 信号，以及在进程完成后用 QUIT 信号来实现无缝重启
+  if File.exist?(old_pid) && server.pid != old_pid
+    begin
+      Process.kill('QUIT', File.read(old_pid).to_i)
+    rescue Errno::ENOENT, Errno::ESRCH
+      puts %(Send 'QUIT' signal to unicorn error!)
+      # someone else did our job for us
+    end
   end
+
+  # DataObjects::Pooling.pools.each(&:dispose) if defined? DataObjects::Pooling
+  # the following is highly recomended for Rails + "preload_app true"
+  # as there's no need for the master process to hold a connection
+  defined?(ActiveRecord::Base) &&
+    ActiveRecord::Base.connection.disconnect!
 end
 
-#before_fork do |server, worker|
-#  defined?(ActiveRecord::Base) and
-#    ActiveRecord::Base.connection.disconnect!
-#
-#  # zero downtime deploy magic:
-#  # if unicorn is already running, ask it to start a new process and quit.
-#  if File.exists?(old_pid) && server.pid != old_pid
-#    begin
-#      Process.kill("QUIT", File.read(old_pid).to_i)
-#    rescue Errno::ENOENT, Errno::ESRCH
-#      # someone else did our job for us
-#    end
-#  end
-#end
-#
-#after_fork do |server, worker|
-#  # re-establish activerecord connections.
-#  defined?(ActiveRecord::Base) and
-#    ActiveRecord::Base.establish_connection
-#end
+after_fork do |server, worker|
+  # 禁止 GC，配合后续的 OOB，来减少请求的执行时间
+  GC.disable
+  # the following is *required* for Rails + "preload_app true",
+  defined?(ActiveRecord::Base) &&
+    ActiveRecord::Base.establish_connection
+end
