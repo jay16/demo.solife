@@ -6,20 +6,11 @@ class HomeController < ApplicationController
   get "/" do
     redirect to("/cpanel") if current_user
 
-    @users     = User.all
-    @messages  = Message.all
-    @weixiners = Weixiner.all
-
-    if @messages.count > 0
-      last_modified @messages.first.updated_at
-      etag  md5_key(@messages.first.updated_at.to_s)
-    end
-
     haml :index, layout: :"../layouts/layout"
   end
 
   get "/about" do
-    etag  md5_key("/about static control")
+    etag  md5("/about static control")
 
     haml :about, layout: :"../layouts/layout"
   end

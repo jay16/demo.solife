@@ -9,15 +9,15 @@
 
 .row
   .bs-example#membersForm
-    - form_tag "/demo/openfind/members", class:"row", method: "post"  do
+    - form_tag url_for('/members'), class:"row", method: "post"  do
       - field_set_tag do 
         = hidden_field_tag "", "v-model" => "official_url", value: Settings.openfind.url
         .col-sm-10
           = text_field_tag :"members[url]", "v-model" => "input_url", "v-on:change" => "checkUrl", "v-on:keyup" => "checkUrl", placeholder: "名单链接", class: "form-control"
         .col-sm-2
-          = submit_tag "名单下载", "v-disable" => "btn_disabled", class: "btn btn-default"
+          = submit_tag "名单下载", name: 'submit', "v-disable" => "btn_disabled", class: "btn btn-default"
 
-    %p.text-danger{ "v-bind:class" => " { 'hidden': !warning_text }" }
+    %p.text-danger{ "v-bind:class" => "{ 'hidden': !warning_text }" }
       {{ warning_text }}
 
 .row
@@ -28,13 +28,13 @@
 
 .row
   .bs-example#templateForm
-    - form_tag "/demo/openfind/template", class:"row", method: "post" do
+    - form_tag url_for('/template'), class:"row", method: "post" do
       - field_set_tag do
         = hidden_field_tag "", "v-model" => "official_url", value: Settings.openfind.url
         .col-sm-10
           = text_field_tag :"template[url]","v-model" => "input_url", "v-on:change" => "checkUrl", "v-on:keyup" => "checkUrl",placeholder: "电子报链接", class: "form-control"
         .col-sm-2
-          = submit_tag "模板下载", "v-disable" => "btn_disabled", class: "btn btn-default"
+          = submit_tag "模板下载", name: 'submit', "v-disable" => "btn_disabled", class: "btn btn-default"
 
     %p.text-danger{ "v-bind:class" => " { 'hidden': !warning_text }" }
       {{ warning_text }}

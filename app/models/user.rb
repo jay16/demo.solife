@@ -2,9 +2,9 @@
 require "model-base"
 class User
     include DataMapper::Resource
-    include Utils::DataMapper::Model
-    #extend  Utils::DataMapper::Model
-    include Utils::ActionLogger
+    # include Utils::DataMapper::Model
+    # #extend  Utils::DataMapper::Model
+    # include Utils::ActionLogger
 
     property :id        , Serial 
     property :email     , String  , :required => true, :unique => true

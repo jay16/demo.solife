@@ -1,0 +1,33 @@
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 1200
+
+Metrics/ClassLength:
+  Max: 1200
+
+Metrics/MethodLength:
+  Max: 1200
+
+Metrics/ModuleLength:
+  Max: 1200
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Style/GlobalVars:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false

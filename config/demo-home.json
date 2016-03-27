@@ -1,6 +1,0 @@
-[
-  { "text":"小6语记", "href": "http://xiao6say.com", "target": "_blank", "thumbnail": "demo-xiao6say.png", "alt":"每天花费 6 分钟管理好自己的时间，让每一秒都过的更有价值" },
-  { "text":"Openfind 电子报小助手", "href": "/openfind", "target": "_self", "thumbnail": "demo-openfind.png", "alt":"Openfind 电子报小助手" },
-  { "text":"nxscae 理财产品", "href": "/nxscae", "target": "_self", "thumbnail": "demo-nxscae.png", "alt":"nxscae 理财"  },
-  { "text":"IOS & Highcharts", "href": "/highcharts", "target": "_self", "thumbnail": "demo-highcharts.png", "alt":"IOS & Highcharts"  }
-]
