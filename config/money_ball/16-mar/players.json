@@ -45,13 +45,23 @@
     "gender": "male"
   },
   {
-    "name": "蔡蔡",
-    "company": "intfocus",
-    "gender": "female"
-  },
-  {
     "name": "david",
     "company": "de2v",
     "gender": "male"
+  },
+  {
+    "name": "I-Chih",
+    "company": "de2v",
+    "gender": "female"
+  },
+  {
+    "name": "janify",
+    "company": "de2v",
+    "gender": "female"
+  },
+  {
+    "name": "蔡蔡",
+    "company": "intfocus",
+    "gender": "female"
   }
 ]

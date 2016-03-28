@@ -12,11 +12,32 @@ namespace :mb do
     File.join(Dir.pwd, path)
   end
 
+  # [
+  #   {
+  #     "name": "albert",
+  #     "company": "intfocus",
+  #     "gender": "male"
+  #   }
+  # ]
   def parse_players
     json_path = app_root_join("config/money_ball/#{current_season}/players.json")
     JSON.parse(File.read(json_path))
   end
 
+  # [
+  #   {
+  #     "players": [
+  #       "arthur",
+  #       "jay"
+  #     ],
+  #     "scores": [
+  #       "3",
+  #       "2"
+  #     ],
+  #     "stage": "积分赛",
+  #     "date": "2016/03/28 12:50"
+  #   }
+  # ]
   def parse_matches
     json_path = app_root_join("config/money_ball/#{current_season}/matches.json")
     JSON.parse(File.read(json_path))
@@ -43,9 +64,11 @@ namespace :mb do
     end
 
     players = parse_players
+    matches = parse_matches
     hash_result = results.map { |k, v|
       player = players.select { |h| h['name'] == k }[0]
-      [k, v, player['company'], player['gender']] 
+      count = matches.select { |m| m['players'].include?(k) }.count
+      [k, v, count, player['company'], player['gender']] 
     }.group_by { |a| a[1] }
 
     rank_result = hash_result.map do |k, v|
