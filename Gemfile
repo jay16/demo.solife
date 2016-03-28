@@ -37,6 +37,7 @@ group :development do
   gem 'whenever', '~>0.9.4', require: false
   gem 'awesome_print', '~>1.6.1'
   gem 'pry', '~>0.10.3'
+  gem 'capistrano', '~>3.4.0'
   gem 'net-ssh', '~>2.7.0'
   gem 'net-scp', '~>1.2.1'
   gem 'guard-livereload', '~>2.5.2', require: false
