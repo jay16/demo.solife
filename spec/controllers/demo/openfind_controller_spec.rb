@@ -13,7 +13,9 @@ describe 'Demo::OpendfindController' do
     header 'IF-None-Match', last_response.headers['ETag']
     header 'If-Modified-Since', last_response.headers['Last-Modified']
     get demo_path('/openfind')
+    
     expect(last_response.status).to eq(304)
+    expect(last_response.body).to be_empty
 
     visit demo_path('/openfind')
 

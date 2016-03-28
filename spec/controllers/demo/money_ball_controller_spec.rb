@@ -12,7 +12,9 @@ describe Demo::MoneyBallController do
     header 'IF-None-Match', last_response.headers['ETag']
     header 'If-Modified-Since', last_response.headers['Last-Modified']
     get demo_path('/money_ball')
+    
     expect(last_response.status).to eq(304)
+    expect(last_response.body).to be_empty
 
     visit demo_path('/money_ball')
     expect(page.title).to include('台球')

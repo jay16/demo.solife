@@ -12,7 +12,9 @@ describe Demo::HomeController do
     header 'IF-None-Match', last_response.headers['ETag']
     header 'If-Modified-Since', last_response.headers['Last-Modified']
     get demo_path('/')
+
     expect(last_response.status).to eq(304)
+    expect(last_response.body).to be_empty
     
     visit demo_path('/')
     expect(page.title).to eql('实验室 | SOLife')
