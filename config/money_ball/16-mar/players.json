@@ -38,5 +38,15 @@
     "name": "jay",
     "company": "intfocus",
     "gender": "male"
+  },
+  {
+    "name": "kevin",
+    "company": "de2v",
+    "gender": "male"
+  },
+  {
+    "name": "蔡蔡",
+    "company": "intfocus",
+    "gender": "female"
   }
 ]

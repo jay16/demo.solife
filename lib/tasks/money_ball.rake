@@ -43,12 +43,27 @@ namespace :mb do
     end
 
     players = parse_players
-    array = results.map do |k, v|
+    hash_result = results.map { |k, v|
       player = players.select { |h| h['name'] == k }[0]
       [k, v, player['company'], player['gender']] 
-    end.sort_by { |a| a[1] }.reverse
+    }.group_by { |a| a[1] }
+
+    rank_result = hash_result.map do |k, v|
+      [k.to_i, v]
+    end
+
+    result = []
+    rank_index = 1
+    rank_result.sort_by { |a| a[0] }.reverse_each do |a|
+      a[1].each do |play_result|
+        result.push(play_result.unshift(a[0] == -1 ? '-' : rank_index))
+      end
+
+      rank_index += 1 if a[0] > -1
+    end
+
     json_path = app_root_join("config/money_ball/#{current_season}/rank.json")
-    File.open(json_path, "w:utf-8") { |file| file.puts(array.to_json) }
+    File.open(json_path, "w:utf-8") { |file| file.puts(result.to_json) }
   end
 
   desc '添加比赛结果'

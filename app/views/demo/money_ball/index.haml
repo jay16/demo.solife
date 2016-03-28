@@ -11,7 +11,8 @@
   %tbody
     - @results.each_with_index do |result, index|
       %tr
-        %td= result[1] >= 0 ? index + 1 : '-'
-        %td= result[0].capitalize
-        %td= result[2].capitalize
-        %td= result[1] >= 0 ? result[1] : '-'
+        %td= result[0]
+        %td= result[1].capitalize
+        %td= result[3]
+        %td= result[2] >= 0 ? result[2] : '-'
+      - 
