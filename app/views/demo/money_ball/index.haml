@@ -2,21 +2,24 @@
   = @page_header
   %small= @current_stage
 :css
-  .table td { vertical-align:middle; }
-%table.table.table-striped.table-condensed.table-bordered{style: 'table-layout: fixed;'}
+  td { text-align:center;vertical-align:middle; }
+  th { text-align:center; }
+%table.table.table-striped.table-condensed.table-bordered
   %thead
     %tr
-      %th 排名
+      %th{style: "text-align:center;"} 排名
       %th 选手
       %th 公司
-      %th 积分
+      %th{style: "text-align:center;"} 积分
   %tbody
     - @results.each_with_index do |result, index|
       %tr
-        %td= result[0]
-        %td
+        %td{style: "width:15%;text-align:center;"}
+          = result[0]
+        %td{style: "width:35%;"}
           = image_tag "head_#{result[1]}.jpg", class: "img-circle", style: "max-width: 30px;"
           = result[1].capitalize
-        %td= result[3]
-        %td= result[2] >= 0 ? result[2] : '-'
-      - 
+        %td{style: "width:35%;"}
+          = result[3]
+        %td{style: "width:15%;text-align:center;"}
+          = result[2] >= 0 ? result[2] : '-'
