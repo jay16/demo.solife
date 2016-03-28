@@ -7,7 +7,7 @@ class Demo::MoneyBallController < Demo::ApplicationController
 
   before do
     @page_header = '2016春季乐课力台球联赛'
-    @current_stage = '淘汰赛'
+    @current_stage = '积分赛'
     @current_season = '16-mar'
     set_seo_meta(@page_header, "八球，2016春季，赛事", "八球，2016春季，赛事，乐课力")
   end
