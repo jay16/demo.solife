@@ -5,5 +5,16 @@ describe Demo::MoneyBallController do
   it 'should ok when view home page' do
     get demo_path('/money_ball')
     expect(last_response).to be_ok
+    expect(last_response.headers['ETag']).to_not be_empty
+    expect(last_response.headers['Last-Modified']).to_not be_empty
+
+
+    header 'IF-None-Match', last_response.headers['ETag']
+    header 'If-Modified-Since', last_response.headers['Last-Modified']
+    get demo_path('/money_ball')
+    expect(last_response.status).to eq(304)
+
+    visit demo_path('/money_ball')
+    expect(page.title).to include('台球')
   end
 end

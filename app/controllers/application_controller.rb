@@ -150,8 +150,8 @@ class ApplicationController < Sinatra::Base
 
   def cache_with_custom_defined(timestamps, etag_content = nil)
     if ENV['RACK_ENV'].eql?('production') || ENV['RACK_ENV'].eql?('test')
-      timestamps.push(settings.startup_time) if timestamps.empty?
-      latest_timestamp = timestamps.delete_if(&:nil?).sort.last
+      timestamps = timestamps.delete_if(&:nil?).sort
+      latest_timestamp = timestamps.empty? ? settings.startup_time : timestamps.last
 
       last_modified latest_timestamp
       etag md5(etag_content || latest_timestamp)
