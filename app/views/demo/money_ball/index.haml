@@ -1,6 +1,8 @@
 %h3
   = @page_header
   %small= @current_stage
+:css
+  .table td { vertical-align:middle; }
 %table.table.table-striped.table-condensed.table-bordered{style: 'table-layout: fixed;'}
   %thead
     %tr
@@ -12,7 +14,9 @@
     - @results.each_with_index do |result, index|
       %tr
         %td= result[0]
-        %td= result[1].capitalize
+        %td
+          = image_tag "head_#{result[1]}.jpg", class: "img-circle", style: "max-width: 30px;"
+          = result[1].capitalize
         %td= result[3]
         %td= result[2] >= 0 ? result[2] : '-'
       - 
