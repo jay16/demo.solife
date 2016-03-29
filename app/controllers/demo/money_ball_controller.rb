@@ -15,14 +15,26 @@ class Demo::MoneyBallController < Demo::ApplicationController
   # Get /money_ball
   get '/' do
     cache_with_custom_defined([File.mtime(rank_json_path)])
-
     @results = json_parse(File.read(rank_json_path))
+
     haml :index, layout: settings.layout
+  end
+
+  # Get /money_ball/matches
+  get '/matches' do
+    cache_with_custom_defined([File.mtime(matches_json_path)])
+    @matches = json_parse(File.read(matches_json_path))
+
+    haml :matches, layout: settings.layout
   end
 
   private
 
   def rank_json_path
     app_root_join("config/money_ball/#{@current_season}/rank.json")
+  end
+
+  def matches_json_path
+    app_root_join("config/money_ball/#{@current_season}/matches.json")
   end
 end

@@ -104,12 +104,13 @@ namespace :mb do
       exit
     end
 
-    matches = parse_matches.push(
-      players: [player0, player1],
-      scores: [score0, score1],
-      stage: stage,
-      date: date
-    )
+    players = [player0, player1]
+    scores = [score0, score1]
+    if score0 < score1
+      players = players.reverse
+      scores = scores.reverse
+    end
+    matches = parse_matches.push(players: players, scores: scores, stage: stage, date: date)
 
     json_path = app_root_join("config/money_ball/#{current_season}/matches.json")
     File.open(json_path, "w:utf-8") { |file| file.puts(matches.to_json) }
