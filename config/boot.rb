@@ -34,7 +34,7 @@ require "#{root_path}/app/models/settings.rb"
 require 'lib/utils/boot.rb'
 include Utils::Boot
 
-recursion_require('lib/utils/core_ext', /\.rb$/, root_path)
+# recursion_require('lib/utils/core_ext', /\.rb$/, root_path)
 
 require 'asset_handler'
 

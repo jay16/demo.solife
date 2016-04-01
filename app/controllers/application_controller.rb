@@ -5,7 +5,8 @@ require 'sinatra/url_for'
 require 'sinatra/decompile'
 require 'sinatra/multi_route'
 require 'lib/sinatra/markup_plugin'
-require 'lib/utils/core_ext/hash_key'
+require 'active_support/core_ext/string'
+require 'active_support/core_ext/hash'
 class ApplicationController < Sinatra::Base
   # use Rack::MiniProfiler
   # Rack::MiniProfiler.config.position = 'right'
@@ -95,12 +96,11 @@ class ApplicationController < Sinatra::Base
   end
 
   def print_format_logger
-    log_info = <<-EOF.strip_heredoc
+    logger.info <<-EOF.strip_heredoc
       #{request.request_method} #{request.path} for #{request.ip} at #{Time.now}
       Parameters:
         #{@params}
     EOF
-    logger.info(log_info)
   end
 
   def request_body(body = request.body)

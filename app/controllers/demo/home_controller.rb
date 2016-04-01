@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'active_support/cache'
 class Demo::HomeController < Demo::ApplicationController
   set :views, ENV['VIEW_PATH'] + '/demo/home'
   set :layout, :"../../layouts/layout"
@@ -14,6 +15,16 @@ class Demo::HomeController < Demo::ApplicationController
 
     @demo_items = JSON.parse(IO.read(json_path))
     haml :index
+  end
+
+  get '/write' do
+    cache = ActiveSupport::Cache.lookup_store(:file_store, '/tmp/cache')
+    cache.write('myparams', params)
+  end
+
+  get '/read' do
+    cache = ActiveSupport::Cache.lookup_store(:file_store, '/tmp/cache')
+    cache.read('myparams')
   end
 
   get '/upload' do
