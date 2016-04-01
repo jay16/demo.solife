@@ -1,6 +1,6 @@
 %h3
   = @page_header
-  %small 比赛明细
+  %small 比赛明细 (#{@matches.length})
 %table.table.table-striped.table-condensed.table-bordered{style: 'table-layout: fixed;'}
   %thead
     %tr
@@ -11,7 +11,7 @@
   %tbody
     - @matches.sort_by { |h| h['date'] }.reverse_each do |match|
       %tr
-        %td= "#{match['players'][0]}(#{match['scores'][0]})"
-        %td= "#{match['players'][1]}(#{match['scores'][1]})"
+        %td= "#{match['players'][0].capitalize}(#{match['scores'][0]})"
+        %td= "#{match['players'][1].capitalize}(#{match['scores'][1]})"
         %td= match['stage']
         %td= match['date']
