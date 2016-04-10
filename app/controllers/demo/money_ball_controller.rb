@@ -54,10 +54,12 @@ class Demo::MoneyBallController < Demo::ApplicationController
     end
     id = md5("#{Time.now.to_f}#{params}")
     matches = json_parse(File.read(mb_json_path('matches')))
-    matches.push(id: id, players: players, scores: scores, stage: params[:stage], date: Time.now.strftime('%m/%d %H:%M'))
+    match = { id: id, players: players, scores: scores, stage: params[:stage], date: Time.now.strftime('%m/%d %H:%M') }
+    matches.push(match)
 
     File.open(mb_json_path('matches'), "w:utf-8") { |file| file.puts(matches.to_json) }
     rank_matches
+    `cd #{ENV['APP_ROOT_PATH']} && git commit -a -m 'add match: #{match}' && git push origin master}`
 
     redirect to('edits')
   end
@@ -82,6 +84,7 @@ class Demo::MoneyBallController < Demo::ApplicationController
     matches[index] = match
     File.open(mb_json_path('matches'), "w:utf-8") { |file| file.puts(matches.to_json) }
     rank_matches
+    `cd #{ENV['APP_ROOT_PATH']} && git commit -a -m 'update match: #{match}' && git push origin master}`
 
     redirect to('edits')
   end

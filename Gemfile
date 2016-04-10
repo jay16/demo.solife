@@ -19,6 +19,7 @@ gem 'haml', '~>4.0.7'
 gem 'therubyracer', '~>0.12.2'
 
 gem 'unicorn', '~>5.0.1'
+gem 'unicorn-worker-killer', '~>0.4.4'
 gem 'rake', '~>11.1.1'
 gem 'settingslogic', '~>2.0.9'
 gem 'httparty', '~>0.13.7'
