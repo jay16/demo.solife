@@ -1,0 +1,19 @@
+%h3
+  = @page_header
+  %small 编辑状态
+%table.table.table-striped.table-condensed.table-bordered{style: 'table-layout: fixed;'}
+  %thead
+    %tr
+      %th 选手
+      %th 对手
+      %th 阶段
+      %th 时间
+      %th 编辑
+  %tbody
+    - @matches.sort_by { |h| h['date'] }.reverse_each do |match|
+      %tr
+        %td= "#{match['players'][0].capitalize}(#{match['scores'][0]})"
+        %td= "#{match['players'][1].capitalize}(#{match['scores'][1]})"
+        %td= match['stage']
+        %td= match['date']
+        %td= link_to '', url_for("/#{match['id']}/edit"), class: 'glyphicon glyphicon-edit'

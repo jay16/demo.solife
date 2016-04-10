@@ -1,5 +1,6 @@
 # encoding: utf-8
 require 'json'
+require 'digest/md5'
 
 desc "乐课力台球八球赛事."
 namespace :mb do
@@ -41,6 +42,17 @@ namespace :mb do
   def parse_matches
     json_path = app_root_join("config/money_ball/#{current_season}/matches.json")
     JSON.parse(File.read(json_path))
+  end
+
+  desc '生成ID, 便于编辑、删除'
+  task :generate_id do
+    matches = parse_matches.map do |match|
+      match['id'] = Digest::MD5.hexdigest("#{Time.now.to_f}#{match}") unless match.has_key?('id')
+      match
+    end
+
+    json_path = app_root_join("config/money_ball/#{current_season}/matches.json")
+    File.open(json_path, "w:utf-8") { |file| file.puts(matches.to_json) }
   end
 
   desc '根据比赛成绩，生成排名'
@@ -110,7 +122,8 @@ namespace :mb do
       players = players.reverse
       scores = scores.reverse
     end
-    matches = parse_matches.push(players: players, scores: scores, stage: stage, date: date)
+    id = Digest::MD5.hexdigest("#{Time.now.to_f}#{ENV['MATCH']}")
+    matches = parse_matches.push(id: id, players: players, scores: scores, stage: stage, date: date)
 
     json_path = app_root_join("config/money_ball/#{current_season}/matches.json")
     File.open(json_path, "w:utf-8") { |file| file.puts(matches.to_json) }

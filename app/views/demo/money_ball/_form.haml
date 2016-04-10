@@ -1,0 +1,20 @@
+- players = @players.map { |h| h['name'] }
+- form_tag url_for(@match.has_key?(:id) ? "/#{@match[:id]}" : "/"), method: "post", class: "form-group" do
+  - field_set_tag do
+    .form-group
+      = label_tag "选手"
+      = select_tag :player0, options: players, selected: @match[:players][0], class: "form-control"
+    .form-group
+      = label_tag "成绩"
+      = select_tag :score0, options: (0..15).to_a, selected: @match[:scores][0], class: "form-control"
+    .form-group
+      = label_tag "对手"
+      = select_tag :player1, options: players, selected: @match[:players][1], class: "form-control"
+    .form-group
+      = label_tag "成绩"
+      = select_tag :score1, options: (0..15).to_a, selected: @match[:scores][1], class: "form-control"
+    .form-group
+      = label_tag "阶段"
+      = select_tag :stage, options: %w(初赛 1/8决赛 1/4决赛 1/2决赛 总决赛), selected: @match[:stage], class: "form-control"
+
+    = submit_tag "提交", class: "btn btn-primary"
