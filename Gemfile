@@ -26,6 +26,10 @@ gem 'httparty', '~>0.13.7'
 gem 'rack-mini-profiler', '~>0.9.9.2'
 gem 'activesupport', '~>4.2.5'
 
+gem 'redis', '~>3.2.2'
+gem 'redis-namespace', '~>1.5.2'
+gem 'sidekiq', '~>4.0.2'
+
 # demo
 gem 'nokogiri', '~>1.6.7'
 gem 'spreadsheet', '=0.9.0'

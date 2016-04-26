@@ -1,109 +1,161 @@
 #!/usr/bin/env bash
-PORT=$(test -z "$2" && echo "4000" || echo "$2")
-ENVIRONMENT=$(test -z "$3" && echo "production" || echo "$3")
+# Description: script jobs around unicorn/redis/sidekiq/mysql 
+# Author: jay@16/02/03
+# Usage: 
+# ./unicorn.sh {config|start|stop|start_redis|stop_redis|restart|deploy|update_assets|import_data|copy_data}
+#
+unicorn_port=${2:-'4567'}
+unicorn_env=${3:-'production'}
+unicorn_config_file=config/unicorn.rb
 
-UNICORN=unicorn  
-CONFIG_FILE=config/unicorn.rb   
-APP_ROOT_PATH=$(pwd)
+unicorn_pid_file=tmp/pids/unicorn.pid
+redis_pid_file=tmp/pids/redis.pid
+sidekiq_pid_file=tmp/pids/sidekiq.pid
+sidekiq_log_file=log/sidekiq.log
+
+bundle_command=$(rbenv which bundle)
+gem_command=$(rbenv which gem)
 
 # user bash environment for crontab job.
-# shell_used=${SHELL##*/}
-shell_used="bash"
-if [[ "$(uname -s)" == "Darwin" ]]; then
-    shell_used="zsh"
-fi
+# shell_used=${SHELL##*/}   
+app_root_path=$(pwd)
+shell_used='bash'
+[[ $(uname -s) = Darwin ]] && shell_used='zsh'
 
-# crontab environment used *sh* on centos
-if [[ "${shell_used}" == "sh" || "${shell_used}" == "bash" ]]; then 
-    shell_used="bash"
-    [ -f ~/.${shell_used}_profile ] && source ~/.${shell_used}_profile &> /dev/null
-fi
-
-echo "## shell used: ${shell_used}"
-[ -f ~/.${shell_used}rc ] && source ~/.${shell_used}rc &> /dev/null
-
-export LANG=zh_CN.UTF-8
+[[ -f ~/.${shell_used}rc ]] && source ~/.${shell_used}rc &> /dev/null
+[[ -f ~/.${shell_used}_profile ]] && source ~/.${shell_used}_profile &> /dev/null
 
 # put below config lines added to ~/.bashrc to make 
 # sure *rbenv* work normally, 
 #
-# 	export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
-# 	export RBENV_ROOT="$HOME/.rbenv"
-# 	if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+#   export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
+#   export RBENV_ROOT="$HOME/.rbenv"
+#   if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 #
 # use the current .ruby-version's command
-is_rbenv_exist=$(type rbenv >/dev/null 2>&1 && echo "yes" || echo "no")
 
-if [[ "${is_rbenv_exist}" == "yes" ]]; then
-    bundle_command=$(rbenv which bundle)
-    gem_command=$(rbenv which gem)
-else
-    bundle_command=$(rvm which bundle)
-    gem_command=$(rvm which gem)
-fi
-
-# make sure command execute in app root path
-cd "${APP_ROOT_PATH}"
+export LANG=zh_CN.UTF-8
+cd "${app_root_path}" || exit 1
 case "$1" in      
     gem)
         shift 1
         $gem_command "$@"
     ;;
-    precompile)
-        RAILS_ENV=production $bundle_command exec rake assets:clean
-        RAILS_ENV=production $bundle_command exec rake assets:my_precompile
-    ;;
+
     bundle)
-        echo "## bundle install"
+        echo '## bundle install'
         $bundle_command install --local > /dev/null 2>&1 
-        if test $? -eq 0 
-        then
-          echo -e "\t bundle install --local successfully."
+        if [[ $? -eq 0 ]]; then
+          echo -e '\t# bundle install --local successfully'
         else
           $bundle_command install
         fi
     ;;
-    start)  
+
+    config)
         bash "$0" bundle
 
-        test -d log || mkdir log
-        test -d tmp || mkdir -p tmp/pids
-        test -d public/callbacks || mkdir -p public/callbacks
-        test -d public/change_logs || mkdir -p public/change_logs
-        rm tmp/*.{htm,html,zip} > /dev/null 2>&1
+        mkdir -p {log,tmp/{rb,js,pids}} > /dev/null 2>&1
+
+        if [[ ! -f config/redis.conf ]]; then
+            RACK_ENV=production $bundle_command exec rake redis:generate_config
+            echo -e "\tgenerate config/redis.conf $([[ $? -eq 0 ]] && echo "successfully" || echo "failed")"
+        fi
+
+    ;;
+
+    start)
+        echo "## shell used: ${shell_used}"
+        bash "$0" config
+        bash "$0" start_redis
+        bash "$0" start_sidekiq
 
         echo "## start unicorn"
-        echo -e "\t# port: ${PORT}, environment: ${ENVIRONMENT}"
-        command_text="$bundle_command exec ${UNICORN} -c ${CONFIG_FILE} -p ${PORT} -E ${ENVIRONMENT} -D"
+        if [[ -f $unicorn_pid_file ]]; then
+            echo -e '\t unicorn already started'
+            exit 0
+        fi
+
+        rm -f tmp/rb/*.rb > /dev/null 2>&1
+        echo -e "\t# port: ${unicorn_port}, environment: ${unicorn_env}"
+        command_text="$bundle_command exec unicorn -c ${unicorn_config_file} -p ${unicorn_port} -E ${unicorn_env} -D"
+        echo -e "\t$ run ${command_text}"
+        run_result=$($command_text)
+        echo -e "\t# unicorn start $([[ $? -eq 0 ]] && echo "successfully" || echo "failed")(${run_result})"
+        ;;
+
+    stop)  
+        echo '## stop unicorn'
+        if [[ ! -f $unicorn_pid_file ]]; then
+            echo -e '\t unicorn never started'
+            exit 1
+        fi
+
+        cat $unicorn_pid_file | xargs -I pid kill -QUIT pid
+        if [[ $? -eq 0 ]]; then
+            rm -f $unicorn_pid_file
+            echo -e '\t unicorn stop successfully'
+        else
+            echo -e '\t unicorn stop failed'
+        fi
+        ;;
+
+    restart|force-reload)  
+        #kill -USR2 `cat tmp/pids/unicorn.pid`  
+        bash "$0" stop
+        echo -e '\n\n#-----------command sparate line----------\n\n'
+        bash "$0" start
+        ;;
+
+    start_redis)
+        bash "$0" config
+
+        echo '## start redis'
+        if [[ -f $redis_pid_file ]]; then
+            echo -e '\t redis already started'
+            exit 0
+        fi
+
+        command_text='redis-server ./config/redis.conf'
         echo -e "\t$ run ${command_text}"
         run_result=$($command_text) #> /dev/null 2>&1
-        echo -e "\t# unicorn start $(test $? -eq 0 && echo "successfully" || echo "failed")(${run_result})."
-        ;;  
-    stop)  
-        echo "## stop unicorn"
-        kill -QUIT `cat tmp/pids/unicorn.pid`  
-        echo -e "\t unicorn stop $(test $? -eq 0 && echo "successfully" || echo "failed")."
+        echo -e "\t# redis start $([[ $? -eq 0 ]] && echo "successfully" || echo "failed")(${run_result})."
+        ;;
 
-        ;;  
-    restart|force-reload)  
-        bash "$0" stop
-        echo -e "\n\n#-----------command sparate line----------\n\n"
-        bash "$0" start
-        
-        ;;  
-    deploy)
-        # ./unicorn.sh deploy | xargs -I cmd /bin/sh -c cmd
-        # ./unicorn.sh deploy | sh
-        echo "RACK_ENV=production bundle exec rake remote:deploy"
+    stop_redis)
+        echo '## stop redis'
+
+        if [[ ! -f $redis_pid_file ]]; then
+            echo -e '\t redis never started'
+            exit 1
+        fi
+
+        cat "$redis_pid_file" | xargs -I pid kill -QUIT pid
+        if [[ $? -eq 0  ]]; then
+            rm -f $redis_pid_file
+            echo -e '\t redis stop successfully'
+        else
+            echo -e '\t redis stop failed'
+        fi
         ;;
-    weixin_group_message)
-        $bundle_command exec rake weixin:send_group_message
+
+    start_sidekiq)
+        bash "$0" config
+
+        echo '## start sidekiq'
+        if [[ -f $sidekiq_pid_file ]]; then
+            echo -e '\t sidekiq already started'
+            exit 0
+        fi
+
+        command_text="${bundle_command} exec sidekiq -r ./config/boot.rb -C ./config/sidekiq.yaml -e production -d"
+        echo -e "\t$ run ${command_text}"
+        run_result=$($command_text) #> /dev/null 2>&1
+        echo -e "\t# sidekiq start $([[ $? -eq 0 ]] && echo "successfully" || echo "failed")(${run_result})."
         ;;
-    download_db)
-        scp jay@solife.us:/home/work/solife-weixin/db/*.db db/
-        ;;
+
     *)  
-        echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload|deploy}" >&2  
-        exit 3  
+        echo "Usage: $SCRIPTNAME {config|start|stop|start_redis|stop_redis|restart|deploy}" >&2  
+        exit 2
         ;;  
 esac  

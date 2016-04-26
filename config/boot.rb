@@ -8,6 +8,9 @@ ENV['ASSET_CDN'] ||= 'false'
 ENV['STARTUP'] = Time.now.to_s
 ENV['VIEW_PATH'] = '%s/app/views' % root_path
 ENV['APP_ROOT_PATH'] = root_path
+ENV['CACHE_NAMESPACE'] ||= 'yh'
+ENV['REDIS_PID_PATH'] ||= %(#{root_path}/tmp/pids/redis.pid)
+ENV['UNICORN_PID_PATH'] ||= %(#{root_path}/tmp/pids/unicorn.pid)
 
 begin
   ENV['BUNDLE_GEMFILE'] ||= '%s/Gemfile' % root_path
@@ -42,3 +45,4 @@ require 'asset_handler'
 # helper load before controller
 recursion_require('app/helpers', /_helper\.rb$/, root_path)
 recursion_require('app/controllers', /_controller\.rb$/, root_path, [/^application_/])
+recursion_require('app/workers', /_worker\.rb$/, root_path)
