@@ -12,6 +12,7 @@
 # 项目配置文件 => *.yaml.example
 config/*.yml
 config/*.yaml
+config/*.conf
 
 # 本地同步脚本
 sync_images_and_db.rb
