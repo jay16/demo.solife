@@ -36,7 +36,6 @@ gem 'spreadsheet', '=0.9.0'
 gem 'rubyzip', '~> 1.1.4'
 gem 'zip-zip', '~>0.3'
 
-return unless `uname -s`.strip.eql?('Darwin')
 
 group :development do
   gem 'whenever', '~>0.9.4', require: false
@@ -51,6 +50,8 @@ group :development do
   gem 'rubocop', '~>0.38.0', require: false
   gem 'jshintrb', '~>0.3.0'
 end
+
+return unless `uname -s`.strip.eql?('Darwin')
 group :test do
   gem 'rack-test', '~>0.6.3'
   gem 'rspec', '~>3.4.0'
