@@ -1,6 +1,8 @@
 %h3
   = @page_header
-  %small= @current_stage
+  %small= @current_season_human + '|' + @current_stage
+:css
+  .table a { color: black; }
 %table.table.table-striped.table-condensed.table-bordered
   %thead
     %tr
@@ -14,8 +16,9 @@
         %td{style: "width:15%;text-align:center;height: 30px;vertical-align:middle;"}
           = result[0]
         %td{style: "width:35%;height: 30px;vertical-align:middle;"}
-          = image_tag "head_#{result[1]}.jpg", class: "img-circle", style: "max-height: 30px;"
-          = result[1].capitalize
+          %a{href:"mb/matches?player=#{result[1]}"}
+            = image_tag "head_#{result[1]}.jpg", class: "img-circle", style: "max-height: 30px;"
+            = result[1].capitalize
         %td{style: "width:35%;height: 30px;vertical-align:middle;"}
           = result[4].capitalize
         %td{style: "width:15%;text-align:center;height: 30px;vertical-align:middle;"}

@@ -6,8 +6,9 @@ class Demo::MoneyBallController < Demo::ApplicationController
   helpers Demo::MoneyBallHelper
 
   before do
-    @page_header = '16春乐课力台球联赛'
+    @page_header = '乐课力台球联赛'
     @current_stage = '积分赛'
+    @current_season_human = '16春'
     @current_season = '16-mar'
     set_seo_meta(@page_header, "八球，2016春季，赛事", "八球，2016春季，赛事，乐课力")
   end
@@ -62,7 +63,7 @@ class Demo::MoneyBallController < Demo::ApplicationController
 
     MoneyBallWorker.perform_async
 
-    redirect to('edits')
+    redirect to('/')
   end
 
   get '/:id/edit' do
