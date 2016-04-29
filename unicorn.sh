@@ -4,7 +4,7 @@
 # Usage: 
 # ./unicorn.sh {config|start|stop|start_redis|stop_redis|restart|deploy|update_assets|import_data|copy_data}
 #
-unicorn_port=${2:-'4567'}
+unicorn_port=${2:-'4001'}
 unicorn_env=${3:-'production'}
 unicorn_config_file=config/unicorn.rb
 
