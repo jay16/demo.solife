@@ -2,7 +2,7 @@
 class MoneyBallWorker
   include Sidekiq::Worker
 
-  def perform()
-    `cd #{ENV['APP_ROOT_PATH']} && git commit -a -m 'add match: #{match}' && git push origin master &`
+  def perform(action)
+    `cd #{ENV['APP_ROOT_PATH']} && git commit -a -m '#{action} match' && git push origin master`
   end
 end

@@ -1,7 +1,6 @@
 ﻿#encoding: utf-8
 ENV["RACK_ENV"] = "test"
 require File.expand_path '../../config/boot.rb', __FILE__
-require File.expand_path '../../lib/utils/core_ext/hash_key.rb', __FILE__
 require 'capybara'
 require 'capybara/dsl'
 require "capybara/rspec"

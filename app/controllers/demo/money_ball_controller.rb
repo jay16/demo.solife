@@ -61,7 +61,7 @@ class Demo::MoneyBallController < Demo::ApplicationController
     File.open(mb_json_path('matches'), "w:utf-8") { |file| file.puts(matches.to_json) }
     rank_matches
 
-    MoneyBallWorker.perform_async
+    MoneyBallWorker.perform_async('add')
 
     redirect to('/')
   end
@@ -86,7 +86,8 @@ class Demo::MoneyBallController < Demo::ApplicationController
     matches[index] = match
     File.open(mb_json_path('matches'), "w:utf-8") { |file| file.puts(matches.to_json) }
     rank_matches
-    `cd #{ENV['APP_ROOT_PATH']} && git commit -a -m 'update match: #{match}' && git push origin master &`
+
+    MoneyBallWorker.perform_async('update')
 
     redirect to('edits')
   end

@@ -1,7 +1,7 @@
 :css
   .table a, h3 a { color: black; }
 %h3
-  = link_to @page_header, '/mb'
+  = link_to @page_header, url_for('/')
   - @matches = @matches.select { |match| match['players'].include?(params[:player].downcase) } if params[:player]
   %small #{@current_season_human} | 比赛明细 (#{@matches.length})
 %table.table.table-striped.table-condensed.table-bordered{style: 'table-layout: fixed;'}
