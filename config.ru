@@ -12,7 +12,8 @@ use Unicorn::WorkerKiller::Oom, (192*(1024**2)), (256*(1024**2))
 { 
   '/' => 'Demo::HomeController',
   '/openfind' => 'Demo::OpenfindController',
-  '/ball' => 'Demo::MoneyBallController'
+  '/ball' => 'Demo::MoneyBallController',
+  '/api' => 'API::ApplicationController'
 }.each_pair do |path, mod|
   clazz = mod.split('::').inject(Object) { |a, b| a.const_get(b) }
   map(path) { run clazz }
