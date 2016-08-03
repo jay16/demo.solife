@@ -125,6 +125,7 @@ class ApplicationController < Sinatra::Base
   end
 
   def respond_with_json(hash = {}, code = 200)
+    puts hash.inspect
     hash[:code] ||= code
     content_type 'application/json;charset=utf-8'
 
